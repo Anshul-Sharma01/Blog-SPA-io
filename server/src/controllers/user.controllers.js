@@ -5,6 +5,8 @@ import sendEmail from "../utils/sendEmail.js";
 import jwt from "jsonwebtoken";
 import asyncHandler from "../utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { isValidObjectId } from "mongoose";
+import { upload } from "../middlewares/multer.middleware.js";
 
 
 const cookieOptions = {
@@ -269,15 +271,132 @@ const getAllUsers = asyncHandler(async (req, res, next) => {
 })
 
 const updateUser = asyncHandler( async (req, res, next) => {
+    const {  name } = req.body;
+    const id = req.user._id;
 
+    try{
+
+        const updatedUser = await User.findByIdAndUpdate(
+            id,
+            { name },
+            {new : true, runValidators : true, context : 'query'}
+        ).select('-password -refreshToken');
+
+        if(!updatedUser){
+            throw new ApiError(400, "User does not exists");
+        }
+        
+        return res.status(200).json(
+            new ApiResponse(200, updatedUser, "User detail updated successfully")
+        );
+
+    }catch(err){
+        throw new ApiError(400, err?.message || "Error occurred while updating user details");
+    }
+
+})
+
+const updateUserAvatar = asyncHandler( async (req, res, next) => {
+    const avatarLocalPath = req.file?.path;
+
+    try{
+        if(!avatarLocalPath){
+            throw new ApiError(400, "Avatar file is required");
+        }
+
+        const avatar = await uploadOnCloudinary(avatarLocalPath);
+
+        if(!avatar.url){
+            throw new ApiError(400, "Error while updating on avatar");
+        }
+
+        const user = User.findByIdAndUpdate(
+            req.user?._id,
+            {
+                $set : {
+                    avatar : {
+                        secure_url : avatar.secure_url,
+                        public_id : avatar.public_id
+                    }
+                }
+            },
+            {new : true}
+        ).select("-password");
+
+        return res.status(200).json(
+            new ApiResponse(200, user, "Avatar Image Updated successfully")
+        );
+
+    }catch(err){
+        throw new ApiError(400, "Error occurred while updated Avatar");
+    }
 })
 
 const deleteUser = asyncHandler( async (req, res, next) => {
+    try{
+        const { userId } = req.params;
 
+        if(!isValidObjectId(userId)){
+            throw new ApiError(400,"Invalid user-id");
+        }
+
+        const deletedUser = await User.findByIdAndDelete(userId);
+        if(!deletedUser){
+            throw new ApiError(400,"User does not exists");
+        }
+        return res.status(200).json(
+            new ApiResponse(200,deletedUser, "User deleted Successfully")
+        );
+
+    }catch(err){
+        throw new ApiError(400, err?.message || "Error occurred while deleting the user");
+    }
 })
 
 const addNewUser = asyncHandler(async (req, res, next) => {
+    try{
+        const { username, email, password, name } = req.body;
+        if(!username || !name || !email || !password){
+            throw new ApiError(400, "All fields are mandatory");
+        }
 
+        const userNameExists = await User.findOne({username});
+        if(!userNameExists){
+            throw new ApiError(400, "Username already exists");
+        }
+        
+        const emailExists = await User.findOne({email});
+        if(!emailExists){
+            throw new ApiError(400,"Email already exists");
+        }
+
+        if(req.file){
+            const avatarLocalPath = req.file.path;
+            const avatar = await uploadOnCloudinary(avatarLocalPath);
+
+            if(!avatar){
+                throw new ApiError(400, "Avatar file is required");
+            }
+
+            const user = await User.create({
+                username, email, name, password,
+                avatar : {
+                    secure_url : avatar.secure_url,
+                    public_id : avatar.public_id
+                }
+            });
+            if(!user){
+                throw new ApiError(400,"Something went wrong while creating new user");
+            }
+
+            return res.status(201).json(
+                new ApiResponse(201, user, "User created successfully")
+            );
+        }
+
+    }catch(err){
+        throw new ApiError(400,"Error occurred while creating a new user");
+    }
 })
 
 const refreshAccessToken = asyncHandler( async (req, res, next) => {
@@ -333,6 +452,7 @@ export {
     changePassword,
     getAllUsers,
     updateUser,
+    updateUserAvatar,
     deleteUser,
     addNewUser,
     refreshAccessToken
