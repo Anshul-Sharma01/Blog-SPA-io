@@ -153,7 +153,14 @@ const logout = asyncHandler( async (req, res, next) => {
 })
 
 const getProfile = asyncHandler( async (req, res, next) => {
+    try{
+        const userId = req.user._id;
+        const user = await User.findById(userId).select("-password -refreshToken");
 
+        res.status(200).json(new ApiResponse(200, user, "User fetched Successfully"));
+    }catch(err){
+        throw new ApiError(400,err?.message || "Error occurred while fetching user profile");
+    }
 })
 
 const forgotPassword = asyncHandler( async (req, res, next ) => {
@@ -169,7 +176,17 @@ const changePassword = asyncHandler( async (req, res, next ) => {
 })
 
 const getAllUsers = asyncHandler(async (req, res, next) => {
-
+    try{
+        const allUsers = await User.find({});
+        if(allUsers.length === 0){
+            throw new ApiError(400, "No Users Exists");
+        }
+        return res.status(200).json(
+            new ApiResponse(200, allUsers, "All Users fetched Successfully")
+        );
+    }catch(err){
+        throw new ApiError(400,err?.message || "Error occurred while fetching all the users");
+    }
 })
 
 const updateUser = asyncHandler( async (req, res, next) => {
