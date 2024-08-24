@@ -1,7 +1,7 @@
 import User from "../models/user.model.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
-import fs from "fs/promises";
+import sendEmail from "../utils/sendEmail.js";
 import jwt from "jsonwebtoken";
 import asyncHandler from "../utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
@@ -164,14 +164,93 @@ const getProfile = asyncHandler( async (req, res, next) => {
 })
 
 const forgotPassword = asyncHandler( async (req, res, next ) => {
+    const { email } = req.body;
+
+    if(!email){
+        throw new ApiError(400, "Email is required");
+    }
+
+    const user = await User.findOne({ email });
+    if(!user){
+        throw new ApiError(400, "Email not registered");
+    }
+
+    const resetToken = await user.generatePasswordResetToken();
+
+    await user.save();
+
+    const resetPasswordURL = `${process.env.FRONTEND_URL}/reset/${resetToken}`;
+
+    const subject = "Reset Password Link";
+    const message = `You can reset your password by clicking <a href=${resetPasswordURL} target="_blank" > Reset Your Password </a>.\nIf the above link does not work for some reason then copy paste this link in new tab ${resetPasswordURL}.\nIf you have not requested this, kindly Ignore.\n The Link will be valid for 15 minutes only`;
+
+    try{
+        await sendEmail(email, subject, message);
+        return res.status(200).json(
+            new ApiResponse(200, {}, `Reset Password token has been sent to ${email} successfully`)
+        );
+    }catch(err){
+        user.forgotPasswordExpiry = undefined;
+        user.forgotPasswordToken = undefined;
+
+        await user.save();
+
+        throw new ApiError(400, err?.message || "Error occurred while sending Reset Token");
+    }
 
 })
 
 const resetPassword = asyncHandler( async (req, res, next) => {
+    const { resetToken } = req.params;
+    const { password } = req.body;
+
+    const forgotPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+    const user = await User.findOne({
+        forgotPasswordToken,
+        forgotPasswordExpiry : {$gt : Date.now()}
+    });
+
+    if(!user){
+        throw new ApiError(400, "Token is invalid or expired, please try again");
+    }
+
+    user.password = password;
+    user.forgotPasswordExpiry = undefined;
+    user.forgotPasswordToken = undefined;
+    await user.save();
+
+    return res.status(200).json(
+        new ApiResponse(200,{ }, "Password changed successfully")
+    );
 
 })
 
 const changePassword = asyncHandler( async (req, res, next ) => {
+    const { oldPassword, newPassword } = req.body;
+    const { id } = req.user;
+
+    if(!oldPassword || !newPassword) {
+        throw new ApiError(400, "All fields are mandatory");
+    }
+
+    const user = await User.findById(id).select('+password');
+    if(!user){
+        throw new ApiError(400, "User does not exists");
+    }
+
+    const isPasswordValid = await user.isPasswordCorrect(oldPassword);
+    if(!isPasswordValid){
+        throw new ApiError(400, "Invalid old Password");
+    }
+
+    user.password = newPassword;
+    await user.save();
+
+    user.password = undefined;
+    return res.status(200).json(
+        new ApiResponse(200, user, "Password changed successfully")
+    );
 
 })
 
