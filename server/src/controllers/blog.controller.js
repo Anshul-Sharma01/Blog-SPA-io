@@ -4,6 +4,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { isValidObjectId } from "mongoose";
 
 
 
@@ -48,6 +49,10 @@ const viewMyBlogs = asyncHandler ( async( req, res, next) => {
     try{
         let { page, limit } = req.query;
         const userId = req.user._id;
+
+        if(!isValidObjectId(userId)){
+            throw new ApiError(400, "Invalid User Id");
+        }
 
         page = parseInt(page) || 1;
         limit = parseInt(limit) || 3;
@@ -133,6 +138,11 @@ const updateBlogDetails = asyncHandler ( async( req, res, next) => {
     try{
         const { title, content } = req.body;
         const { blogId } = req.params;
+
+        if(!isValidObjectId(blogId)){
+            throw new ApiError(400, "Invalid Blog Id");
+        }
+
         if(!title && !content){
             throw new ApiError(400, "Atleast update one field");
         }
@@ -168,6 +178,11 @@ const updateBlogDetails = asyncHandler ( async( req, res, next) => {
 const updateBlogThumbnail = asyncHandler( async( req, res, next) => {
     try{
         const { blogId } = req.params;
+
+        if(!isValidObjectId(blogId)){
+            throw new ApiError(400, "Invalid Blog Id");
+        }
+
         if(req.file){
             const thumbnailLocalPath = req.file?.path;
             if(!thumbnailLocalPath){
@@ -210,7 +225,26 @@ const updateBlogThumbnail = asyncHandler( async( req, res, next) => {
 })
 
 const deleteBlog = asyncHandler ( async(req, res, next) => {
+    try{
+        const { blogId } = req.params;
 
+        if(!isValidObjectId(blogId)){
+            throw new ApiError(400, "Invalid Blog Id");
+        }
+
+        const deletedBlog = await Blog.findByIdAndDelete(blogId);
+
+        if(!deletedBlog){
+            throw new ApiError(400, "Blog does not exists");
+        }
+        
+        return res.status(200).json(
+            new ApiResponse(200, deletedBlog, "Blog deleted Successfully")
+        );
+
+    }catch(err){
+        throw new ApiError(400, err?.message || "Error occurred while deleting the blog");
+    }
 })
 
 
