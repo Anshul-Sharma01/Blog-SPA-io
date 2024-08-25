@@ -1,8 +1,9 @@
 import { User } from "../models/user.model.js";
-import { Blog } from "../models/blog.model.js";
+import { Blog, Blog } from "../models/blog.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 
 
@@ -83,15 +84,129 @@ const viewMyBlogs = asyncHandler ( async( req, res, next) => {
 })
 
 const createBlog = asyncHandler(async (req, res, next) => {
+    try{
+        const { title, content } = req.body;
+        const userId = req.user._id;
 
+        if(!title || !content){
+            throw new ApiError(400, "All Fields are mandatory");
+        }
+
+        if(req.file){
+            const thumbnailLocalPath = req.file.path;
+            const thumbnail = await uploadOnCloudinary(thumbnailLocalPath);
+
+            if(!thumbnail){
+                throw new ApiError(400, "Error occurred while uploading thumbnail file");
+            }
+
+            const blog = await Blog.create({
+                owner : userId,
+                title,
+                content,
+                thumbnail : {
+                    public_id : thumbnail.public_id,
+                    secure_url : thumbnail.secure_url
+                }
+            })
+
+            if(!blog){
+                throw new ApiError(400, "Error creating new blog");
+            }
+
+            return res.status(201).json(new ApiResponse(
+                201,
+                blog,
+                "BLog created successfully"
+            ))
+
+        }else{
+            throw new ApiError(400, "Thumbnail file is required");
+        }
+
+    }catch(err){
+        throw new ApiError(400, err?.message || "Error occurrd while creating a blog");
+    }
 })
 
 const updateBlogDetails = asyncHandler ( async( req, res, next) => {
+    try{
+        const { title, content } = req.body;
+        const { blogId } = req.params;
+        if(!title && !content){
+            throw new ApiError(400, "Atleast update one field");
+        }
 
+        const updatedFields = {};
+        if(title){
+            updatedFields.title = title;
+        }
+        if(content){
+            updatedFields.content = content;
+        }
+
+
+        const updatedBlog = await Blog.findByIdAndUpdate(
+            blogId,
+            {$set : updatedFields},
+            {new : true}
+        )
+
+        if(!updatedBlog){
+            throw new ApiError(400, "Error updating blog details");
+        }
+
+        return res.status(200).json(
+            new ApiResponse(200, updatedBlog, "Blog details updated successfully")
+        );
+
+    }catch(err){
+        throw new ApiError(400, err?.message || "Error updating blog details");
+    }
 })
 
 const updateBlogThumbnail = asyncHandler( async( req, res, next) => {
+    try{
+        const { blogId } = req.params;
+        if(req.file){
+            const thumbnailLocalPath = req.file?.path;
+            if(!thumbnailLocalPath){
+                throw new ApiError(400, "Please provide new thumbnail");
+            }
 
+            const thumbnail = await uploadOnCloudinary(thumbnailLocalPath);
+
+            if(!thumbnail){
+                throw new ApiError(400, "Error occurred while updating thumbnail on cloudinary" );
+            }
+
+            const updatedBlog = await Blog.findByIdAndUpdate(
+                blogId,
+                {
+                    $set : {
+                        thumbnail : {
+                            public_id : thumbnail.public_id,
+                            secure_url : thumbnail.secure_url
+                        }
+                    }
+                },
+                {new :true}
+            )
+
+            if(!updatedBlog){
+                throw new ApiError(400, "Error occurred while updating the thumbnail");
+            }
+
+            return res.status(200).json(
+                new ApiResponse(200, updatedBlog, "Blog Thumbnail updated successfully")
+            );
+
+        }else{  
+            throw new ApiError(400, "Thumbnail file is required");
+        }
+    }catch(err){
+        throw new ApiError(400, "Error occurred while updating the blog thumbnail");
+    }
 })
 
 const deleteBlog = asyncHandler ( async(req, res, next) => {
