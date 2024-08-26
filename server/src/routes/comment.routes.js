@@ -9,7 +9,7 @@ const router = Router();
 router.use(verifyJWT);
 
 
-router.route("/:BlogId")
+router.route("/:blogId")
 .get(getBlogComments)
 .post(addComment);
 
