@@ -10,7 +10,7 @@ import { Comment } from "../models/comment.model.js";
 
 const getBlogComments = asyncHandler ( async(req, res, next) => {
     try{
-        const { blogId } = req.query;
+        const { blogId } = req.params;
 
         if(!isValidObjectId(blogId)){
             throw new ApiError(400, "Invalid Blog Id");
@@ -34,7 +34,7 @@ const getBlogComments = asyncHandler ( async(req, res, next) => {
 
 const addComment = asyncHandler(async (req, res, next) => {
     try{
-        const { blogId } = req.query;
+        const { blogId } = req.params;
         const userId = req.user._id;
         const { content } = req.body;
 
