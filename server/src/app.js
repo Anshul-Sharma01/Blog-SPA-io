@@ -15,11 +15,11 @@ app.use(express.static("public"));
 
 import userRoutes from "./routes/user.routes.js";
 import blogRoutes from "./routes/blog.routes.js";
-
+import commentRoutes from "./routes/comment.routes.js";
 
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/blogs", blogRoutes);
-
+app.use("api/v1/comments", commentRoutes);
 
 export { app }; 
 
