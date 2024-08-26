@@ -62,7 +62,7 @@ const getLikedBlogs = asyncHandler(async(req, res, next) => {
     try{
         const userId = req.user._id;
 
-        const likedBlogs = await Like.find({likedBy : userId});
+        const likedBlogs = await Like.find({ likedBy : userId, blog : {$exists : true}}).populate("blog");
 
         if(likedBlogs.length === 0){
             return res.status(200).json(new ApiResponse(200, likedBlogs, "No Liked blogs Found"));
