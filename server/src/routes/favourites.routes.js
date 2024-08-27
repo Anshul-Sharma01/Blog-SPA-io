@@ -9,7 +9,7 @@ const router = Router();
 app.use(verifyJWT);
 
 router.route("/add/:blogId").post(addToFavourite);
-router.route("/remove/:blogId").post(removeFromFavourite);
+router.route("/remove/:blogId").delete(removeFromFavourite);
 
 export default router;
 
