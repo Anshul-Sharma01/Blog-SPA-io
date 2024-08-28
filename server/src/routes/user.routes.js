@@ -14,7 +14,7 @@ router.route("/login").post(login);
 router.route("/logout").post(verifyJWT, logout);
 router.route("/me").post(verifyJWT, getProfile);
 router.route("/reset").post(forgotPassword);
-router.route("/reset/:resetToken").get(resetPassword);
+router.route("/reset/:resetToken").post(resetPassword);
 router.route("/change-password").post(verifyJWT, changePassword);
 router.route("/update-profile").patch(verifyJWT, updateUser);
 router.route("/update-avatar").patch(verifyJWT, upload.single("avatar"), updateUserAvatar);
