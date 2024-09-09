@@ -1,8 +1,8 @@
 import { isValidObjectId } from "mongoose";
-import { ApiError } from "../utils/ApiError";
-import { asyncHandler } from "../utils/asyncHandler";
-import { Like } from "../models/like.model";
-import { ApiResponse } from "../utils/ApiResponse";
+import { ApiError } from "../utils/ApiError.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { Like } from "../models/like.model.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 
 const toggleBlogLike = asyncHandler(async(req, res, next) => {
     try{

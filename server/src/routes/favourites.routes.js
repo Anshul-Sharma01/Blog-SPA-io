@@ -1,12 +1,12 @@
 import { Router } from "express";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { addToFavourite, clearAllFavourites, getAllFavourites, getFavouriteBlogsByOwner, getFavouriteCountForBlog, removeFromFavourite, toggleFavourite } from "../controllers/favourites.controller.js";
+import { clearAllFavourites, getAllFavourites, getFavouriteBlogsByOwner, getFavouriteCountForBlog, toggleFavourite } from "../controllers/favourites.controller.js";
 
 
 
 const router = Router();
 
-app.use(verifyJWT);
+router.use(verifyJWT);
 
 router.route("/").get(getAllFavourites);
 router.route("/fav/:blogId").post(toggleFavourite);

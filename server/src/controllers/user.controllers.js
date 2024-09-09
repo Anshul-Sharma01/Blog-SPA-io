@@ -1,12 +1,12 @@
-import User from "../models/user.model.js";
-import ApiError from "../utils/ApiError.js";
-import ApiResponse from "../utils/ApiResponse.js";
+import {User} from "../models/user.model.js";
+import {ApiError} from "../utils/ApiError.js";
+import {ApiResponse} from "../utils/ApiResponse.js";
 import sendEmail from "../utils/sendEmail.js";
 import jwt from "jsonwebtoken";
-import asyncHandler from "../utils/asyncHandler.js";
+import {asyncHandler} from "../utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { isValidObjectId } from "mongoose";
-import { upload } from "../middlewares/multer.middleware.js";
+
 
 
 const cookieOptions = {
@@ -28,10 +28,11 @@ const generateAcessAndRefreshTokens = async(userId) => {
     }
 }
 
-
 const register = asyncHandler(async (req, res, next) => {   
     try{
         const { username, name, email, password } = req.body;
+        console.log(username, name, email, password);
+
 
         if(!username || !name || !email || !password){
             throw new ApiError(400, "All fields are mandatory");
@@ -49,7 +50,7 @@ const register = asyncHandler(async (req, res, next) => {
 
 
         if(req.file){
-            const avatarLocalPath = req.file.path;
+            const avatarLocalPath = req.file?.path;
             const avatar = await uploadOnCloudinary(avatarLocalPath);
 
             if(!avatar){
@@ -85,9 +86,11 @@ const register = asyncHandler(async (req, res, next) => {
 
 
     }catch(err){
-        throw new ApiError(400, "Error occurred while registering the user");
+        throw new ApiError(400, err?.message || "Error occurred while registering the user");
     }
 })
+
+
 
 const login = asyncHandler(async (req, res, next) => {
     try{

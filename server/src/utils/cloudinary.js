@@ -5,32 +5,35 @@ import fs from "fs";
 cloudinary.config({
     cloud_name : process.env.CLOUDINARY_CLOUD_NAME,
     api_key : process.env.CLOUDINARY_API_KEY,
-    api_secret : process.env.CLOUDINARY_API_SECRET
+    api_secret : process.env.CLOUDINARY_API_SECRET 
 })
 
 
 
-
-const uploadOnCloudinary = async( LocalFilePath ) => {
-    try{
-        if(!LocalFilePath){
-            return null;
+const uploadOnCloudinary = async (LocalFilePath) => {
+    try {
+        if (!LocalFilePath) {
+            throw new Error("No file path provided");
         }
 
         const response = await cloudinary.uploader.upload(LocalFilePath, {
-            resource_type : "auto"
-        }).catch((err) => {
-            console.log("Cloudinary error : ", err);
-        })
+            resource_type: "auto"
+        });
 
+        // Ensure file is deleted after successful upload
         fs.unlinkSync(LocalFilePath);
         return response;
-        
-    }catch(err){
-        fs.unlinkSync(LocalFilePath);
-        return null;
+
+    } catch (err) {
+        console.log("Cloudinary error:", err);
+        // Ensure file is deleted even in case of error
+        if (LocalFilePath && fs.existsSync(LocalFilePath)) {
+            fs.unlinkSync(LocalFilePath);
+        }
+        throw new Error("Failed to upload file to Cloudinary");
     }
-}
+};
+
 
 const deleteFromCloudinary = async(pathId) => {
     try{
@@ -49,7 +52,8 @@ const deleteFromCloudinary = async(pathId) => {
 
 
 export {
-    uploadOnCloudinary
+    uploadOnCloudinary,
+    deleteFromCloudinary
 };
 
 
