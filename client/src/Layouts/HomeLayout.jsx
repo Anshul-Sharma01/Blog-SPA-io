@@ -44,6 +44,12 @@ function HomeLayout({ children }){
                         <li className="mt-10">
                             <Link to="/">Home</Link>
                         </li>
+                        <li>
+                            <Link to="/auth/register" >Sign Up</Link>
+                        </li>
+                        <li>
+                            <Link to="/auth/login">Log In </Link>
+                        </li>
                     </ul>
                 </div>
             </div>
