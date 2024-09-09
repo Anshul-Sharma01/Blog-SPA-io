@@ -95,18 +95,20 @@ const register = asyncHandler(async (req, res, next) => {
 const login = asyncHandler(async (req, res, next) => {
     try{
         const { email, password } = req.body;
+        // console.log(email, password);
 
         if(!email || !password){
             throw new ApiError(400, "Email or password is required");
         }
 
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email }).select("+password");
 
         if(!user){
             throw new ApiError(404, "User does not exists");
         }
 
-        const isPasswordValid = await user.isPasswordCorrect(password);
+
+        const isPasswordValid = await user.isPasswordCorrect(password, user.password);
 
         if(!isPasswordValid){
             throw new ApiError(401, "Invalid User credentials");
@@ -130,7 +132,7 @@ const login = asyncHandler(async (req, res, next) => {
         )
 
     }catch(err){
-        throw new ApiError(400, err?.message || "Authentication failed");
+        throw new ApiError(400, err || "Authentication failed");
     }
 })
 

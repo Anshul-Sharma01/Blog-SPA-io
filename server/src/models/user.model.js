@@ -96,10 +96,12 @@ userSchema.methods = {
         )
     },
     
-    isPasswordCorrect : async function(){
-        return await bcryptjs.compare(password, this.password);
+    isPasswordCorrect: async function(password, hashedPassword) {
+        if (!password || typeof password !== 'string') {
+            throw new Error("Password must be a string");
+        }
+        return await bcryptjs.compare(password, hashedPassword);
     },
-
     generatePasswordResetToken : async function() {
         const resetToken = crypto.randomBytes(20).toString('hex');
         this.forgotPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
