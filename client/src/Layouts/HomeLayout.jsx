@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
 import { FiMenu } from "react-icons/fi";
 import { AiFillCloseCircle } from "react-icons/ai";
+import { useSelector } from "react-redux";
 
 
 
 function HomeLayout({ children }){
+
+    const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn);
 
 
     function changeWidth(){
@@ -44,12 +47,20 @@ function HomeLayout({ children }){
                         <li className="mt-10">
                             <Link to="/">Home</Link>
                         </li>
-                        <li>
-                            <Link to="/auth/register" >Sign Up</Link>
-                        </li>
-                        <li>
-                            <Link to="/auth/login">Log In </Link>
-                        </li>
+
+                        {
+                            !isLoggedIn && (
+                                <>
+                                    <li>
+                                        <Link to="/auth/register" >Sign Up</Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/auth/login">Log In </Link>
+                                    </li>
+                                </>
+                            )
+                        }
+
                     </ul>
                 </div>
             </div>
