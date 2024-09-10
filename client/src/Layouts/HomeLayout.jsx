@@ -1,11 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiMenu } from "react-icons/fi";
 import { AiFillCloseCircle } from "react-icons/ai";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Logout } from "../Redux/Slices/AuthSlice.js";
 
 
 
 function HomeLayout({ children }){
+    
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn);
 
@@ -21,6 +25,14 @@ function HomeLayout({ children }){
 
         const drawerSide = document.getElementsByClassName('drawer-side');
         drawerSide[0].style.width = 0;
+    }
+
+    async function handleLogout(e){
+        e.preventDefault();
+        const res = await dispatch(Logout());
+        if(res?.payload?.success){
+            navigate("/");
+        }
     }
 
     return(
@@ -56,6 +68,15 @@ function HomeLayout({ children }){
                                     </li>
                                     <li>
                                         <Link to="/auth/login">Log In </Link>
+                                    </li>
+                                </>
+                            )
+                        }
+                        {
+                            isLoggedIn && (
+                                <>
+                                    <li>
+                                        <Link onClick={handleLogout}>LogOut</Link>
                                     </li>
                                 </>
                             )

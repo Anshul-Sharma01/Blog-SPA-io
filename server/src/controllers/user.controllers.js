@@ -151,8 +151,8 @@ const logout = asyncHandler( async (req, res, next) => {
         )
 
         return res.status(200)
-        .clearCookie("accessToken",cookieOptions)
-        .clearCookie("refreshTokn", cookieOptions)
+        .cookie("accessToken", "", { ...cookieOptions, expires: new Date(0) })
+        .cookie("refreshToken", "", { ...cookieOptions, expires: new Date(0) })
         .json(new ApiResponse(200, {}, "User loggedOut succesfully"))
     }catch(err){
         throw new ApiError(400, err?.message || "Error occurred while logging out");
