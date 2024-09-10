@@ -1,14 +1,16 @@
-
+import { FaArrowLeftLong } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import HomeLayout from "../Layouts/HomeLayout";
+import { Link, useNavigate } from "react-router-dom";
 
 
 
 function Profile(){
 
     const userData = useSelector((state) => state.auth.userData); 
+    const navigate = useNavigate();
     // const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
     // console.log(userData, isLoggedIn);
 
@@ -98,6 +100,10 @@ function Profile(){
                             </div>
                         </div>
                         <div className="card-actions justify-end">
+                            <button className="btn btn-accent" onClick={(e) => navigate("/")}>
+                                <FaArrowLeftLong />
+                                Go Back
+                            </button>
                             <button className="btn text-white btn-primary">Update Profile</button>
                         </div>
                     </div>
