@@ -31,8 +31,6 @@ const generateAcessAndRefreshTokens = async(userId) => {
 const register = asyncHandler(async (req, res, next) => {   
     try{
         const { username, name, email, password } = req.body;
-        console.log(username, name, email, password);
-
 
         if(!username || !name || !email || !password){
             throw new ApiError(400, "All fields are mandatory");
@@ -48,12 +46,12 @@ const register = asyncHandler(async (req, res, next) => {
             throw new ApiError(400, "Email already exists");
         }
 
-
         if(req.file){
             const avatarLocalPath = req.file?.path;
             const avatar = await uploadOnCloudinary(avatarLocalPath);
+            // console.log("Avatar file : ", avatar);
 
-            if(!avatar){
+            if(!avatar.secure_url){
                 throw new ApiError(400, "Avatar file is not uploaded");
             }
 
@@ -66,30 +64,32 @@ const register = asyncHandler(async (req, res, next) => {
                     secure_url : avatar.secure_url,
                     public_id : avatar.public_id
                 }
-            })
+            });
 
-            const createdUser = await User.findById(user._id).select(
-                "-password -refreshToken"
-            );
+            const createdUser = await User.findById(user._id).select("-password -refreshToken");
             if(!createdUser){
                 throw new ApiError(500, "Something went wrong while registering the user");
             }
 
-            return res.status(201).json(
-                new ApiResponse(201, createdUser, "User registered Successfully")
-            );
+            // Generate Access and Refresh Tokens
+            const { accessToken, refreshToken } = await generateAcessAndRefreshTokens(user._id);
 
-        }else{
+            // Send response with cookies and user data
+            return res.status(201)
+                .cookie("accessToken", accessToken, cookieOptions)
+                .cookie("refreshToken", refreshToken, cookieOptions)
+                .json(
+                    new ApiResponse(201, { user: createdUser, accessToken, refreshToken }, "User registered Successfully")
+                );
+
+        } else {
             throw new ApiError(400, "Avatar file is required");
         }
 
-
-
-    }catch(err){
+    } catch(err) {
         throw new ApiError(400, err?.message || "Error occurred while registering the user");
     }
-})
-
+});
 
 
 const login = asyncHandler(async (req, res, next) => {
