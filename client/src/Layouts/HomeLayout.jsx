@@ -37,7 +37,7 @@ function HomeLayout({ children }){
 
     return(
         <div className="min-h-[90vh]"> 
-            <div className="drawer absolute left-0 z-50 w-fit ">
+            <div className=" drawer absolute left-0 z-50 w-fit ">
                 <input type="checkbox" id="my-drawer" className="drawer-toggle" />
                 <div className="drawer-content">
                     <label htmlFor="my-drawer" className="cursor-pointer relative">
@@ -75,6 +75,9 @@ function HomeLayout({ children }){
                         {
                             isLoggedIn && (
                                 <>
+                                    <li>
+                                        <Link to="/me/profile">Profile</Link>
+                                    </li>
                                     <li>
                                         <Link onClick={handleLogout}>LogOut</Link>
                                     </li>

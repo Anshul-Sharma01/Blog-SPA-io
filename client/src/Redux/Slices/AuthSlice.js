@@ -6,7 +6,7 @@ import Cookies from "js-cookie";  // Import js-cookie
 const initialState = {
     isLoggedIn: localStorage.getItem('isLoggedIn') || false,
     userRole: localStorage.getItem('role') || "",
-    userData: JSON.parse(localStorage.getItem('data')) || {}
+    userData: JSON.parse(localStorage.getItem('userData')) || {}
 }
 
 export const createAccount = createAsyncThunk("/auth/signup", async (data) => {
