@@ -12,7 +12,7 @@ function HomeLayout({ children }){
     const navigate = useNavigate();
 
     const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn);
-
+    const personalBlogsExists = useSelector((state) => state?.blog?.personalBlogsExists);
 
     function changeWidth(){
         const drawerSide = document.getElementsByClassName('drawer-side');
@@ -81,6 +81,13 @@ function HomeLayout({ children }){
                                     <li>
                                         <Link to="/blogs/create">Create blog</Link>
                                     </li>
+                                    {
+                                        personalBlogsExists && (
+                                            <li>
+                                                <Link to="/blogs/me">My Blogs</Link>
+                                            </li>
+                                        )
+                                    }
                                     <li>
                                         <Link onClick={handleLogout}>LogOut</Link>
                                     </li>

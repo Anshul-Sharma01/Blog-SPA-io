@@ -315,7 +315,7 @@ const updateUserAvatar = asyncHandler( async (req, res, next) => {
             throw new ApiError(400, "Error while updating on avatar");
         }
 
-        const user = User.findByIdAndUpdate(
+        const user = await User.findByIdAndUpdate(
             req.user?._id,
             {
                 $set : {
@@ -404,46 +404,37 @@ const addNewUser = asyncHandler(async (req, res, next) => {
     }
 })
 
-const refreshAccessToken = asyncHandler( async (req, res, next) => {
+const refreshAccessToken = asyncHandler(async (req, res, next) => {
     const incomingrefreshToken = req.cookies.refreshToken || req.body.refreshToken;
 
-    if(!incomingrefreshToken){
-        throw new ApiError(401, "Unauthorized request");
+    if (!incomingrefreshToken) {
+        throw new ApiError(401, "Unauthorized request - No Refresh Token provided");
     }
 
-    try{
+    try {
         const decodedToken = jwt.verify(incomingrefreshToken, process.env.REFRESH_TOKEN_SECRET);
 
         const user = await User.findById(decodedToken?._id);
-
-        if(!user){
-            throw new ApiError(401, "Invalid refresh Token"); 
+        if (!user) {
+            throw new ApiError(401, "Invalid refresh token - User not found");
         }
 
-        if(incomingrefreshToken != user.refreshToken){
-            throw new ApiError(401, "Refresh Token is expired or used");
+        if (incomingrefreshToken !== user.refreshToken) {
+            throw new ApiError(401, "Invalid refresh token - Token does not match");
         }
 
-        const { accessToken, newRefreshToken } = await generateAcessAndRefreshTokens(user._id);
+        // Generate new tokens
+        const { accessToken, refreshToken: newRefreshToken } = await generateAcessAndRefreshTokens(user._id);
 
         return res
-        .status(200)
-        .cookie("accessToken", accessToken)
-        .cookie("refreshToken", newRefreshToken)
-        .json(
-            new ApiResponse(
-                200,
-                {
-                    accessToken, refreshToken : newRefreshToken
-                },
-                "Access Token Refreshed"
-            )
-        )
-
-    }catch(err){
-        throw new ApiError(401, err?.message || "Invalid refresh Token");
+            .status(200)
+            .cookie("accessToken", accessToken, cookieOptions)
+            .cookie("refreshToken", newRefreshToken, cookieOptions)
+            .json(new ApiResponse(200, { accessToken, refreshToken: newRefreshToken }, "Access token refreshed successfully"));
+    } catch (err) {
+        throw new ApiError(401, err.message || "Invalid refresh token");
     }
-})
+});
 
 
 
