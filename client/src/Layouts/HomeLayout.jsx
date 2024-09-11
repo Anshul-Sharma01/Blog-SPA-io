@@ -12,7 +12,7 @@ function HomeLayout({ children }){
     const navigate = useNavigate();
 
     const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn);
-    const personalBlogsExists = useSelector((state) => state?.blog?.personalBlogsExists);
+    const personalBlogsExists = useSelector((state) => state?.auth?.personalBlogsExists);
 
     function changeWidth(){
         const drawerSide = document.getElementsByClassName('drawer-side');

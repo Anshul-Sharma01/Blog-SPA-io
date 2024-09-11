@@ -119,10 +119,19 @@ const createBlog = asyncHandler(async (req, res, next) => {
                 throw new ApiError(400, "Error creating new blog");
             }
 
+            const user = await User.findByIdAndUpdate(
+                userId,
+                {
+                    $inc : { blogCount : 1} 
+                },
+                {new : true}
+            );
+
+
             return res.status(201).json(new ApiResponse(
                 201,
                 blog,
-                "BLog created successfully"
+                "Blog created successfully"
             ))
 
         }else{

@@ -4,9 +4,10 @@ import axiosInstance from "../../Helpers/axiosInstance.js";
 import Cookies from "js-cookie";  // Import js-cookie
 
 const initialState = {
-    isLoggedIn: localStorage.getItem('isLoggedIn') || false,
-    userRole: localStorage.getItem('role') !== undefined || "",
-    userData: JSON.parse(localStorage.getItem('userData')) !== undefined || {}
+    isLoggedIn: localStorage.getItem('isLoggedIn') === 'true', 
+    userRole: localStorage.getItem('role') !== undefined ? localStorage.getItem('role')  : "", 
+    userData: JSON.parse(localStorage.getItem('userData')) !== undefined ? JSON.parse(localStorage.getItem('userData')) : {},  
+    personalBlogsExists: localStorage.getItem('personalBlogsExists') === 'true', 
 }
 
 export const createAccount = createAsyncThunk("/auth/signup", async (data) => {
@@ -80,6 +81,8 @@ const authSlice = createSlice({
                 state.isLoggedIn = true;
                 state.userData = action?.payload?.data?.user;
                 state.userRole = action?.payload?.data?.user?.role;
+                state.personalBlogsExists = user?.blogCount > 0;
+                localStorage.setItem('personalBlogsExists', state.personalBlogsExists);
             }
         })
             .addCase(createAccount.rejected, (state) => {
@@ -87,6 +90,7 @@ const authSlice = createSlice({
                 state.userData = {};
                 state.isLoggedIn = false;
                 state.userRole = " ";
+                state.personalBlogsExists = false;
             })
             .addCase(LoginUser.fulfilled, (state, action) => {
                 console.log("Action : " ,action);
@@ -97,6 +101,8 @@ const authSlice = createSlice({
                     state.isLoggedIn = true;
                     state.userData = action?.payload?.data?.user;
                     state.userRole = action?.payload?.data?.user?.role;
+                    state.personalBlogsExists = action?.payload?.data?.user?.blogCount > 0;
+                    localStorage.setItem('personalBlogsExists', state.personalBlogsExists);
                 }
             })
             .addCase(LoginUser.rejected, (state) => {
@@ -104,12 +110,14 @@ const authSlice = createSlice({
                 state.userData = {};
                 state.isLoggedIn = false;
                 state.userRole = " ";
+                state.personalBlogsExists = false;
             })
             .addCase(Logout.fulfilled, (state) => {
                 localStorage.clear();
                 state.isLoggedIn = false;
                 state.userData = {};
                 state.userRole = "";
+                state.personalBlogsExists = false;
             })
     }
 })

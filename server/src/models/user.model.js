@@ -41,6 +41,11 @@ const userSchema = new Schema({
         enum : ['USER','ADMIN'],
         default : 'USER'
     },
+    blogCount : {
+        type : Number,
+        default : 0,
+        minLength : [0, "Blog Count can't be less than 0"],
+    },
     avatar : {
         public_id : {
             type : String,

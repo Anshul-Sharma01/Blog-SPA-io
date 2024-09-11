@@ -30,9 +30,9 @@ function Login(){
         }
 
         const response = await dispatch(LoginUser(userData));
-        if(response.meta.requestStatus === 'fulfilled'){
+        console.log("Response: ",response);
+        if(response.payload.statusCode === 200){
             navigate("/");
-            
         }
         setUserData({
             email : "",

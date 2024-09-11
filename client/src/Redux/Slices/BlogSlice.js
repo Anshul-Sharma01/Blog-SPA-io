@@ -32,6 +32,7 @@ const blogSlice = createSlice({
         builder.addCase(createNewBlog.fulfilled, (state, action) => {
             if(action?.payload?.statusCode == 201){
                 state.personalBlogsExists = true;
+                localStorage.setItem('personalBlogsExists', true);
             }
         })
     }

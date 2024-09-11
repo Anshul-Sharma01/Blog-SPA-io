@@ -77,9 +77,9 @@ function Register() {
         formData.append("password", userData.password);
         formData.append("avatar", userData.avatar);
     
-        const res = await dispatch(createAccount(formData));
+        const response = await dispatch(createAccount(formData));
     
-        if (res.meta.requestStatus === 'fulfilled') {
+        if (response.payload.statusCode === 200) {
             navigate("/");
             setUserData({
                 username: "",

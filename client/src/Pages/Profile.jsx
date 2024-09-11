@@ -9,9 +9,9 @@ import { Link, useNavigate } from "react-router-dom";
 
 function Profile(){
 
-    const userData = useSelector((state) => state.auth.userData); 
+    const userData = useSelector((state) => state?.auth?.userData); 
     const navigate = useNavigate();
-    // const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
     // console.log(userData, isLoggedIn);
 
     const [ userProfileData, setUserProfileData ] = useState({
@@ -21,6 +21,7 @@ function Profile(){
         email : ""
     })
 
+    // console.log("UserData:" ,userData);
     
 
     useEffect(() => {
@@ -28,23 +29,22 @@ function Profile(){
         async function setData(){
             try {
                 setUserProfileData({
-                    avatar : userData.avatar.secure_url || " ",
-                    name : userData.name || " ",
-                    username : userData.username || " ",
-                    email : userData.email || " "
-                })
+                    avatar : userData?.avatar?.secure_url || "",  // Use optional chaining and provide a default value
+                    name : userData?.name || "",
+                    username : userData?.username || "",
+                    email : userData?.email || ""
+                });
                 toast.dismiss();
                 toast.success("Profile Successfully Fetched");
             } catch (error) {
                 toast.dismiss();
-                toast.error("Profile Successfully Fetched");
-                console.error("Error fetching Profile : ", error);
+                toast.error("Error fetching Profile");
+                console.error("Error fetching Profile: ", error);
             }
         }
         if(userData){
             setData();
         }
-        // console.log(userProfileData);
     }, [userData]);
 
     return(
