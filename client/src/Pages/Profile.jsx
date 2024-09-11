@@ -2,7 +2,7 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
-import HomeLayout from "../Layouts/HomeLayout";
+import HomeLayout from "../Layouts/HomeLayout.jsx";
 import { Link, useNavigate } from "react-router-dom";
 
 

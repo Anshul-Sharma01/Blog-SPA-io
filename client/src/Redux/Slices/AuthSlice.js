@@ -5,8 +5,8 @@ import Cookies from "js-cookie";  // Import js-cookie
 
 const initialState = {
     isLoggedIn: localStorage.getItem('isLoggedIn') || false,
-    userRole: localStorage.getItem('role') || "",
-    userData: JSON.parse(localStorage.getItem('userData')) || {}
+    userRole: localStorage.getItem('role') !== undefined || "",
+    userData: JSON.parse(localStorage.getItem('userData')) !== undefined || {}
 }
 
 export const createAccount = createAsyncThunk("/auth/signup", async (data) => {
@@ -35,13 +35,13 @@ export const LoginUser = createAsyncThunk("/auth/login", async (data) => {
             success: (data) => {
                 return data?.data?.message;
             },
-            error: "Failed to authenticate your credentials"
+            error:"Failed to authenticate your credentials"
         })
 
         return (await res).data;
 
-    } catch (err) {
-        console.error("Error occurred while authenticating credentials: ", err);
+    } catch (error) {
+        console.error("Error occurred while authenticating credentials: ", error);
     }
 })
 
@@ -73,12 +73,14 @@ const authSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(createAccount.fulfilled, (state, action) => {
-            localStorage.setItem('userData', JSON.stringify(action?.payload?.data?.user));
-            localStorage.setItem('isLoggedIn', true);
-            localStorage.setItem('role', action?.payload?.data?.user?.role);
-            state.isLoggedIn = true;
-            state.userData = action?.payload?.data?.user;
-            state.userRole = action?.payload?.data?.user?.role;
+            if(action?.payload?.statusCode == 201){
+                localStorage.setItem('userData', JSON.stringify(action?.payload?.data?.user));
+                localStorage.setItem('isLoggedIn', true);
+                localStorage.setItem('role', action?.payload?.data?.user?.role);
+                state.isLoggedIn = true;
+                state.userData = action?.payload?.data?.user;
+                state.userRole = action?.payload?.data?.user?.role;
+            }
         })
             .addCase(createAccount.rejected, (state) => {
                 localStorage.clear();
@@ -87,12 +89,15 @@ const authSlice = createSlice({
                 state.userRole = " ";
             })
             .addCase(LoginUser.fulfilled, (state, action) => {
-                localStorage.setItem('userData', JSON.stringify(action?.payload?.data?.user));
-                localStorage.setItem('isLoggedIn', true);
-                localStorage.setItem('role', action?.payload?.data?.user?.role);
-                state.isLoggedIn = true;
-                state.userData = action?.payload?.data?.user;
-                state.userRole = action?.payload?.data?.user?.role;
+                console.log("Action : " ,action);
+                if(action?.payload?.statusCode == 200){
+                    localStorage.setItem('userData', JSON.stringify(action?.payload?.data?.user));
+                    localStorage.setItem('isLoggedIn', true);
+                    localStorage.setItem('role', action?.payload?.data?.user?.role);
+                    state.isLoggedIn = true;
+                    state.userData = action?.payload?.data?.user;
+                    state.userRole = action?.payload?.data?.user?.role;
+                }
             })
             .addCase(LoginUser.rejected, (state) => {
                 localStorage.clear();

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { MdOutlineWallpaper } from "react-icons/md";
+import HomeLayout from "../Layouts/HomeLayout.jsx";
+
 
 function CreateBlog(){
 
@@ -37,7 +39,7 @@ function CreateBlog(){
 
 
     return(
-        <>
+        <HomeLayout>
             <section className="flex flex-row justify-center items-center h-[100vh]">
                 <div className="card card-side bg-base-100 shadow-xl">
                 <figure>
@@ -89,7 +91,7 @@ function CreateBlog(){
                     </div>
                 </div>
             </section>
-        </>
+        </HomeLayout>
     )
 }
 
