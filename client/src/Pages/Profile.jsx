@@ -54,9 +54,9 @@ function Profile(){
                 <div className="card card-side bg-base-100 shadow-xl">
                     <figure>
                         <img
-                        className="rounded-full border-2 border-solid border-black"
+                        className="rounded-full border-2 border-solid border-black h-[400px]"
                         src={userProfileData.avatar}
-                        alt="Movie" />
+                        alt="USer-Picture" />
                     </figure>
                     <div className="card-body">
                         <div className="flex justify-center items-center flex-col">

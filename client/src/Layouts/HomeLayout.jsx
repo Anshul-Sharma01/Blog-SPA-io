@@ -79,6 +79,9 @@ function HomeLayout({ children }){
                                         <Link to="/me/profile">Profile</Link>
                                     </li>
                                     <li>
+                                        <Link to="/blogs/create">Create blog</Link>
+                                    </li>
+                                    <li>
                                         <Link onClick={handleLogout}>LogOut</Link>
                                     </li>
                                 </>

@@ -7,6 +7,7 @@ import HomePage from "../src/Pages/HomePage.jsx"
 import Register from './Pages/Register.jsx'
 import Login from './Pages/Login.jsx'
 import Profile from './Pages/Profile.jsx'
+import CreateBlog from './Pages/CreateBlog.jsx'
 
 function App() {
 
@@ -18,6 +19,8 @@ function App() {
         <Route path='/auth/login' element={<Login/>}></Route>
 
         <Route path='/me/profile' element={<Profile/>}></Route>
+
+        <Route path='/blogs/create' element={<CreateBlog/>}></Route>
       </Routes>
     </>
   )
