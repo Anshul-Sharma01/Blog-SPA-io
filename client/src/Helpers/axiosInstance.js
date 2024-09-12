@@ -36,27 +36,27 @@ axiosInstance.interceptors.response.use(
             originalRequest._retry = true;
 
             try {
-            const refreshToken = Cookies.get('refreshToken');
-            const response = await axiosInstance.post('/users/refresh-token', {
-                refreshToken,
-            });
+                const refreshToken = Cookies.get('refreshToken');
+                const response = await axiosInstance.post('/users/refresh-token', {
+                    refreshToken,
+                });
 
-            const newAccessToken = response.data.accessToken;
-            const newRefreshToken = response.data.refreshToken;
+                const newAccessToken = response.data.accessToken;
+                const newRefreshToken = response.data.refreshToken;
 
-            Cookies.set('accessToken', newAccessToken);
-            Cookies.set('refreshToken', newRefreshToken);
+                Cookies.set('accessToken', newAccessToken);
+                Cookies.set('refreshToken', newRefreshToken);
 
-            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
-            return axiosInstance(originalRequest);
+                return axiosInstance(originalRequest);
             } catch (err) {
-            console.error('Error refreshing access token:', err);
-            return Promise.reject(err);
+                console.error('Error refreshing access token:', err);
+                return Promise.reject(err);
             }
         }
         } else {
-        console.error('Error with the request:', error.message);
+            console.error('Error with the request:', error.message);
         }
 
         return Promise.reject(error);

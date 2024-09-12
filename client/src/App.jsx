@@ -8,6 +8,7 @@ import Register from './Pages/Register.jsx'
 import Login from './Pages/Login.jsx'
 import Profile from './Pages/Profile.jsx'
 import CreateBlog from './Pages/CreateBlog.jsx'
+import PersonalBlogs from './Pages/PersonalBlogs.jsx'
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
         <Route path='/me/profile' element={<Profile/>}></Route>
 
         <Route path='/blogs/create' element={<CreateBlog/>}></Route>
+        <Route path='/blogs/me' element={<PersonalBlogs/>}></Route>
       </Routes>
     </>
   )
