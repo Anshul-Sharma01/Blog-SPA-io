@@ -9,9 +9,9 @@ function PersonalBlogs() {
     const dispatch = useDispatch();
     const [personalBlogsData, setPersonalBlogsData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [limit, setLimit] = useState(3);
+    const [limit] = useState(3);
     const [page, setPage] = useState(1);
-    const [hasMore, setHasMore] = useState(true);
+    const [totalPages, setTotalPages] = useState(1);
 
     async function fetchBlogs() {
         try {
@@ -19,12 +19,10 @@ function PersonalBlogs() {
             console.log(resultAction);
 
             if (resultAction?.payload?.data?.myBlogs) {
-                if (resultAction.payload.data.myBlogs.length < limit) {
-                    setHasMore(false);
-                }
                 setPersonalBlogsData(resultAction.payload.data.myBlogs);
+                setTotalPages(resultAction.payload.data.totalPages);
+                setIsLoading(false);
             }
-            setIsLoading(false);
         } catch (error) {
             console.error("Failed to fetch personal blogs: ", error);
         }
@@ -32,17 +30,18 @@ function PersonalBlogs() {
 
     useEffect(() => {
         fetchBlogs();
-    }, [dispatch, page, limit]);
+    }, [dispatch, page]);
 
     function handlePagination() {
-        if (hasMore) {
+        if (page < totalPages) {
             setPage((prev) => prev + 1);
         }
     }
 
     function handleBackwardPagination() {
-        setPage((prev) => Math.max(prev - 1, 1));
-        setHasMore(hasMore === false ? true : false);
+        if (page > 1) {
+            setPage((prev) => prev - 1);
+        }
     }
 
     console.log("Blogs data: ", personalBlogsData);
@@ -93,9 +92,9 @@ function PersonalBlogs() {
                     Previous
                 </button>
                 <button
-                    className={`btn btn-outline ${!hasMore ? "btn-disabled" : ""}`}
+                    className={`btn btn-outline ${page >= totalPages ? "btn-disabled" : ""}`}
                     onClick={handlePagination}
-                    disabled={!hasMore}
+                    disabled={page >= totalPages}
                 >
                     Next
                 </button>
