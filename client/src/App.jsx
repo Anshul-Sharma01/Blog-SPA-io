@@ -1,6 +1,4 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+
 import './App.css'
 import { Routes, Route } from 'react-router-dom'
 import HomePage from "../src/Pages/HomePage.jsx"
@@ -9,6 +7,7 @@ import Login from './Pages/Login.jsx'
 import Profile from './Pages/Profile.jsx'
 import CreateBlog from './Pages/CreateBlog.jsx'
 import PersonalBlogs from './Pages/PersonalBlogs.jsx'
+import NotFound from './Components/NotFound.jsx'
 
 function App() {
 
@@ -23,6 +22,8 @@ function App() {
 
         <Route path='/blogs/create' element={<CreateBlog/>}></Route>
         <Route path='/blogs/me' element={<PersonalBlogs/>}></Route>
+
+        <Route path='*' element={<NotFound/>}></Route>
       </Routes>
     </>
   )
