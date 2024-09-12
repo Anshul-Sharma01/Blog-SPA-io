@@ -25,6 +25,11 @@ const blogSchema = new Schema({
             type : String,
             required : true
         }
+    },
+    numberOfLikes : {
+        type : Number,
+        default : 0,
+        minLength : [0, "Number of Likes can't be less than zero"]
     }
 }, {
     timestamps : true

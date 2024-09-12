@@ -3,34 +3,46 @@ import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { Like } from "../models/like.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import { Blog } from "../models/blog.model.js";
 
-const toggleBlogLike = asyncHandler(async(req, res, next) => {
-    try{
-        const { blogId } = rea.params;
+const toggleBlogLike = asyncHandler(async (req, res, next) => {
+    try {
+        const { blogId } = req.params;
         const userId = req.user._id;
 
-        if(!isValidObjectId(blogId)){
+        if (!isValidObjectId(blogId)) {
             throw new ApiError(400, "Invalid Blog Id");
         }
 
-        const likedBlogs = await Like.findOne({ likedBy : userId, blog : blogId });
+        const likedBlogs = await Like.findOne({ likedBy: userId, blog: blogId });
 
-        if(likedBlogs){
+        if (likedBlogs) {
             await likedBlogs.deleteOne();
-            return res.status(200).json(new ApiResponse(200,likedBlogs, "Blog Liked removed successfully"));
-        }else{
+            const blog = await Blog.findByIdAndUpdate(
+                blogId,
+                {
+                    $inc: { numberOfLikes: -1 },
+                    $max: { numberOfLikes: 0 }
+                },
+                { new: true }
+            );
+            return res.status(200).json(new ApiResponse(200, likedBlogs, "Blog Like removed successfully"));
+        } else {
+            const blog = await Blog.findByIdAndUpdate(
+                blogId,
+                { $inc: { numberOfLikes: 1 } },
+                { new: true }
+            );
             const blogLiked = await Like.create({
-                likedBy : userId,
-                blog : blogId
-            })
+                likedBy: userId,
+                blog: blogId
+            });
             return res.status(201).json(new ApiResponse(201, blogLiked, "Blog Liked successfully"));
         }
-
-        
-    }catch(err){
-        throw new ApiError(400,"Error occurred while toggling Blog like");
+    } catch (err) {
+        throw new ApiError(400, "Error occurred while toggling Blog like");
     }
-})
+});
 
 const toggleCommentLike = asyncHandler(async(req, res, next) => {
     try{

@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { fetchPersonalBlogs } from "../Redux/Slices/BlogSlice";
 import BlogSkeleton from "../Components/BlogSkeleton";
 import HomeLayout from "../Layouts/HomeLayout.jsx";
+import { BiLike } from "react-icons/bi";
 
 function PersonalBlogs() {
     const dispatch = useDispatch();
@@ -18,7 +19,6 @@ function PersonalBlogs() {
             console.log(resultAction);
 
             if (resultAction?.payload?.data?.myBlogs) {
-                
                 if (resultAction.payload.data.myBlogs.length < limit) {
                     setHasMore(false);
                 }
@@ -42,47 +42,64 @@ function PersonalBlogs() {
 
     function handleBackwardPagination() {
         setPage((prev) => Math.max(prev - 1, 1));
+        setHasMore(hasMore === false ? true : false);
     }
 
     console.log("Blogs data: ", personalBlogsData);
 
     return (
         <HomeLayout>
-            <h1 className="text-center font-mono tracking-widest uppercase text-4xl font-bold p-5">My Blogs</h1>
-            {isLoading && (
-                <section className="flex flex-row justify-center items-center h-[100vh] gap-10 flex-wrap">
+            <h1 className="text-center font-mono tracking-widest uppercase text-4xl font-bold py-10">My Blogs</h1>
+            {isLoading ? (
+                <section className="flex justify-center items-center h-[60vh] gap-10 flex-wrap">
                     <BlogSkeleton />
                     <BlogSkeleton />
                     <BlogSkeleton />
                     <BlogSkeleton />
                 </section>
-            )}
-            <section className="m-4 p-10 flex justify-center items-center flex-wrap flex-row gap-10 h-[100vh]">
-                {personalBlogsData.map((ele) => (
-                    <div key={ele._id} className="w-[500px] rounded-md border">
-                        <img
-                            src={ele.thumbnail.secure_url}
-                            alt="Blog Thumbnail"
-                            className="glass h-[200px] w-full rounded-md object-contain"
-                        />
-                        <div className="p-4">
-                            <h1 className="text-lg font-semibold">{ele.title}</h1>
-                            <p className="mt-3 text-sm text-gray-600">
-                                {ele.content}
-                            </p>
-                            <button
-                                type="button"
-                                className="mt-4 rounded-sm bg-black px-2.5 py-1 text-[10px] font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-                            >
-                                Read
-                            </button>
+            ) : (
+                <section className="m-4 p-10 flex justify-center items-center flex-wrap gap-10">
+                    {personalBlogsData.map((ele) => (
+                        <div key={ele._id} className="w-[450px] rounded-lg border shadow-lg hover:shadow-xl transition-shadow duration-300">
+                            <img
+                                src={ele.thumbnail.secure_url}
+                                alt="Blog Thumbnail"
+                                className="h-[200px] w-full rounded-t-lg object-cover"
+                            />
+                            <div className="p-6">
+                                <h1 className="text-2xl font-bold">{ele.title}</h1>
+                                <div className="flex items-center mt-4 text-gray-600">
+                                    <BiLike className="text-2xl mr-2" />
+                                    <span className="text-lg">{ele.numberOfLikes}</span>
+                                </div>
+                                <button
+                                    type="button"
+                                    className="mt-4 w-full rounded-md btn  px-4 py-2 text-sm font-medium text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 btn-accent"
+                                >
+                                    Read More
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </section>
+                    ))}
+                </section>
+            )}
 
-            <button className="btn btn-accent" onClick={handleBackwardPagination} disabled={page === 1}>Prev Blogs</button>
-            <button className="btn btn-accent" onClick={handlePagination} disabled={!hasMore}>Next Blogs</button>
+            <div className="flex justify-between items-center px-10 py-5">
+                <button
+                    className={`btn btn-outline ${page === 1 ? "btn-disabled" : ""}`}
+                    onClick={handleBackwardPagination}
+                    disabled={page === 1}
+                >
+                    Previous
+                </button>
+                <button
+                    className={`btn btn-outline ${!hasMore ? "btn-disabled" : ""}`}
+                    onClick={handlePagination}
+                    disabled={!hasMore}
+                >
+                    Next
+                </button>
+            </div>
         </HomeLayout>
     );
 }
