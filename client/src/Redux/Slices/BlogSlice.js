@@ -22,9 +22,9 @@ export const createNewBlog = createAsyncThunk("/blog/create", async(data) => {
     }
 })
 
-export const fetchPersonalBlogs = createAsyncThunk("/blogs/me", async() => {
+export const fetchPersonalBlogs = createAsyncThunk("/blogs/me", async(data) => {
     try {
-        const res = axiosInstance.get("blogs/my");
+        const res = axiosInstance.get(`blogs/my?limit=${data.limit}&page=${data.page}`);
         toast.promise(res, {
             loading: "Fetching Personal Blogs",
             success: "Personal blogs fetched successfully",
