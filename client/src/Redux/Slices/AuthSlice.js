@@ -68,6 +68,39 @@ export const Logout = createAsyncThunk("/auth/logout", async (req, res) => {
     }
 })
 
+export const resetUserPassword = createAsyncThunk("/auth/reset", async(data) => {
+    try{
+        console.log(data);
+        const res = axiosInstance.post("users/reset", data);
+        toast.promise(res, {
+            loading : 'Wait for a moment !',
+            success : `Email successfully sent to ${data.email}`,
+            error : 'Error occurred while sending mail'
+        });
+
+        return (await res).data;
+
+    }catch(err){
+        console.log("Error occurred while sending reset token through mail : ", err);
+    }
+})
+
+export const resetPasswordToken = createAsyncThunk("/auth/reset/:resetToken", async ({ resetToken, password }) => {
+    try {
+        const res = axiosInstance.post(`users/reset/${resetToken}`, { password });
+        toast.promise(res, {
+            loading: "Resetting your password",
+            success: "Password reset successfully",
+            error: "Error occurred while resetting your password",
+        });
+
+        return (await res).data;
+    } catch (err) {
+        console.log("Error occurred while updating the password using reset token: ", err);
+        
+    }
+});
+
 const authSlice = createSlice({
     name: 'auth',
     initialState,

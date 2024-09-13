@@ -90,6 +90,7 @@ function Login(){
                     <p>
                         Don't have an account ?  <Link to="/auth/register" className="link text-accent cursor-pointer">Create an Account</Link>
                     </p>
+                    <p className="text-left "><Link to="/auth/reset" className="link text-accent cursor-pointer">Forgot Password ?</Link></p>
                 </div>
 
             </section>

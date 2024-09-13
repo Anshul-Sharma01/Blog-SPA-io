@@ -10,6 +10,8 @@ import PersonalBlogs from './Pages/PersonalBlogs.jsx'
 import NotFound from './Components/NotFound.jsx'
 import RequireAuth from './Components/RequireAuth.jsx'
 import PermissionDenied from './Components/PermissionDenied.jsx'
+import ResetPassword from './Pages/ResetPassword.jsx'
+import ResetToken from './Pages/ResetToken.jsx'
 
 function App() {
 
@@ -22,8 +24,8 @@ function App() {
         {/* AUTH ROUTES */}
         <Route path='/auth/register' element={<Register/>}></Route>
         <Route path='/auth/login' element={<Login/>}></Route>
-
-
+        <Route path='/auth/reset' element={<ResetPassword/>}></Route>
+        <Route path='/auth/reset/:resetToken' element={<ResetToken/>}></Route>
 
         <Route element={<RequireAuth allowedRoles={['USER','ADMIN']} />}>
           <Route path='/me/profile' element={<Profile/>}></Route>
@@ -32,7 +34,7 @@ function App() {
         </Route>
 
 
-      <Route path='/denied' element={<PermissionDenied/>}></Route>
+        <Route path='/denied' element={<PermissionDenied/>}></Route>
 
         {/* NOT FOUND */}
 
