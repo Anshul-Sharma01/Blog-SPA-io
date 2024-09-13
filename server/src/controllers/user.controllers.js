@@ -262,6 +262,7 @@ const changePassword = asyncHandler(async (req, res, next) => {
 });
 
 
+
 const getAllUsers = asyncHandler(async (req, res, next) => {
     try{
         const allUsers = await User.find({});
@@ -279,6 +280,8 @@ const getAllUsers = asyncHandler(async (req, res, next) => {
 const updateUser = asyncHandler( async (req, res, next) => {
     const {  name } = req.body;
     const id = req.user._id;
+    console.log(name);
+    console.log(req.body);
 
     try{
 

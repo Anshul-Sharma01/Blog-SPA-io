@@ -116,6 +116,20 @@ export const changePasswordThunk = createAsyncThunk("/auth/password/change", asy
     }
 })
 
+export const updateUserThunk = createAsyncThunk("/me/profile/update", async (data) => {
+    try{
+        const res = axiosInstance.patch("users/update-profile", data);
+        toast.promise(res, {
+            loading : "Updating Your details",
+            success : "Details updated successfully",
+            error : "Error occurred while updating the details"
+        })
+        return (await res).data;
+    }catch(err){
+        console.log("Error occurred while updating user details : ", err);
+    }
+})
+
 const authSlice = createSlice({
     name: 'auth',
     initialState,
@@ -166,6 +180,13 @@ const authSlice = createSlice({
                 state.userData = {};
                 state.userRole = "";
                 state.personalBlogsExists = false;
+            })
+            .addCase(updateUserThunk.fulfilled, (state, action) => {
+                if(action?.payload?.statusCode == 200){
+                    console.log("Update User Payload:", action.payload);
+                    localStorage.setItem('userData', JSON.stringify(action?.payload?.data));
+                    state.userData = action?.payload?.data;
+                }
             })
     }
 })

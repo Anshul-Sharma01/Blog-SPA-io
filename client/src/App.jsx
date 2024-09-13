@@ -13,6 +13,8 @@ import PermissionDenied from './Components/PermissionDenied.jsx'
 import ResetPassword from './Pages/ResetPassword.jsx'
 import ResetToken from './Pages/ResetToken.jsx'
 import ChangePassword from './Pages/ChangePassword.jsx'
+import UpdateProfile from "./Pages/UpdateProfile.jsx"
+
 
 function App() {
 
@@ -31,6 +33,7 @@ function App() {
 
         <Route element={<RequireAuth allowedRoles={['USER','ADMIN']} />}>
           <Route path='/me/profile' element={<Profile/>}></Route>
+          <Route path='/profile/update' element={<UpdateProfile/>}></Route>
           <Route path='/blogs/create' element={<CreateBlog/>}></Route>
           <Route path='/blogs/me' element={<PersonalBlogs/>}></Route>
         </Route>
