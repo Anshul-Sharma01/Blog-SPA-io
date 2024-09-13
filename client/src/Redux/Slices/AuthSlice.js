@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import axiosInstance from "../../Helpers/axiosInstance.js";
 import Cookies from "js-cookie";  // Import js-cookie
+import axios from "axios";
 
 const initialState = {
     isLoggedIn: localStorage.getItem('isLoggedIn') === 'true', 
@@ -100,6 +101,20 @@ export const resetPasswordToken = createAsyncThunk("/auth/reset/:resetToken", as
         
     }
 });
+
+export const changePasswordThunk = createAsyncThunk("/auth/password/change", async({ oldPassword, newPassword }) => {
+    try{
+        const res = axiosInstance.post("users/change-password", { oldPassword, newPassword });
+        toast.promise(res, {
+            loading : "Changing your password",
+            success : "Password changed successfully",
+            error : "Error occurred while changing the password"
+        })
+        return (await res).data;
+    }catch(err){
+        console.log("Error occurred while changing password using old password : ", err);
+    }
+})
 
 const authSlice = createSlice({
     name: 'auth',

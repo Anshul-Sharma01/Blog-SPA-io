@@ -12,6 +12,7 @@ import RequireAuth from './Components/RequireAuth.jsx'
 import PermissionDenied from './Components/PermissionDenied.jsx'
 import ResetPassword from './Pages/ResetPassword.jsx'
 import ResetToken from './Pages/ResetToken.jsx'
+import ChangePassword from './Pages/ChangePassword.jsx'
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
         <Route path='/auth/login' element={<Login/>}></Route>
         <Route path='/auth/reset' element={<ResetPassword/>}></Route>
         <Route path='/auth/reset/:resetToken' element={<ResetToken/>}></Route>
+        <Route path='/auth/password/change' element={<ChangePassword/>}></Route>
 
         <Route element={<RequireAuth allowedRoles={['USER','ADMIN']} />}>
           <Route path='/me/profile' element={<Profile/>}></Route>

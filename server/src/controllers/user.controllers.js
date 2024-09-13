@@ -234,21 +234,21 @@ const resetPassword = asyncHandler( async (req, res, next) => {
 
 })
 
-const changePassword = asyncHandler( async (req, res, next ) => {
+const changePassword = asyncHandler(async (req, res, next) => {
     const { oldPassword, newPassword } = req.body;
     const userId = req.user._id;
 
-    if(!oldPassword || !newPassword) {
+    if (!oldPassword || !newPassword) {
         throw new ApiError(400, "All fields are mandatory");
     }
 
     const user = await User.findById(userId).select('+password');
-    if(!user){
-        throw new ApiError(400, "User does not exists");
+    if (!user) {
+        throw new ApiError(400, "User does not exist");
     }
 
     const isPasswordValid = await user.isPasswordCorrect(oldPassword);
-    if(!isPasswordValid){
+    if (!isPasswordValid) {
         throw new ApiError(400, "Invalid old Password");
     }
 
@@ -259,8 +259,8 @@ const changePassword = asyncHandler( async (req, res, next ) => {
     return res.status(200).json(
         new ApiResponse(200, user, "Password changed successfully")
     );
+});
 
-})
 
 const getAllUsers = asyncHandler(async (req, res, next) => {
     try{

@@ -89,6 +89,9 @@ function HomeLayout({ children }){
                                         )
                                     }
                                     <li>
+                                        <Link to="/auth/password/change">Change Password</Link>
+                                    </li>
+                                    <li>
                                         <Link onClick={handleLogout}>LogOut</Link>
                                     </li>
                                 </>
