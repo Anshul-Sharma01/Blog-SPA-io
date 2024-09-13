@@ -4,7 +4,8 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import HomeLayout from "../Layouts/HomeLayout.jsx";
 import { Link, useNavigate } from "react-router-dom";
-import UpdateProfile from "./UpdateProfile.jsx"; // Import the UpdateProfile component
+import UpdateProfile from "../Components/UpdateProfile.jsx"; // Import the UpdateProfile component
+import UpdateAvatar from "../Components/UpdateAvatar.jsx";
 
 function Profile() {
     const userData = useSelector((state) => state?.auth?.userData); 
@@ -94,9 +95,12 @@ function Profile() {
                             </div>
                         </div>
                         <div className="card-actions justify-end">
-                            <button className="btn btn-accent" onClick={() => navigate("/")}>
+                            {/* <button className="btn btn-accent" onClick={() => navigate("/")}>
                                 <FaArrowLeftLong />
                                 Go Back
+                            </button> */}
+                            <button onClick={() => document.getElementById('my_modal_1').showModal()}  className="btn btn-success text-black">
+                                Update Avatar
                             </button>
                             <button 
                                 className="btn text-white btn-primary" 
@@ -109,6 +113,7 @@ function Profile() {
                 </div>
             </section>
             <UpdateProfile /> {/* Render the UpdateProfile component */}
+            <UpdateAvatar />
         </HomeLayout>
     );
 }

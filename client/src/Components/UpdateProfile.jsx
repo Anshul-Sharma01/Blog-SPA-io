@@ -30,13 +30,6 @@ function UpdateProfile() {
 
     return (
         <>
-            <button 
-                className="btn" 
-                onClick={() => document.getElementById('my_modal_3').showModal()}
-            >
-                Open Update Profile Modal
-            </button>
-
             <dialog id="my_modal_3" className="modal">
                 <div className="modal-box">
                     <button 

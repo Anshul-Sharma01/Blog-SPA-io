@@ -337,7 +337,7 @@ const updateUserAvatar = asyncHandler( async (req, res, next) => {
         );
 
     }catch(err){
-        throw new ApiError(400, "Error occurred while updated Avatar");
+        throw new ApiError(400, `Error occurred while updated Avatar : ${err.message} `);
     }
 })
 

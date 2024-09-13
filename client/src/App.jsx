@@ -13,7 +13,7 @@ import PermissionDenied from './Components/PermissionDenied.jsx'
 import ResetPassword from './Pages/ResetPassword.jsx'
 import ResetToken from './Pages/ResetToken.jsx'
 import ChangePassword from './Pages/ChangePassword.jsx'
-import UpdateProfile from "./Pages/UpdateProfile.jsx"
+import UpdateProfile from "./Components/UpdateProfile.jsx"
 
 
 function App() {

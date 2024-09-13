@@ -130,6 +130,24 @@ export const updateUserThunk = createAsyncThunk("/me/profile/update", async (dat
     }
 })
 
+export const updateUserAvatarThunk = createAsyncThunk("/me/profile/avatar", async(data) => {
+    try{
+        const res = axiosInstance.patch("users/update-avatar", data,{ headers: {
+            'Content-Type': 'multipart/form-data',
+        }});
+        toast.promise(res, {
+            loading : 'Updating your profile picture',
+            success : "Profile photo updated successfully",
+            error : "Error occurred while updating profile picture"
+        })
+
+        return (await res).data;
+    }catch(err){
+        console.log(`Error occurred while updating user avatar  : ${err}`);
+    }
+})
+
+
 const authSlice = createSlice({
     name: 'auth',
     initialState,
@@ -184,6 +202,13 @@ const authSlice = createSlice({
             .addCase(updateUserThunk.fulfilled, (state, action) => {
                 if(action?.payload?.statusCode == 200){
                     console.log("Update User Payload:", action.payload);
+                    localStorage.setItem('userData', JSON.stringify(action?.payload?.data));
+                    state.userData = action?.payload?.data;
+                }
+            })
+            .addCase(updateUserAvatarThunk.fulfilled, (state, action) => {
+                if(action?.payload?.statusCode == 200){
+                    // console.log("Actions-Payload : ",action?.payload);
                     localStorage.setItem('userData', JSON.stringify(action?.payload?.data));
                     state.userData = action?.payload?.data;
                 }
