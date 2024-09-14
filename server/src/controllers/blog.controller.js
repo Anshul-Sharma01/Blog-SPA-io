@@ -163,7 +163,9 @@ const createBlog = asyncHandler(async (req, res, next) => {
 
             return res.status(201).json(new ApiResponse(
                 201,
-                blog,
+                {
+                    user,blog
+                },
                 "Blog created successfully"
             ))
 
@@ -309,9 +311,21 @@ const deleteBlog = asyncHandler(async (req, res, next) => {
         if (!deletedBlog) {
             throw new ApiError(400, "Blog does not exist");
         }
+        
+        const author = await User.findByIdAndUpdate(
+            userID,
+            {$inc : {blogCount : -1}},
+            {new : true}
+        )
 
         return res.status(200).json(
-            new ApiResponse(200, deletedBlog, "Blog deleted successfully")
+            new ApiResponse(
+                200, 
+                {
+                    user : author,
+                    deleteBlog
+                },
+                "Blog deleted successfully")
         );
 
     } catch (err) {

@@ -79,7 +79,7 @@ function Register() {
     
         const response = await dispatch(createAccount(formData));
     
-        if (response.payload.statusCode === 200) {
+        if (response?.payload?.statusCode === 201) {
             navigate("/");
             setUserData({
                 username: "",

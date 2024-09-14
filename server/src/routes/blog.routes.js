@@ -13,7 +13,7 @@ router.route("/my").get(verifyJWT, viewMyBlogs);
 router.route("/create").post(verifyJWT, upload.single("thumbnail"), createBlog);
 router.route("/update/:blogId").patch(verifyJWT, updateBlogDetails);
 router.route("/thumbnail/update/:blogId").patch(verifyJWT, upload.single("thumbnail"), updateBlogThumbnail);
-router.route("/delete/:blogId").get(verifyJWT, verifyAdmin, deleteBlog);
+router.route("/delete/:blogId").get(verifyJWT, deleteBlog);
 
 
 export default router;

@@ -6,10 +6,11 @@ import axios from "axios";
 
 const initialState = {
     isLoggedIn: localStorage.getItem('isLoggedIn') === 'true', 
-    userRole: localStorage.getItem('role') !== undefined ? localStorage.getItem('role')  : "", 
+    userRole: localStorage.getItem('role') !== undefined ? localStorage.getItem('role') : "", 
     userData: JSON.parse(localStorage.getItem('userData')) !== undefined ? JSON.parse(localStorage.getItem('userData')) : {},  
     personalBlogsExists: localStorage.getItem('personalBlogsExists') === 'true', 
-}
+};
+
 
 export const createAccount = createAsyncThunk("/auth/signup", async (data) => {
     try {
@@ -154,14 +155,16 @@ const authSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(createAccount.fulfilled, (state, action) => {
-            if(action?.payload?.statusCode == 201){
-                localStorage.setItem('userData', JSON.stringify(action?.payload?.data?.user));
+            if (action?.payload?.statusCode === 201) {
+                const user = action?.payload?.data?.user;
+                localStorage.setItem('userData', JSON.stringify(user));
                 localStorage.setItem('isLoggedIn', true);
-                localStorage.setItem('role', action?.payload?.data?.user?.role);
+                localStorage.setItem('role', user?.role);
+
                 state.isLoggedIn = true;
-                state.userData = action?.payload?.data?.user;
-                state.userRole = action?.payload?.data?.user?.role;
-                state.personalBlogsExists = user?.blogCount > 0;
+                state.userData = user;
+                state.userRole = user?.role;
+                state.personalBlogsExists = user?.blogCount > 0;  // Update based on blog count
                 localStorage.setItem('personalBlogsExists', state.personalBlogsExists);
             }
         })
@@ -173,15 +176,16 @@ const authSlice = createSlice({
                 state.personalBlogsExists = false;
             })
             .addCase(LoginUser.fulfilled, (state, action) => {
-                console.log("Action : " ,action);
-                if(action?.payload?.statusCode == 200){
-                    localStorage.setItem('userData', JSON.stringify(action?.payload?.data?.user));
+                if (action?.payload?.statusCode === 200) {
+                    const user = action?.payload?.data?.user;
+                    localStorage.setItem('userData', JSON.stringify(user));
                     localStorage.setItem('isLoggedIn', true);
-                    localStorage.setItem('role', action?.payload?.data?.user?.role);
+                    localStorage.setItem('role', user?.role);
+
                     state.isLoggedIn = true;
-                    state.userData = action?.payload?.data?.user;
-                    state.userRole = action?.payload?.data?.user?.role;
-                    state.personalBlogsExists = action?.payload?.data?.user?.blogCount > 0;
+                    state.userData = user;
+                    state.userRole = user?.role;
+                    state.personalBlogsExists = user?.blogCount > 0;  
                     localStorage.setItem('personalBlogsExists', state.personalBlogsExists);
                 }
             })

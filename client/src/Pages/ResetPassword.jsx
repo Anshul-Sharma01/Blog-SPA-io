@@ -14,10 +14,11 @@ function ResetPassword(){
 
         if(userEmail.trim() === ''){
             toast.error("Please fill in your email");
+            return;
         }
 
         const response = await dispatch(resetUserPassword({email : userEmail}));
-        console.log("Response: ",response);
+        
 
     }
 

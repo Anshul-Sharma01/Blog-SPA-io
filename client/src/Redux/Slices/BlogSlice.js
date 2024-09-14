@@ -5,8 +5,9 @@ import axiosInstance from "../../Helpers/axiosInstance.js";
 const initialState = {
     personalBlogsExists: localStorage.getItem('personalBlogsExists') === 'true',
     blogsData: [],
-    allBlogsData : [],
-}
+    allBlogsData: [],
+};
+
 
 export const createNewBlog = createAsyncThunk("/blog/create", async(data) => {
     try {
@@ -107,17 +108,33 @@ export const updateBlogThumbnailThunk = createAsyncThunk("/blogs/update/thumbnai
     }
 });
 
+export const deleteBlogThunk = createAsyncThunk("/blogs/delete/:blogId", async({ blogId }) => {
+    try{
+        const res = axiosInstance.get(`blogs/delete/${blogId}`);
+        toast.promise(res, {
+            loading : 'Deleting the blog',
+            success : "Blog deleted successfully",
+            error : "Error occurred in deleting the blog"
+        })
 
+        return ( await res).data;
+
+    }catch(err){
+        console.log("Error occurred while deleting the blog using thunk : ", err);
+    }
+})
 
 const blogSlice = createSlice({
     name: 'blog',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(createNewBlog.fulfilled, (state, action) => {
+        builder 
+        .addCase(createNewBlog.fulfilled, (state, action) => {
             if (action?.payload?.statusCode === 201) {
-                state.personalBlogsExists = true;
-                localStorage.setItem('personalBlogsExists', 'true'); 
+                state.personalBlogsExists = true; 
+                localStorage.setItem('personalBlogsExists', 'true');
+                localStorage.setItem('userData', JSON.stringify(action?.payload?.data?.user));
             }
         })
         .addCase(fetchPersonalBlogs.fulfilled, (state, action) => {
@@ -130,6 +147,17 @@ const blogSlice = createSlice({
                 state.blogsData = action?.payload?.data || { };
             }
         })
+        .addCase(deleteBlogThunk.fulfilled, (state, action) => {
+            if (action?.payload?.statusCode === 200) {
+                const user = action?.payload?.data?.user;
+                localStorage.setItem('userData', JSON.stringify(user));
+                
+                if (user?.blogCount === 0) {
+                    state.personalBlogsExists = false;  
+                    localStorage.setItem('personalBlogsExists', 'false');
+                }
+            }
+        });
     }
 })
 

@@ -3,23 +3,23 @@ import { FiMenu } from "react-icons/fi";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Logout } from "../Redux/Slices/AuthSlice.js";
+import { useEffect, useState } from "react";
 
-
-
-function HomeLayout({ children }){
-    
+function HomeLayout({ children }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    // Fetch state directly from Redux
     const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn);
     const personalBlogsExists = useSelector((state) => state?.auth?.personalBlogsExists);
 
-    function changeWidth(){
+    // Drawer control functions
+    function changeWidth() {
         const drawerSide = document.getElementsByClassName('drawer-side');
         drawerSide[0].style.width = 'auto';
     }
 
-    function hideDrawer(){
+    function hideDrawer() {
         const element = document.getElementsByClassName('drawer-toggle');
         element[0].checked = false;
 
@@ -27,17 +27,17 @@ function HomeLayout({ children }){
         drawerSide[0].style.width = 0;
     }
 
-    async function handleLogout(e){
+    // Logout handling
+    async function handleLogout(e) {
         e.preventDefault();
         const res = await dispatch(Logout());
-        if(res?.payload?.success){
+        if (res?.payload?.success) {
             navigate("/");
         }
     }
-
-    return(
-        <div className="min-h-[90vh]"> 
-            <div className=" drawer absolute left-0 z-50 w-fit ">
+    return (
+        <div className="min-h-[90vh]">
+            <div className="drawer absolute left-0 z-50 w-fit">
                 <input type="checkbox" id="my-drawer" className="drawer-toggle" />
                 <div className="drawer-content">
                     <label htmlFor="my-drawer" className="cursor-pointer relative">
@@ -52,7 +52,7 @@ function HomeLayout({ children }){
                     <label htmlFor="my-drawer" className="drawer-overlay"></label>
                     <ul className="menu p-4 w-48 sm:w-80 bg-base-200 text-base-content relative h-fit">
                         <li className="w-fit absolute right-2 z-50 ">
-                            <button onClick={hideDrawer} >
+                            <button onClick={hideDrawer}>
                                 <AiFillCloseCircle size={24} />
                             </button>
                         </li>
@@ -63,54 +63,45 @@ function HomeLayout({ children }){
                             <Link to="/blogs/all">All Blogs</Link>
                         </li>
 
-                        {
-                            !isLoggedIn && (
-                                <>
-                                    <li>
-                                        <Link to="/auth/register" >Sign Up</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/auth/login">Log In </Link>
-                                    </li>
-                                </>
-                            )
-                        }
-                        {
-                            isLoggedIn && (
-                                <>
-                                    <li>
-                                        <Link to="/me/profile">Profile</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/blogs/create">Create blog</Link>
-                                    </li>
-                                    {
-                                        personalBlogsExists && (
-                                            <li>
-                                                <Link to="/blogs/me">My Blogs</Link>
-                                            </li>
-                                        )
-                                    }
-                                    <li>
-                                        <Link to="/auth/password/change">Change Password</Link>
-                                    </li>
-                                    <li>
-                                        <Link onClick={handleLogout}>LogOut</Link>
-                                    </li>
-                                </>
-                            )
-                        }
+                        {!isLoggedIn && (
+                            <>
+                                <li>
+                                    <Link to="/auth/register">Sign Up</Link>
+                                </li>
+                                <li>
+                                    <Link to="/auth/login">Log In</Link>
+                                </li>
+                            </>
+                        )}
 
+                        {isLoggedIn && (
+                            <>
+                                <li>
+                                    <Link to="/me/profile">Profile</Link>
+                                </li>
+                                <li>
+                                    <Link to="/blogs/create">Create Blog</Link>
+                                </li>
+                                {personalBlogsExists && (
+                                    <li>
+                                        <Link to="/blogs/me">My Blogs</Link>
+                                    </li>
+                                )}
+                                <li>
+                                    <Link to="/auth/password/change">Change Password</Link>
+                                </li>
+                                <li>
+                                    <Link onClick={handleLogout}>LogOut</Link>
+                                </li>
+                            </>
+                        )}
                     </ul>
                 </div>
             </div>
 
             {children}
-
         </div>
-    )
+    );
 }
 
-
 export default HomeLayout;
-

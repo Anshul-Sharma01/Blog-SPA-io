@@ -5,6 +5,7 @@ import { fetchBlogThunk } from '../Redux/Slices/BlogSlice';
 import HomeLayout from '../Layouts/HomeLayout';
 import UpdateBlogData from '../Components/Blogs/UpdateBlogData';
 import UpdateBlogAvatar from '../Components/Blogs/UpdateBlogAvatar';
+import DeleteBlog from '../Components/Blogs/DeleteBlog';
 
 function ViewBlog() {
     const { blogId } = useParams();
@@ -80,6 +81,12 @@ function ViewBlog() {
                         >
                             Update Blog
                         </button>
+                        <button 
+                            className='btn btn-error px-4 py-2'
+                            onClick={() => document.getElementById('delete_blog_modal').showModal()}    
+                        >
+                            Delete Blog
+                        </button>
                     </div>
                 )}
             </div>
@@ -87,6 +94,7 @@ function ViewBlog() {
                 <>
                     <UpdateBlogData blogId={blogId} />
                     <UpdateBlogAvatar blogId={blogId} />
+                    <DeleteBlog blogId={blogId}/>
                 </>
             )}
         </HomeLayout>
