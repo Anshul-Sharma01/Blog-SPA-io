@@ -12,7 +12,7 @@ router.route("/view/:blogId").get(viewBlog);
 router.route("/my").get(verifyJWT, viewMyBlogs);
 router.route("/create").post(verifyJWT, upload.single("thumbnail"), createBlog);
 router.route("/update/:blogId").patch(verifyJWT, updateBlogDetails);
-router.route("/updatethumbnail/:blogId").patch(verifyJWT, updateBlogThumbnail);
+router.route("/thumbnail/update/:blogId").patch(verifyJWT, upload.single("thumbnail"), updateBlogThumbnail);
 router.route("/delete/:blogId").get(verifyJWT, verifyAdmin, deleteBlog);
 
 

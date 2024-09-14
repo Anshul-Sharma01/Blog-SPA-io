@@ -86,6 +86,27 @@ export const updateBlogThunk = createAsyncThunk("/blogs/update/:blogId", async({
     }
 })
 
+export const updateBlogThumbnailThunk = createAsyncThunk("/blogs/update/thumbnail", async ({ blogId, formData }) => {
+    try {
+        const res = axiosInstance.patch(`blogs/thumbnail/update/${blogId}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        });
+
+        toast.promise(res, {
+            loading: 'Updating Blog Thumbnail',
+            success: "Successfully Updated Blog Thumbnail",
+            error: "Error occurred while updating Blog Thumbnail"
+        });
+
+        return (await res).data;
+
+    } catch (err) {
+        console.log(`Error occurred while updating blog thumbnail using thunk : ${err}`);
+    }
+});
+
 
 
 const blogSlice = createSlice({

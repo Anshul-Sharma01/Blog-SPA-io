@@ -180,7 +180,7 @@ const updateBlogDetails = asyncHandler ( async( req, res, next) => {
     try{
         const { title, content } = req.body;
         const  { blogId }  = req.params;
-        console.log(req.params);
+        // console.log(req.params);
 
         if(!isValidObjectId(blogId)){
             throw new ApiError(400, "Invalid Blog Id");
@@ -225,6 +225,7 @@ const updateBlogThumbnail = asyncHandler( async( req, res, next) => {
         if(!isValidObjectId(blogId)){
             throw new ApiError(400, "Invalid Blog Id");
         }
+        console.log("Files : ",req.file);
 
         if(req.file){
             const thumbnailLocalPath = req.file?.path;
@@ -263,7 +264,7 @@ const updateBlogThumbnail = asyncHandler( async( req, res, next) => {
             throw new ApiError(400, "Thumbnail file is required");
         }
     }catch(err){
-        throw new ApiError(400, "Error occurred while updating the blog thumbnail");
+        throw new ApiError(400, `Error occurred while updating the blog thumbnail : ${err}`);
     }
 })
 
