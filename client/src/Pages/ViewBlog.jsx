@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { fetchBlogThunk } from '../Redux/Slices/BlogSlice';
 import HomeLayout from '../Layouts/HomeLayout';
@@ -7,24 +7,32 @@ import UpdateBlogData from '../Components/Blogs/UpdateBlogData';
 import UpdateBlogAvatar from '../Components/Blogs/UpdateBlogAvatar';
 
 function ViewBlog() {
-
     const { blogId } = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const [blogData, setBlogData] = useState({});
+    const [isOwner, setIsOwner] = useState(false);
+
+
+    const currentUserId = useSelector((state) => state?.auth?.userData?._id);
 
     async function fetchBlogData() {
         const res = await dispatch(fetchBlogThunk({ blogId }));
 
         if (res?.payload?.data) {
-            setBlogData(res?.payload?.data);
+            setBlogData(res.payload.data);
+
+
+            if (res.payload.data.owner._id === currentUserId) {
+                setIsOwner(true);
+            }
         }
     }
 
     useEffect(() => {
         fetchBlogData();
-    }, []);
+    }, [dispatch, blogId, currentUserId]);
 
     return (
         <HomeLayout>
@@ -58,18 +66,29 @@ function ViewBlog() {
                     />
                 </div>
 
-                <div className='card-actions flex flex-row gap-20 justify-center items-center'>
-                    <button className='btn btn-warning px-4 py-2' onClick={() => document.getElementById("blog_avatar_modal").showModal()}>
-                        Update Thumbnail
-                    </button>
-                    <button className='btn btn-success px-4 py-2' onClick={() => document.getElementById("blog_modal_1").showModal()}>
-                        Update Blog
-                    </button>
-                </div>
-
+                {isOwner && (
+                    <div className='card-actions flex flex-row gap-20 justify-center items-center'>
+                        <button
+                            className='btn btn-warning px-4 py-2'
+                            onClick={() => document.getElementById("blog_avatar_modal").showModal()}
+                        >
+                            Update Thumbnail
+                        </button>
+                        <button
+                            className='btn btn-success px-4 py-2'
+                            onClick={() => document.getElementById("blog_modal_1").showModal()}
+                        >
+                            Update Blog
+                        </button>
+                    </div>
+                )}
             </div>
-            <UpdateBlogData blogId={blogId} />
-            <UpdateBlogAvatar blogId={blogId} />
+            {isOwner && (
+                <>
+                    <UpdateBlogData blogId={blogId} />
+                    <UpdateBlogAvatar blogId={blogId} />
+                </>
+            )}
         </HomeLayout>
     );
 }

@@ -176,36 +176,45 @@ const createBlog = asyncHandler(async (req, res, next) => {
     }
 })
 
-const updateBlogDetails = asyncHandler ( async( req, res, next) => {
-    try{
+const updateBlogDetails = asyncHandler(async (req, res, next) => {
+    try {
         const { title, content } = req.body;
-        const  { blogId }  = req.params;
-        // console.log(req.params);
+        const { blogId } = req.params;
+        const userID = req.user._id;
 
-        if(!isValidObjectId(blogId)){
+        if (!isValidObjectId(blogId)) {
             throw new ApiError(400, "Invalid Blog Id");
         }
 
-        if(!title && !content){
-            throw new ApiError(400, "Atleast update one field");
+        if (!title && !content) {
+            throw new ApiError(400, "At least update one field");
+        }
+
+
+        const blog = await Blog.findById(blogId);
+        if (!blog) {
+            throw new ApiError(404, "Blog not found");
+        }
+
+        if (blog.owner.toString() !== userID.toString()) {
+            throw new ApiError(403, "You are not authorized to update this blog");
         }
 
         const updatedFields = {};
-        if(title){
+        if (title) {
             updatedFields.title = title;
         }
-        if(content){
+        if (content) {
             updatedFields.content = content;
         }
 
-
         const updatedBlog = await Blog.findByIdAndUpdate(
             blogId,
-            {$set : updatedFields},
-            {new : true}
-        )
+            { $set: updatedFields },
+            { new: true }
+        );
 
-        if(!updatedBlog){
+        if (!updatedBlog) {
             throw new ApiError(400, "Error updating blog details");
         }
 
@@ -213,83 +222,103 @@ const updateBlogDetails = asyncHandler ( async( req, res, next) => {
             new ApiResponse(200, updatedBlog, "Blog details updated successfully")
         );
 
-    }catch(err){
+    } catch (err) {
         throw new ApiError(400, err?.message || "Error updating blog details");
     }
-})
+});
 
-const updateBlogThumbnail = asyncHandler( async( req, res, next) => {
-    try{
+
+const updateBlogThumbnail = asyncHandler(async (req, res, next) => {
+    try {
         const { blogId } = req.params;
+        const userID = req.user._id;
 
-        if(!isValidObjectId(blogId)){
+        if (!isValidObjectId(blogId)) {
             throw new ApiError(400, "Invalid Blog Id");
         }
-        console.log("Files : ",req.file);
 
-        if(req.file){
+
+        const blog = await Blog.findById(blogId);
+        if (!blog) {
+            throw new ApiError(404, "Blog not found");
+        }
+
+        if (blog.owner.toString() !== userID.toString()) {
+            throw new ApiError(403, "You are not authorized to update this blog thumbnail");
+        }
+
+        if (req.file) {
             const thumbnailLocalPath = req.file?.path;
-            if(!thumbnailLocalPath){
-                throw new ApiError(400, "Please provide new thumbnail");
+            if (!thumbnailLocalPath) {
+                throw new ApiError(400, "Please provide a new thumbnail");
             }
 
             const thumbnail = await uploadOnCloudinary(thumbnailLocalPath);
-
-            if(!thumbnail){
-                throw new ApiError(400, "Error occurred while updating thumbnail on cloudinary" );
+            if (!thumbnail) {
+                throw new ApiError(400, "Error occurred while updating thumbnail on Cloudinary");
             }
 
             const updatedBlog = await Blog.findByIdAndUpdate(
                 blogId,
                 {
-                    $set : {
-                        thumbnail : {
-                            public_id : thumbnail.public_id,
-                            secure_url : thumbnail.secure_url
-                        }
-                    }
+                    $set: {
+                        thumbnail: {
+                            public_id: thumbnail.public_id,
+                            secure_url: thumbnail.secure_url,
+                        },
+                    },
                 },
-                {new :true}
-            )
+                { new: true }
+            );
 
-            if(!updatedBlog){
+            if (!updatedBlog) {
                 throw new ApiError(400, "Error occurred while updating the thumbnail");
             }
 
             return res.status(200).json(
                 new ApiResponse(200, updatedBlog, "Blog Thumbnail updated successfully")
             );
-
-        }else{  
+        } else {
             throw new ApiError(400, "Thumbnail file is required");
         }
-    }catch(err){
-        throw new ApiError(400, `Error occurred while updating the blog thumbnail : ${err}`);
+    } catch (err) {
+        throw new ApiError(400, `Error occurred while updating the blog thumbnail: ${err}`);
     }
-})
+});
 
-const deleteBlog = asyncHandler ( async(req, res, next) => {
-    try{
+const deleteBlog = asyncHandler(async (req, res, next) => {
+    try {
         const { blogId } = req.params;
+        const userID = req.user._id;
 
-        if(!isValidObjectId(blogId)){
+        if (!isValidObjectId(blogId)) {
             throw new ApiError(400, "Invalid Blog Id");
+        }
+
+        const blog = await Blog.findById(blogId);
+        if (!blog) {
+            throw new ApiError(404, "Blog not found");
+        }
+
+        if (blog.owner.toString() !== userID.toString()) {
+            throw new ApiError(403, "You are not authorized to delete this blog");
         }
 
         const deletedBlog = await Blog.findByIdAndDelete(blogId);
 
-        if(!deletedBlog){
-            throw new ApiError(400, "Blog does not exists");
+        if (!deletedBlog) {
+            throw new ApiError(400, "Blog does not exist");
         }
-        
+
         return res.status(200).json(
-            new ApiResponse(200, deletedBlog, "Blog deleted Successfully")
+            new ApiResponse(200, deletedBlog, "Blog deleted successfully")
         );
 
-    }catch(err){
+    } catch (err) {
         throw new ApiError(400, err?.message || "Error occurred while deleting the blog");
     }
-})
+});
+
 
 
 export {

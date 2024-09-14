@@ -71,6 +71,7 @@ function AllBlogs(){
                         {
                             allBlogsData.map((ele) => (
                                 <BlogStructure
+                                    blogId={ele._id}
                                     key={ele._id}
                                     thumbnail={ele.thumbnail.secure_url}
                                     title={ele.title}
