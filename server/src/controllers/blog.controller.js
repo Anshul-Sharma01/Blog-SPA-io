@@ -53,6 +53,31 @@ const viewAllBlogs = asyncHandler ( async (req, res, next) => {
     }
 })
 
+const viewBlog = asyncHandler( async (req, res, next) => {
+    try{
+        const { blogId } = req.params;
+        console.log(req.params);
+
+        if(!isValidObjectId(blogId)){
+            throw new ApiError(400, "Invalid Blog Id");
+        }
+
+        const blog = await Blog.findById(blogId)
+        .populate("owner", "username name");
+
+        if(!blog){
+            throw new ApiError(404, "Blog not found");
+        }
+        
+        return res.status(200).json(
+            new ApiResponse(200, blog, "Blog Data Fetched Successfully")
+        );
+
+    }catch(err){
+        throw new ApiError(400, `Error occurred while fetching the blog : ${err}`);
+    }
+})
+
 const viewMyBlogs = asyncHandler ( async( req, res, next) => {
     try{
         let { page, limit } = req.query;
@@ -154,7 +179,8 @@ const createBlog = asyncHandler(async (req, res, next) => {
 const updateBlogDetails = asyncHandler ( async( req, res, next) => {
     try{
         const { title, content } = req.body;
-        const { blogId } = req.params;
+        const  { blogId }  = req.params;
+        console.log(req.params);
 
         if(!isValidObjectId(blogId)){
             throw new ApiError(400, "Invalid Blog Id");
@@ -267,6 +293,7 @@ const deleteBlog = asyncHandler ( async(req, res, next) => {
 
 export {
     viewAllBlogs,
+    viewBlog,
     viewMyBlogs,
     createBlog,
     updateBlogDetails,

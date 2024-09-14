@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { MdOutlineCloudUpload } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { updateUserAvatarThunk } from "../Redux/Slices/AuthSlice";
+import { updateUserAvatarThunk } from "../../Redux/Slices/AuthSlice";
 
 
 

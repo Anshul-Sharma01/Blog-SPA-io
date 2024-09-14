@@ -2,7 +2,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { updateUserThunk } from "../Redux/Slices/AuthSlice";
+import { updateUserThunk } from "../../Redux/Slices/AuthSlice";
 
 function UpdateProfile() {
     const [userName, setUserName] = useState("");

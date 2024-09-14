@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import  { fetchPersonalBlogs } from "../Redux/Slices/BlogSlice";
-import BlogSkeleton from "../Components/BlogSkeleton";
+import BlogSkeleton from "../Components/Blogs/BlogSkeleton.jsx";
 import HomeLayout from "../Layouts/HomeLayout.jsx";
 import { BiLike } from "react-icons/bi";
-import BlogStructure from "../Components/BlogStructure.jsx";
+import BlogStructure from "../Components/Blogs/BlogStructure.jsx";
 
 function PersonalBlogs() {
     const dispatch = useDispatch();
@@ -60,7 +60,7 @@ function PersonalBlogs() {
             ) : (
                 <section className="m-4 p-10 flex justify-center items-center flex-wrap gap-10">
                     {personalBlogsData.map((ele) => (
-                        <BlogStructure key={ele._id} thumbnail={ele?.thumbnail?.secure_url} title={ele.title} numberOfLikes={ele.numberOfLikes}/>
+                        <BlogStructure blogId = {ele._id} key={ele._id} thumbnail={ele?.thumbnail?.secure_url} title={ele.title} numberOfLikes={ele.numberOfLikes}/> 
                     ))}
                 </section>
             )}

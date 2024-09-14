@@ -1,7 +1,9 @@
 import { BiLike } from "react-icons/bi";
 import { LuUser2 } from "react-icons/lu";
+import { Link } from "react-router-dom";
 
-function BlogStructure({ thumbnail, title, numberOfLikes, author }){
+
+function BlogStructure({ thumbnail, title, numberOfLikes, author, blogId }){
     return(
         <>
             <div className="w-[450px] rounded-lg border shadow-lg hover:shadow-xl transition-shadow duration-300">
@@ -26,12 +28,16 @@ function BlogStructure({ thumbnail, title, numberOfLikes, author }){
                             )
                         }
                     </div>
-                    <button
-                        type="button"
-                        className="mt-4 w-full rounded-md btn  px-4 py-2 text-sm font-medium text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 btn-accent"
-                    >
-                        Read More
-                    </button>
+                        <Link to={`/blogs/view/${blogId}`}>
+                            <button
+                                type="button"
+                                className="mt-4 w-full rounded-md btn  px-4 py-2 text-sm font-medium text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 btn-accent"
+                            >
+                                Read More
+                            </button>   
+                        
+                        </Link>
+                        
                 </div>
             </div>
         </>

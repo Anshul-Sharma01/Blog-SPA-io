@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import axiosInstance from "../../Helpers/axiosInstance.js";
 
 const initialState = {
-    personalBlogsExists: localStorage.getItem('personalBlogsExists') === 'true', // Ensure this is a boolean
+    personalBlogsExists: localStorage.getItem('personalBlogsExists') === 'true',
     blogsData: [],
     allBlogsData : [],
 }
@@ -53,6 +53,39 @@ export const fetchAllBlogsThunk = createAsyncThunk("/blogs/all", async(data) => 
         console.log("Error occurred while fetching all blogs using thunk : ", err);
     }
 })
+
+export const fetchBlogThunk = createAsyncThunk("/blog/view/:blogId", async(data) => {
+    try{
+        const res = axiosInstance.get(`blogs/view/${data.blogId}`);
+        toast.promise(res, {
+            loading : 'Fetching Blog Details',
+            success : " Blog details fetched successfully",
+            error : "Error occurred in fetching Blog details"
+        })
+
+        return (await res).data;
+
+    }catch(err){
+        console.log("Error occurred while fetching a blog using thunk : ", err);
+    }
+})
+
+
+export const updateBlogThunk = createAsyncThunk("/blogs/update/:blogId", async({ title, content, blogId }) => {
+    try{
+        const res = axiosInstance.patch(`/blogs/update/${blogId}`, { title, content });
+        toast.promise(res, {
+            loading : 'Updating blod data',
+            success : "Blog details updated successfully",
+            error : "Error occurred while updating blog details"
+        })
+
+        return (await res).data;
+    }catch(err){
+        console.log("Error occurred while updating blog data : ", err);
+    }
+})
+
 
 
 const blogSlice = createSlice({

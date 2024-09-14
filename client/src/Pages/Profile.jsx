@@ -4,8 +4,8 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import HomeLayout from "../Layouts/HomeLayout.jsx";
 import { Link, useNavigate } from "react-router-dom";
-import UpdateProfile from "../Components/UpdateProfile.jsx"; // Import the UpdateProfile component
-import UpdateAvatar from "../Components/UpdateAvatar.jsx";
+import UpdateProfile from "../Components/Users/UpdateProfile.jsx"; // Import the UpdateProfile component
+import UpdateAvatar from "../Components/Users/UpdateAvatar.jsx";
 
 function Profile() {
     const userData = useSelector((state) => state?.auth?.userData); 

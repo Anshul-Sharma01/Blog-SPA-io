@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import HomeLayout from "../Layouts/HomeLayout.jsx";
 import { fetchAllBlogsThunk } from "../Redux/Slices/BlogSlice.js";
-import BlogSkeleton from "../Components/BlogSkeleton.jsx";
-import BlogStructure from "../Components/BlogStructure.jsx";
+import BlogSkeleton from "../Components/Blogs/BlogSkeleton.jsx";
+import BlogStructure from "../Components/Blogs/BlogStructure.jsx";
 
 
 function AllBlogs(){
