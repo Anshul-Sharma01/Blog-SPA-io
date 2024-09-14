@@ -14,6 +14,7 @@ import ResetPassword from './Pages/ResetPassword.jsx'
 import ResetToken from './Pages/ResetToken.jsx'
 import ChangePassword from './Pages/ChangePassword.jsx'
 import UpdateProfile from "./Components/UpdateProfile.jsx"
+import AllBlogs from './Pages/AllBlogs.jsx'
 
 
 function App() {
@@ -31,6 +32,8 @@ function App() {
         <Route path='/auth/reset/:resetToken' element={<ResetToken/>}></Route>
         <Route path='/auth/password/change' element={<ChangePassword/>}></Route>
 
+
+        <Route path='/blogs/all' element={<AllBlogs/>}></Route>
         <Route element={<RequireAuth allowedRoles={['USER','ADMIN']} />}>
           <Route path='/me/profile' element={<Profile/>}></Route>
           <Route path='/profile/update' element={<UpdateProfile/>}></Route>

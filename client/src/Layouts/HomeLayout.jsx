@@ -59,6 +59,9 @@ function HomeLayout({ children }){
                         <li className="mt-10">
                             <Link to="/">Home</Link>
                         </li>
+                        <li>
+                            <Link to="/blogs/all">All Blogs</Link>
+                        </li>
 
                         {
                             !isLoggedIn && (

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { fetchPersonalBlogs } from "../Redux/Slices/BlogSlice";
+import  { fetchPersonalBlogs } from "../Redux/Slices/BlogSlice";
 import BlogSkeleton from "../Components/BlogSkeleton";
 import HomeLayout from "../Layouts/HomeLayout.jsx";
 import { BiLike } from "react-icons/bi";
+import BlogStructure from "../Components/BlogStructure.jsx";
 
 function PersonalBlogs() {
     const dispatch = useDispatch();
@@ -59,26 +60,7 @@ function PersonalBlogs() {
             ) : (
                 <section className="m-4 p-10 flex justify-center items-center flex-wrap gap-10">
                     {personalBlogsData.map((ele) => (
-                        <div key={ele._id} className="w-[450px] rounded-lg border shadow-lg hover:shadow-xl transition-shadow duration-300">
-                            <img
-                                src={ele.thumbnail.secure_url}
-                                alt="Blog Thumbnail"
-                                className="h-[200px] w-full rounded-t-lg object-cover"
-                            />
-                            <div className="p-6">
-                                <h1 className="text-2xl font-bold">{ele.title}</h1>
-                                <div className="flex items-center mt-4 text-gray-600">
-                                    <BiLike className="text-2xl mr-2" />
-                                    <span className="text-lg">{ele.numberOfLikes}</span>
-                                </div>
-                                <button
-                                    type="button"
-                                    className="mt-4 w-full rounded-md btn  px-4 py-2 text-sm font-medium text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 btn-accent"
-                                >
-                                    Read More
-                                </button>
-                            </div>
-                        </div>
+                        <BlogStructure key={ele._id} thumbnail={ele?.thumbnail?.secure_url} title={ele.title} numberOfLikes={ele.numberOfLikes}/>
                     ))}
                 </section>
             )}

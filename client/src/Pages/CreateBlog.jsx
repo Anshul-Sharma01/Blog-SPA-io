@@ -53,7 +53,7 @@ function CreateBlog(){
         const res = await dispatch(createNewBlog(formData));
 
         if(res.meta.requestStatus === 'fulfilled'){
-            navigate("/");
+            navigate("/blogs/me");
         }
 
     }
