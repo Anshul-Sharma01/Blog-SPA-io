@@ -15,7 +15,6 @@ function ViewBlog() {
     const [blogData, setBlogData] = useState({});
     const [isOwner, setIsOwner] = useState(false);
 
-
     const currentUserId = useSelector((state) => state?.auth?.userData?._id);
 
     async function fetchBlogData() {
@@ -23,7 +22,6 @@ function ViewBlog() {
 
         if (res?.payload?.data) {
             setBlogData(res.payload.data);
-
 
             if (res.payload.data.owner._id === currentUserId) {
                 setIsOwner(true);
@@ -37,52 +35,46 @@ function ViewBlog() {
 
     return (
         <HomeLayout>
-            <div className="max-w-4xl flex flex-col justify-center items-center mx-auto p-6">
+            <div className="max-w-4xl flex flex-col justify-center items-center mx-auto p-6 space-y-8">
                 <img
                     src={blogData?.thumbnail?.secure_url || ""}
                     alt="Blog Thumbnail"
-                    className="w-full h-[400px] object-contain rounded-lg shadow-md mb-8"
+                    className="w-full h-[400px] object-cover rounded-lg shadow-lg mb-8 transition-transform duration-300 hover:scale-105"
                 />
 
-                <h1 className="text-4xl font-bold text-center text-gray-800 mb-6">
-                    <input
-                        type="text"
-                        className="block w-fit px-4 py-4 rounded-md h-fit ring-1 ring-inset ring-gray-400 focus:text-gray-800"
-                        value={blogData?.title || ""}
-                        disabled
-                    />
+                <h1 className="text-5xl font-bold text-center text-gray-800 mb-6">
+                    {blogData?.title || ""}
                 </h1>
 
-                <div className="text-center text-gray-500 italic mb-8">
+                <div className="text-center text-gray-500 italic mb-8 text-lg">
                     <p>By {blogData?.owner?.username || "Unknown"}</p>
                 </div>
 
-                <div className="prose max-w-none text-lg leading-relaxed text-gray-700">
-                    <textarea
-                        name=""
-                        id=""
-                        value={blogData?.content || ""}
-                        cols="50"
-                        disabled
-                    />
+                <div className="prose w-full max-w-none text-lg leading-relaxed text-gray-700 bg-white p-6 rounded-lg shadow-sm">
+                    <div
+                        className="whitespace-pre-wrap break-words"
+                        style={{ width: '100%' }}
+                    >
+                        {blogData?.content || ""}
+                    </div>
                 </div>
 
                 {isOwner && (
-                    <div className='card-actions flex flex-row gap-20 justify-center items-center'>
+                    <div className="flex flex-row gap-6 justify-center items-center mt-8 space-x-4">
                         <button
-                            className='btn btn-warning px-4 py-2'
+                            className="btn btn-warning px-6 py-3 text-lg shadow-lg hover:bg-yellow-500"
                             onClick={() => document.getElementById("blog_avatar_modal").showModal()}
                         >
                             Update Thumbnail
                         </button>
                         <button
-                            className='btn btn-success px-4 py-2'
+                            className="btn btn-success px-6 py-3 text-lg shadow-lg hover:bg-green-500"
                             onClick={() => document.getElementById("blog_modal_1").showModal()}
                         >
                             Update Blog
                         </button>
                         <button 
-                            className='btn btn-error px-4 py-2'
+                            className="btn btn-error px-6 py-3 text-lg shadow-lg hover:bg-red-500"
                             onClick={() => document.getElementById('delete_blog_modal').showModal()}    
                         >
                             Delete Blog
@@ -90,6 +82,7 @@ function ViewBlog() {
                     </div>
                 )}
             </div>
+
             {isOwner && (
                 <>
                     <UpdateBlogData blogId={blogId} />

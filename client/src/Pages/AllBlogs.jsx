@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 
 import HomeLayout from "../Layouts/HomeLayout.jsx";
 import { fetchAllBlogsThunk } from "../Redux/Slices/BlogSlice.js";
 import BlogSkeleton from "../Components/Blogs/BlogSkeleton.jsx";
 import BlogStructure from "../Components/Blogs/BlogStructure.jsx";
-import toast from "react-hot-toast";
 
 
 function AllBlogs(){
