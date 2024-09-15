@@ -7,6 +7,7 @@ import HomeLayout from "../Layouts/HomeLayout.jsx";
 import { fetchAllBlogsThunk } from "../Redux/Slices/BlogSlice.js";
 import BlogSkeleton from "../Components/Blogs/BlogSkeleton.jsx";
 import BlogStructure from "../Components/Blogs/BlogStructure.jsx";
+import toast from "react-hot-toast";
 
 
 function AllBlogs(){
@@ -23,6 +24,9 @@ function AllBlogs(){
     async function fetchAllBlogs(){
         try{
             const res = await dispatch(fetchAllBlogsThunk({ limit, page }));
+            if(res?.payload?.data?.totalBlogs == 0){
+                navigate("/");
+            }
             if(res?.payload?.data?.allBlogs){
                 setAllBlogsData(res?.payload?.data?.allBlogs);
                 setTotalPages(res?.payload?.data?.totalPages);

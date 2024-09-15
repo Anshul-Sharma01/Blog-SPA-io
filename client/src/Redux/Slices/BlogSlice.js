@@ -44,7 +44,7 @@ export const fetchAllBlogsThunk = createAsyncThunk("/blogs/all", async(data) => 
         const res = axiosInstance.get(`blogs/viewall?limit=${data.limit}&page=${data.page}`);
         toast.promise(res, {
             loading : 'Fetching All blogs',
-            success : "Successfully Fetched All Blogs",
+            success : (data) => data?.data?.message,
             error : "Error occurred while fetching all blogs"
         })
 

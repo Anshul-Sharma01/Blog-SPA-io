@@ -23,19 +23,21 @@ const viewAllBlogs = asyncHandler ( async (req, res, next) => {
         .limit(limit)
         .populate("owner", "username name");
 
-        if(allBlogs.length === 0){
+        
+
+        const totalBlogs = await Blog.countDocuments();
+
+        if(allBlogs.length == 0){
             return res.status(200).json(
-                new ApiResponse(200, {
-                    allBlogs : [],
+                new ApiResponse(200,{
+                    allBlogs,
                     totalBlogs,
                     totalPages : Math.ceil(totalBlogs / limit),
                     currentPage : page
-                }),
+                },
                 "Blogs doesn't exists"
-            )
+            ))
         }
-
-        const totalBlogs = await Blog.countDocuments();
 
         return res.status(200).json(
             new ApiResponse(200,{

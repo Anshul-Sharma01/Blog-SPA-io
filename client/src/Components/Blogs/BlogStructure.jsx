@@ -1,6 +1,7 @@
 import { BiLike } from "react-icons/bi";
 import { LuUser2 } from "react-icons/lu";
 import { Link } from "react-router-dom";
+import { MdOutlineStarBorder, MdOutlineStar } from "react-icons/md";
 
 
 function BlogStructure({ thumbnail, title, numberOfLikes, author, blogId }){
@@ -15,9 +16,14 @@ function BlogStructure({ thumbnail, title, numberOfLikes, author, blogId }){
                 <div className="p-6">
                     <h1 className="text-2xl font-bold">{title}</h1>
                     <div className="flex items-center justify-between mt-4 text-gray-600">
-                        <div className="flex flex-row justify-center items-center">
-                            <BiLike className="text-2xl mr-2" />
-                            <span className="text-lg">{numberOfLikes}</span>
+                        <div className="flex flex-row justify-center items-center gap-4">
+                            <div className="flex flex-row justify-center items-center">
+                                <BiLike className="text-2xl mr-2" />
+                                <span className="text-lg">{numberOfLikes}</span>
+                            </div>
+                            <div>
+                                <MdOutlineStarBorder className="text-3xl hover:cursor-pointer" />
+                            </div>
                         </div>
                         {
                             author && (
