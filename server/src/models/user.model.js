@@ -2,6 +2,7 @@ import mongoose, { Schema } from "mongoose";
 import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 import crypto from "crypto";
+import { type } from "os";
 
 
 
@@ -46,6 +47,12 @@ const userSchema = new Schema({
         default : 0,
         minLength : [0, "Blog Count can't be less than 0"],
     },
+    favourites : [
+        {
+            type : Schema.Types.ObjectId,
+            ref : "Favourites"
+        }
+    ],
     avatar : {
         public_id : {
             type : String,

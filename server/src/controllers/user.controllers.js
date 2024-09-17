@@ -37,6 +37,7 @@ const register = asyncHandler(async (req, res, next) => {
         }
 
         const userNameExists = await User.findOne({username});
+        
         if(userNameExists){
             throw new ApiError(400, "Username already exists");
         }

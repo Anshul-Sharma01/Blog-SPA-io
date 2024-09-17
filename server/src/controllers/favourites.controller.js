@@ -8,58 +8,65 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 
 
 
-const toggleFavourite = asyncHandler(async( req, res, next) => {
-    try{
+const toggleFavourite = asyncHandler(async (req, res, next) => {
+    try {
         const { blogId } = req.params;
         const { blogUserId } = req.body;
         const userId = req.user._id;
 
-
-        if(!isValidObjectId(blogId)){
-            throw new ApiError(400,"Invalid Blog Id");
+        if (!isValidObjectId(blogId)) {
+            throw new ApiError(400, "Invalid Blog Id");
         }
 
-        if(!isValidObjectId(blogUserId)){
+        if (!isValidObjectId(blogUserId)) {
             throw new ApiError(400, "Invalid User Id");
         }
 
-        const blogExists = await Favourites.findOne({ blog: blogId, owner : userId });
+        const blogExists = await Favourites.findOne({ blog: blogId, owner: userId });
 
-        if(blogExists){
+        if (blogExists) {
+            
             await blogExists.deleteOne();
+            await User.findByIdAndUpdate(userId, {
+                $pull: { favourites: blogId }
+            });
+
             return res.status(200).json(new ApiResponse(200, blogExists, "Blog removed from Favourites"));
         }
 
+
         const favBlog = await Favourites.create({
-            blog : blogId,
-            owner : userId,
-            blogOwner : blogUserId
-        })
+            blog: blogId,
+            owner: userId,
+            blogOwner: blogUserId
+        });
+
+        await User.findByIdAndUpdate(userId, {
+            $push: { favourites: blogId }
+        });
 
         return res.status(201).json(new ApiResponse(201, favBlog, "Blog added to Favourites"));
-
-
-
-    }catch(err){
+    } catch (err) {
         throw new ApiError(400, err?.message || "Error occurred while toggling Favourite");
     }
-})
+});
 
-const getAllFavourites = asyncHandler( async (req, res, next) => {
-    try{
+
+const getAllFavourites = asyncHandler(async (req, res, next) => {
+    try {
         const userId = req.user._id;
 
-        const favouriteBlogs = await Favourites.find({owner : userId});
+        const favouriteBlogs = await Favourites.find({ owner: userId });
 
-        if(favouriteBlogs.length === 0){
+        if (favouriteBlogs.length === 0) {
             return res.status(200).json(new ApiResponse(200, [], "You haven't added any blog to favourites"));
         }
         return res.status(200).json(new ApiResponse(200, favouriteBlogs, "Favourite blogs fetched"));
-
-    }catch(err){    
+    } catch (err) {
         throw new ApiError(400, err?.message || "Error occurred while fetching favourite blogs");
     }
-})
+});
+
 
 const getFavouriteCountForBlog = asyncHandler(async (req, res, next) => {
     try{
@@ -83,19 +90,20 @@ const getFavouriteCountForBlog = asyncHandler(async (req, res, next) => {
     }
 })
 
-const clearAllFavourites = asyncHandler(async ( req, res, next) => {
-    try{
+const clearAllFavourites = asyncHandler(async (req, res, next) => {
+    try {
         const userId = req.user._id;
-
-        await Favourites.deleteMany({ owner : userId });
+        await Favourites.deleteMany({ owner: userId });
+        await User.findByIdAndUpdate(userId, {
+            $set: { favourites: [] }
+        });
 
         return res.status(200).json(new ApiResponse(200, [], "Favourites list wiped off"));
-
-
-    }catch(err){
-        throw new ApiError(400, err?.message ||  "Error occurred while removing all favourites");
+    } catch (err) {
+        throw new ApiError(400, err?.message || "Error occurred while removing all favourites");
     }
-})
+});
+
 
 const getFavouriteBlogsByOwner = asyncHandler(async(req, res,next) => {
     try{
