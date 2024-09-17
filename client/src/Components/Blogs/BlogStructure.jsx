@@ -1,41 +1,62 @@
 import { BiLike } from "react-icons/bi";
 import { LuUser2 } from "react-icons/lu";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MdOutlineStarBorder, MdOutlineStar } from "react-icons/md";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { toggleFavThunk } from "../../Redux/Slices/FavouritesSlice";
 
-function BlogStructure({ thumbnail, title, numberOfLikes, author, blogId }) {
+function BlogStructure({ thumbnail, title, numberOfLikes, author, blogId, blogUserId }) {
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const [ toggleFavourite, setToggleFavourite ] = useState(false);
+    async function handletoggleFavourite(e){
+        e.preventDefault();
+
+        const res = await dispatch(toggleFavThunk({ blogId, blogUserId}));
+
+        if(res?.payload?.success === true){
+            setToggleFavourite(true);
+        }
+
+    }
+
+
     return (
         <div className="w-[450px] rounded-lg border border-gray-200 shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out transform hover:-translate-y-2 bg-white overflow-hidden">
-            {/* Blog Thumbnail */}
+            
             <img
                 src={thumbnail}
                 alt="Blog Thumbnail"
                 className="h-[200px] w-full object-cover rounded-t-lg transition-transform duration-300 ease-in-out hover:scale-105"
             />
 
-            {/* Blog Content */}
+
             <div className="p-6 space-y-4">
-                {/* Blog Title */}
+
                 <h1 className="text-2xl font-bold text-gray-800 hover:text-gray-900 transition-colors duration-300">
                     {title}
                 </h1>
 
-                {/* Blog Stats (Likes and Author Info) */}
+
                 <div className="flex items-center justify-between text-gray-600">
                     <div className="flex items-center space-x-4">
-                        {/* Likes Section */}
+                
                         <div className="flex items-center space-x-2">
                             <BiLike className="text-2xl text-blue-600" />
                             <span className="text-lg font-semibold">{numberOfLikes}</span>
                         </div>
 
-                        {/* Star Section */}
+                        
                         <div>
-                            <MdOutlineStarBorder className="text-3xl text-yellow-400 hover:text-yellow-500 transition-colors duration-300 cursor-pointer" />
+                            <button onClick={(e) => handletoggleFavourite(e)}>
+                                <MdOutlineStarBorder className="text-3xl text-yellow-400 hover:text-yellow-500 transition-colors duration-300 cursor-pointer" />
+                            </button>
                         </div>
                     </div>
 
-                    {/* Author Section */}
                     {author && (
                         <div className="flex items-center space-x-2 text-gray-800">
                             <LuUser2 className="text-2xl" />
@@ -46,7 +67,6 @@ function BlogStructure({ thumbnail, title, numberOfLikes, author, blogId }) {
                     )}
                 </div>
 
-                {/* Read More Button */}
                 <Link to={`/blogs/view/${blogId}`}>
                     <button
                         type="button"

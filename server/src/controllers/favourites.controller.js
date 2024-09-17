@@ -3,6 +3,7 @@ import { ApiError } from "../utils/ApiError.js"
 import { asyncHandler } from "../utils/asyncHandler.js"
 import { Favourites } from "../models/favourites.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import { User } from "../models/user.model.js";
 
 
 
@@ -13,13 +14,16 @@ const toggleFavourite = asyncHandler(async (req, res, next) => {
         const { blogId } = req.params;
         const { blogUserId } = req.body;
         const userId = req.user._id;
+        console.log(blogUserId);
+        console.log(blogId);
+        
 
         if (!isValidObjectId(blogId)) {
             throw new ApiError(400, "Invalid Blog Id");
         }
 
         if (!isValidObjectId(blogUserId)) {
-            throw new ApiError(400, "Invalid User Id");
+            throw new ApiError(400, "Invalid blog User Id");
         }
 
         const blogExists = await Favourites.findOne({ blog: blogId, owner: userId });

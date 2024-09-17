@@ -80,6 +80,7 @@ function AllBlogs(){
                                     title={ele.title}
                                     numberOfLikes={ele.numberOfLikes}
                                     author={ele.owner.username}
+                                    blogUserId={ele.blogUserId}
                                 />
                             ))
                         }

@@ -16,6 +16,7 @@ import ChangePassword from './Pages/ChangePassword.jsx'
 import UpdateProfile from "./Components/Users/UpdateProfile.jsx"
 import AllBlogs from './Pages/AllBlogs.jsx'
 import ViewBlog from './Pages/ViewBlog.jsx'
+import MyFavourites from './Pages/MyFavourites.jsx'
 
 
 function App() {
@@ -40,6 +41,8 @@ function App() {
           <Route path='/me/profile' element={<Profile/>}></Route>
           <Route path='/blogs/create' element={<CreateBlog/>}></Route>
           <Route path='/blogs/me' element={<PersonalBlogs/>}></Route>
+
+          <Route path='/favourites/my' element={<MyFavourites/>}></Route>
         </Route>
 
 

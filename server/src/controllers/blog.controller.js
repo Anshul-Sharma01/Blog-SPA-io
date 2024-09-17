@@ -8,52 +8,66 @@ import { isValidObjectId } from "mongoose";
 
 
 
-
-const viewAllBlogs = asyncHandler ( async (req, res, next) => {
-    try{
+const viewAllBlogs = asyncHandler(async (req, res, next) => {
+    try {
         let { page, limit } = req.query;
         page = parseInt(page) || 3;
         limit = parseInt(limit) || 3;
 
+        const skip = (page - 1) * limit;
 
-        const skip = ( page - 1 ) * limit;
-
+        // Fetch all blogs and populate owner details
         const allBlogs = await Blog.find({})
-        .skip(skip)
-        .limit(limit)
-        .populate("owner", "username name");
-
-        
+            .skip(skip)
+            .limit(limit)
+            .populate("owner", "username name _id");
 
         const totalBlogs = await Blog.countDocuments();
 
-        if(allBlogs.length == 0){
+        // If no blogs exist, return response with empty array
+        if (allBlogs.length === 0) {
             return res.status(200).json(
-                new ApiResponse(200,{
-                    allBlogs,
-                    totalBlogs,
-                    totalPages : Math.ceil(totalBlogs / limit),
-                    currentPage : page
-                },
-                "Blogs doesn't exists"
-            ))
+                new ApiResponse(
+                    200,
+                    {
+                        allBlogs,
+                        totalBlogs,
+                        totalPages: Math.ceil(totalBlogs / limit),
+                        currentPage: page
+                    },
+                    "Blogs don't exist"
+                )
+            );
         }
 
-        return res.status(200).json(
-            new ApiResponse(200,{
-                allBlogs,
-                totalBlogs,
-                totalPages : Math.ceil(totalBlogs / limit),
-                currentPage : page
-            },
-            "All Blogs Fetched Successfully"
-        )
-        )
+        // If blogs exist, include the blogUserId in the response
+        const blogDataWithBlogUserId = allBlogs.map((blog) => {
+            return {
+                ...blog._doc, // Spread the blog details
+                blogUserId: blog.owner._id, // Rename owner's _id to blogUserId
+                owner: {
+                    ...blog.owner._doc, // Spread owner details
+                    _id: undefined, // Remove the original _id to avoid conflict
+                }
+            };
+        });
 
-    }catch(err){
+        return res.status(200).json(
+            new ApiResponse(
+                200,
+                {
+                    allBlogs: blogDataWithBlogUserId, // Return the transformed data with blogUserId
+                    totalBlogs,
+                    totalPages: Math.ceil(totalBlogs / limit),
+                    currentPage: page
+                },
+                "All Blogs Fetched Successfully"
+            )
+        );
+    } catch (err) {
         throw new ApiError(400, err?.message || "Error occurred while fetching blogs");
     }
-})
+});
 
 const viewBlog = asyncHandler( async (req, res, next) => {
     try{
@@ -84,6 +98,7 @@ const viewMyBlogs = asyncHandler ( async( req, res, next) => {
     try{
         let { page, limit } = req.query;
         const userId = req.user._id;
+        console.log("User id :",userId);
 
         if(!isValidObjectId(userId)){
             throw new ApiError(400, "Invalid User Id");
@@ -289,6 +304,7 @@ const updateBlogThumbnail = asyncHandler(async (req, res, next) => {
         throw new ApiError(400, `Error occurred while updating the blog thumbnail: ${err}`);
     }
 });
+
 
 const deleteBlog = asyncHandler(async (req, res, next) => {
     try {

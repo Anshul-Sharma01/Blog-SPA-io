@@ -88,6 +88,9 @@ function HomeLayout({ children }) {
                                     </li>
                                 )}
                                 <li>
+                                    <Link to="/favourites/my"> My Favourites</Link>
+                                </li>
+                                <li>
                                     <Link to="/auth/password/change">Change Password</Link>
                                 </li>
                                 <li>
