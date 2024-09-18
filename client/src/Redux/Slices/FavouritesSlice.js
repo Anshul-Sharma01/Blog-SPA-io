@@ -34,6 +34,35 @@ export const getAllFavThunk = createAsyncThunk("/favourites/my", async () => {
     }
 })
 
+export const getFavCountThunk = createAsyncThunk("/favourites/my", async ({ blogId }) => {
+    try {
+        // Await the axios call
+        const res = await axiosInstance.get(`favourites/countfav/${blogId}`);
+
+        // Log the full response
+        console.log("Full API Response: ", res);
+
+        // Log the data field of the response
+        console.log("Response Data: ", res.data);
+
+        // Show a toast with detailed debugging info
+        toast.promise(Promise.resolve(res), {
+            loading: 'Fetching the count of favourites for your blog',
+            success: (response) => {
+                console.log("Toast Response Data: ", response?.data?.data); 
+                return `Total Stars: ${response?.data?.data?.countFavourites || 0}`;
+            },
+            error: `Error occurred while fetching stars for your blog`
+        });
+
+        // Return the actual data from the response
+        return res.data;
+
+    } catch (err) {
+        console.log(`Error occurred while fetching count of favourites for a particular blog: ${err}`);
+    }
+});
+
 
 const favouriteSlice = createSlice({
     name : 'favourite',

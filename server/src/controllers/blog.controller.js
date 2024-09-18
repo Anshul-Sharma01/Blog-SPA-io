@@ -248,7 +248,6 @@ const updateBlogDetails = asyncHandler(async (req, res, next) => {
     }
 });
 
-
 const updateBlogThumbnail = asyncHandler(async (req, res, next) => {
     try {
         const { blogId } = req.params;
@@ -306,7 +305,6 @@ const updateBlogThumbnail = asyncHandler(async (req, res, next) => {
         throw new ApiError(400, `Error occurred while updating the blog thumbnail: ${err}`);
     }
 });
-
 
 const deleteBlog = asyncHandler(async (req, res, next) => {
     try {

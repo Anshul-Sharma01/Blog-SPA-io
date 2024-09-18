@@ -10,7 +10,7 @@ router.use(verifyJWT);
 
 router.route("/").get(getAllFavourites);
 router.route("/fav/:blogId").post(toggleFavourite);
-router.route("/countfav/:blogId").post(getFavouriteCountForBlog);
+router.route("/countfav/:blogId").get(getFavouriteCountForBlog);
 router.route("/clear").delete(clearAllFavourites);
 router.route("/:blogUserId").get(getFavouriteBlogsByOwner);
 

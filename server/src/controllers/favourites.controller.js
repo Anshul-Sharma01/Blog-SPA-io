@@ -74,6 +74,7 @@ const getAllFavourites = asyncHandler(async (req, res, next) => {
     }
 });
 
+
 const getFavouriteCountForBlog = asyncHandler(async (req, res, next) => {
     try{
         const { blogId } = req.params;
@@ -88,7 +89,7 @@ const getFavouriteCountForBlog = asyncHandler(async (req, res, next) => {
             return res.status(200).json(new ApiResponse(200, [], "No-one has favourited yet"));
         }
 
-        return res.status(200).json(new ApiResponse(200, countFavourites, "Fetched count of stars" ));
+        return res.status(200).json(new ApiResponse(200, {countFavourites}, "Fetched count of stars" ));
 
 
     }catch(err){

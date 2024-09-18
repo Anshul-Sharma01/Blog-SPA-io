@@ -6,6 +6,7 @@ import HomeLayout from '../Layouts/HomeLayout';
 import UpdateBlogData from '../Components/Blogs/UpdateBlogData';
 import UpdateBlogAvatar from '../Components/Blogs/UpdateBlogAvatar';
 import DeleteBlog from '../Components/Blogs/DeleteBlog';
+import FavCount from '../Components/Blogs/FavCount';
 
 function ViewBlog() {
     const { blogId } = useParams();
@@ -79,6 +80,13 @@ function ViewBlog() {
                         >
                             Delete Blog
                         </button>
+
+                        <button 
+                            className='btn btn-accent px-6 py-3 text-lg shadow-lg hover:bg-yellow-400'
+                            onClick={() => document.getElementById('favCount_modal').showModal()}
+                        >
+                            Stars Count
+                        </button>
                     </div>
                 )}
             </div>
@@ -88,6 +96,7 @@ function ViewBlog() {
                     <UpdateBlogData blogId={blogId} />
                     <UpdateBlogAvatar blogId={blogId} />
                     <DeleteBlog blogId={blogId}/>
+                    <FavCount blogId={blogId} />
                 </>
             )}
         </HomeLayout>
