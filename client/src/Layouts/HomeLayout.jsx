@@ -82,11 +82,11 @@ function HomeLayout({ children }) {
                                 <li>
                                     <Link to="/blogs/create">Create Blog</Link>
                                 </li>
-                                {personalBlogsExists && (
-                                    <li>
-                                        <Link to="/blogs/me">My Blogs</Link>
-                                    </li>
-                                )}
+                                
+                                <li>
+                                    <Link to="/blogs/me">My Blogs</Link>
+                                </li>
+                                
                                 <li>
                                     <Link to="/favourites/my"> My Favourites</Link>
                                 </li>

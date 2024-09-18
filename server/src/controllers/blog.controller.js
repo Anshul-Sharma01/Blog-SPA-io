@@ -114,7 +114,9 @@ const viewMyBlogs = asyncHandler ( async( req, res, next) => {
         .limit(limit);
 
         if(myBlogs.length === 0){
-            throw new ApiError(400, "The user does not have any blogs");
+            return res.status(200).json(
+                new ApiResponse(200, myBlogs, "User does not have any blogs")
+            );
         }
 
         const totalBlogs = await Blog.countDocuments({ owner : userId });
