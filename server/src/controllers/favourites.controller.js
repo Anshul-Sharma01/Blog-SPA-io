@@ -4,7 +4,7 @@ import { asyncHandler } from "../utils/asyncHandler.js"
 import { Favourites } from "../models/favourites.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.model.js";
-
+import { Blog } from "../models/blog.model.js";
 
 
 
@@ -60,7 +60,10 @@ const getAllFavourites = asyncHandler(async (req, res, next) => {
     try {
         const userId = req.user._id;
 
-        const favouriteBlogs = await Favourites.find({ owner: userId });
+        const favouriteBlogs = await Favourites.find({ owner: userId })
+            .populate("owner", "username name _id")
+            .populate("blog", "_id thumbnail title numberOfLikes")
+            .populate("blogOwner", "username name _id");
 
         if (favouriteBlogs.length === 0) {
             return res.status(200).json(new ApiResponse(200, [], "You haven't added any blog to favourites"));
@@ -70,7 +73,6 @@ const getAllFavourites = asyncHandler(async (req, res, next) => {
         throw new ApiError(400, err?.message || "Error occurred while fetching favourite blogs");
     }
 });
-
 
 const getFavouriteCountForBlog = asyncHandler(async (req, res, next) => {
     try{
@@ -93,6 +95,7 @@ const getFavouriteCountForBlog = asyncHandler(async (req, res, next) => {
         throw new ApiError(400, err?.message || "Error occurred while fetching count of favourites");
     }
 })
+
 
 const clearAllFavourites = asyncHandler(async (req, res, next) => {
     try {

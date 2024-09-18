@@ -35,4 +35,4 @@ const blogSchema = new Schema({
     timestamps : true
 })
 
-export const Blog = model("Blogs", blogSchema);
+export const Blog = model("Blog", blogSchema);

@@ -1,13 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getAllFavThunk } from "../Redux/Slices/FavouritesSlice";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import BlogStructure from "../Components/Blogs/BlogStructure";
+import BlogSkeleton from "../Components/Blogs/BlogSkeleton.jsx";
+import HomeLayout from "../Layouts/HomeLayout.jsx";
 
 function MyFavourites(){
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const [ isLoading, setIsLoading ] = useState(true);
+    const [ favblogs, setFavBlogs ] = useState([]); 
 
     async function fetchFavourites(){
         try{
@@ -15,6 +21,9 @@ function MyFavourites(){
             if(res?.payload?.data.length == 0){
                 navigate("/blogs/all");
             }
+            setFavBlogs(res?.payload?.data);
+            setIsLoading(false);
+            console.log(favblogs);
             console.log("Favourites Response : ", res);
         }catch(err){
             console.log("Error occurred at favourites : ", err);
@@ -26,9 +35,44 @@ function MyFavourites(){
     }, [])
 
     return(
-        <>
-            <h1>My Favourites</h1>
-        </>
+        <HomeLayout>
+            <section className="flex flex-col justify-center items-center gap-4">
+
+                <h1 className="text-center font-mono tracking-widest uppercase text-4xl font-bold py-10">
+                    My Favourites
+                </h1>
+
+                {
+                    isLoading && (
+                        <>
+                            <BlogSkeleton />
+                            <BlogSkeleton />
+                            <BlogSkeleton />
+                            <BlogSkeleton />
+                            <BlogSkeleton />
+                            <BlogSkeleton />
+                        
+                        </>
+                    )
+                }
+                {
+                    !isLoading && (
+                        
+                        favblogs?.map((ele) => {
+                            return <BlogStructure
+                                blogId={ele?.blog._id}
+                                key={ele?.blog._id}
+                                thumbnail={ele?.blog?.thumbnail?.secure_url}
+                                title={ele?.blog?.title}
+                                numberOfLikes={ele?.blog?.numberOfLikes}
+                                author={ele?.blogOwner?.username}
+                                blogUserId={ele?.blogOwner?._id}
+                            />
+                        })
+                    )
+                }
+            </section>
+        </HomeLayout>
     )
 }
 

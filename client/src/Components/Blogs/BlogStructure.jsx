@@ -19,6 +19,7 @@ function BlogStructure({ thumbnail, title, numberOfLikes, author, blogId, blogUs
 
         if(res?.payload?.success === true){
             setToggleFavourite(true);
+            navigate("/blogs/all");
         }
 
     }
