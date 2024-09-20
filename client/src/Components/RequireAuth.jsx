@@ -5,7 +5,7 @@ function RequireAuth({ allowedRoles }) {
     const { isLoggedIn, userRole } = useSelector((state) => state?.auth);
 
     if (!isLoggedIn) {
-        return <Navigate to="/login" />;
+        return <Navigate to="/auth/login" />;
     }
 
     if (allowedRoles.includes(userRole)) {
