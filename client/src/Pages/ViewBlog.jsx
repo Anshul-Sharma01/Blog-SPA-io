@@ -40,18 +40,18 @@ function ViewBlog() {
                 <img
                     src={blogData?.thumbnail?.secure_url || ""}
                     alt="Blog Thumbnail"
-                    className="w-full h-[400px] object-cover rounded-lg shadow-lg mb-8 transition-transform duration-300 hover:scale-105"
+                    className="w-full h-[400px] object-cover rounded-lg shadow-lg mb-8 transition-transform duration-300 ease-in-out hover:scale-105"
                 />
 
-                <h1 className="text-5xl font-bold text-center text-gray-800 mb-6">
+                <h1 className="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-4 md:mb-6">
                     {blogData?.title || ""}
                 </h1>
 
-                <div className="text-center text-gray-500 italic mb-8 text-lg">
+                <div className="text-center text-gray-500 italic mb-4 md:mb-6 text-lg">
                     <p>By {blogData?.owner?.username || "Unknown"}</p>
                 </div>
 
-                <div className="prose w-full max-w-none text-lg leading-relaxed text-gray-700 bg-white p-6 rounded-lg shadow-sm">
+                <div className="prose w-full max-w-none text-lg leading-relaxed text-gray-700 bg-white p-6 rounded-lg shadow-md">
                     <div
                         className="whitespace-pre-wrap break-words"
                         style={{ width: '100%' }}
@@ -61,28 +61,27 @@ function ViewBlog() {
                 </div>
 
                 {isOwner && (
-                    <div className="flex flex-row gap-6 justify-center items-center mt-8 space-x-4">
+                    <div className="flex flex-row gap-6 justify-center items-center mt-8">
                         <button
-                            className="btn btn-warning px-6 py-3 text-lg shadow-lg hover:bg-yellow-500"
+                            className="btn btn-warning px-6 py-3 text-lg shadow-lg transition duration-300 ease-in-out hover:bg-yellow-500"
                             onClick={() => document.getElementById("blog_avatar_modal").showModal()}
                         >
                             Update Thumbnail
                         </button>
                         <button
-                            className="btn btn-success px-6 py-3 text-lg shadow-lg hover:bg-green-500"
+                            className="btn btn-success px-6 py-3 text-lg shadow-lg transition duration-300 ease-in-out hover:bg-green-500"
                             onClick={() => document.getElementById("blog_modal_1").showModal()}
                         >
                             Update Blog
                         </button>
-                        <button 
-                            className="btn btn-error px-6 py-3 text-lg shadow-lg hover:bg-red-500"
-                            onClick={() => document.getElementById('delete_blog_modal').showModal()}    
+                        <button
+                            className="btn btn-error px-6 py-3 text-lg shadow-lg transition duration-300 ease-in-out hover:bg-red-500"
+                            onClick={() => document.getElementById('delete_blog_modal').showModal()}
                         >
                             Delete Blog
                         </button>
-
-                        <button 
-                            className='btn btn-accent px-6 py-3 text-lg shadow-lg hover:bg-yellow-400'
+                        <button
+                            className="btn btn-accent px-6 py-3 text-lg shadow-lg transition duration-300 ease-in-out hover:bg-yellow-400"
                             onClick={() => document.getElementById('favCount_modal').showModal()}
                         >
                             Stars Count
@@ -95,7 +94,7 @@ function ViewBlog() {
                 <>
                     <UpdateBlogData blogId={blogId} />
                     <UpdateBlogAvatar blogId={blogId} />
-                    <DeleteBlog blogId={blogId}/>
+                    <DeleteBlog blogId={blogId} />
                     <FavCount blogId={blogId} />
                 </>
             )}
