@@ -4,19 +4,19 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import HomeLayout from "../Layouts/HomeLayout.jsx";
 import { Link, useNavigate } from "react-router-dom";
-import UpdateProfile from "../Components/Users/UpdateProfile.jsx"; // Import the UpdateProfile component
+import UpdateProfile from "../Components/Users/UpdateProfile.jsx"; 
 import UpdateAvatar from "../Components/Users/UpdateAvatar.jsx";
 
 function Profile() {
-    const userData = useSelector((state) => state?.auth?.userData); 
+    const userData = useSelector((state) => state?.auth?.userData);
     const navigate = useNavigate();
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
-    const [ userProfileData, setUserProfileData ] = useState({
-        avatar : "",
-        name : "",
-        username : "",
-        email : ""
+    const [userProfileData, setUserProfileData] = useState({
+        avatar: "",
+        name: "",
+        username: "",
+        email: ""
     });
 
     useEffect(() => {
@@ -45,69 +45,35 @@ function Profile() {
     return (
         <HomeLayout>
             <section className="flex justify-center items-center h-[100vh]">
-                <div className="card card-side bg-base-100 shadow-xl">
-                    <figure>
+                <div className="max-w-lg w-full bg-white shadow-md rounded-lg overflow-hidden">
+                    <figure className="flex justify-center p-6">
                         <img
-                            className="rounded-full border-2 border-solid border-black h-[400px]"
+                            className="rounded-full border-4 border-gray-200 h-[150px] w-[150px] object-cover shadow-sm"
                             src={userProfileData.avatar}
                             alt="User-Picture"
                         />
                     </figure>
-                    <div className="card-body">
-                        <div className="flex justify-center items-center flex-col">
-                            <div className="flex flex-col justify-center items-center gap-4 p-4">
-                                <div className="flex flex-col text-left">
-                                    <label htmlFor="inputname" className="block text-gray-800 font-mono tracking-widest text-lg font-semibold">Username</label>
-                                    <div className="mt-2">
-                                        <input
-                                            type="text"
-                                            disabled
-                                            value={userProfileData.username}
-                                            name="inputname"
-                                            className="block w-56 rounded-md py-1.5 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="flex flex-col text-left">
-                                    <label htmlFor="inputname" className="block text-gray-800 font-mono tracking-widest text-lg font-semibold">Name</label>
-                                    <div className="mt-2">
-                                        <input
-                                            type="text"
-                                            name="inputname"
-                                            value={userProfileData.name}
-                                            disabled
-                                            className="block w-56 rounded-md py-1.5 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="flex flex-col text-left">
-                                    <label htmlFor="inputname" className="block text-gray-800 font-mono tracking-widest text-lg font-semibold">Email</label>
-                                    <div className="mt-2">
-                                        <input
-                                            type="text"
-                                            name="inputname"
-                                            disabled
-                                            value={userProfileData.email}
-                                            className="block w-56 rounded-md py-1.5 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
+                    <div className="px-6 py-4">
+                        <div className="text-center">
+                            <h2 className="text-2xl font-bold text-gray-800">{userProfileData.name}</h2>
+                            <p className="text-gray-500 text-sm">@{userProfileData.username}</p>
+                            <p className="text-gray-600 mt-2">{userProfileData.email}</p>
                         </div>
-                        <div className="card-actions justify-end">
-                            {/* <button className="btn btn-accent" onClick={() => navigate("/")}>
-                                <FaArrowLeftLong />
-                                Go Back
-                            </button> */}
-                            <button onClick={() => document.getElementById('my_modal_1').showModal()}  className="btn btn-success text-black">
-                                Update Avatar
-                            </button>
-                            <button 
-                                className="btn text-white btn-primary" 
-                                onClick={() => document.getElementById('my_modal_3').showModal()}
-                            >
-                                Update Profile
-                            </button>
+                        <div className="mt-6">
+                            <div className="grid grid-cols-2 gap-4">
+                                <button
+                                    className="w-full py-2 px-4 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700 transition duration-300"
+                                    onClick={() => document.getElementById('my_modal_1').showModal()}
+                                >
+                                    Update Avatar
+                                </button>
+                                <button
+                                    className="w-full py-2 px-4 bg-green-600 text-white rounded-md shadow hover:bg-green-700 transition duration-300"
+                                    onClick={() => document.getElementById('my_modal_3').showModal()}
+                                >
+                                    Update Profile
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

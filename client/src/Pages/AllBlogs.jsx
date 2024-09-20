@@ -8,105 +8,97 @@ import { fetchAllBlogsThunk } from "../Redux/Slices/BlogSlice.js";
 import BlogSkeleton from "../Components/Blogs/BlogSkeleton.jsx";
 import BlogStructure from "../Components/Blogs/BlogStructure.jsx";
 
-
-function AllBlogs(){
-
-    const [ allBlogsData, setAllBlogsData ] = useState([]);
-    const [ isLoading, setIsLoading ] = useState(true);
-    const [ totalPages, setTotalPages ] = useState(1);
-    const [ limit ] = useState(6);
-    const [ page, setPage ] = useState(1);
+function AllBlogs() {
+    const [allBlogsData, setAllBlogsData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [totalPages, setTotalPages] = useState(1);
+    const [limit] = useState(6);
+    const [page, setPage] = useState(1);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    async function fetchAllBlogs(){
-        try{
+    async function fetchAllBlogs() {
+        try {
             const res = await dispatch(fetchAllBlogsThunk({ limit, page }));
-            if(res?.payload?.data?.totalBlogs == 0){
+            if (res?.payload?.data?.totalBlogs == 0) {
                 navigate("/");
             }
-            if(res?.payload?.data?.allBlogs){
+            if (res?.payload?.data?.allBlogs) {
                 setAllBlogsData(res?.payload?.data?.allBlogs);
                 setTotalPages(res?.payload?.data?.totalPages);
                 setIsLoading(false);
             }
-        }catch(err){
+        } catch (err) {
             console.log("Error occurred in fetching all Blogs : ", err);
         }
     }
 
     useEffect(() => {
-        fetchAllBlogs();  
-    }, [ dispatch, page ]);
+        fetchAllBlogs();
+    }, [dispatch, page]);
 
     function handleForwardPagination() {
-        if( page < totalPages ){
-            setPage( (prev) => prev + 1 );
+        if (page < totalPages) {
+            setPage((prev) => prev + 1);
         }
     }
 
-    function handleBackwardPagination(){
-        if( page > 1 ){
+    function handleBackwardPagination() {
+        if (page > 1) {
             setPage((prev) => prev - 1);
         }
     }
 
-    console.log("All Blogs data : ", allBlogsData);
-
-
-
-    return(
+    return (
         <HomeLayout>
-            <h1 className="text-center font-mono tracking-widest uppercase text-4xl font-bold py-10">All Blogs</h1>
-            {
-                isLoading ? (
-                    <section className="flex justify-center items-center h-[100vh] gap-10 flex-wrap">
-                        <BlogSkeleton/>
-                        <BlogSkeleton/>
-                        <BlogSkeleton/>
-                        <BlogSkeleton/>
-                        <BlogSkeleton/>
-                        <BlogSkeleton/>
-                    </section>
-                ) : (
-                    <section className="m-4 p-10 flex flex-row justify-center items-center flex-wrap gap-10 w-[80vw]">
-                        {
-                            allBlogsData.map((ele) => (
-                                <BlogStructure
-                                    blogId={ele._id}
-                                    key={ele._id}
-                                    thumbnail={ele.thumbnail.secure_url}
-                                    title={ele.title}
-                                    numberOfLikes={ele.numberOfLikes}
-                                    author={ele.owner.username}
-                                    blogUserId={ele.blogUserId}
-                                />
-                            ))
-                        }
-                    </section>
-                )
-            }
+            <h1 className="text-center font-mono tracking-wide text-5xl font-bold py-12 text-gray-800 drop-shadow-lg">
+                Explore All Blogs
+            </h1>
 
-            <div className="flex justify-center items-center px-10 gap-20 py-5">
-                <button 
-                    className={`btn btn-outline ${page === 1 ? "btn-disabled" : ""}`}
+            {isLoading ? (
+                <section className="flex justify-center items-center min-h-[60vh] gap-10 flex-wrap px-4">
+                    <BlogSkeleton />
+                    <BlogSkeleton />
+                    <BlogSkeleton />
+                    <BlogSkeleton />
+                    <BlogSkeleton />
+                    <BlogSkeleton />
+                </section>
+            ) : (
+                <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 p-4 md:p-10 w-full max-w-7xl mx-auto">
+                    {allBlogsData.map((ele) => (
+                        <BlogStructure
+                            blogId={ele._id}
+                            key={ele._id}
+                            thumbnail={ele.thumbnail.secure_url}
+                            title={ele.title}
+                            numberOfLikes={ele.numberOfLikes}
+                            author={ele.owner.username}
+                            blogUserId={ele.blogUserId}
+                        />
+                    ))}
+                </section>
+            )}
+
+            <div className="flex justify-center items-center py-10 gap-5">
+                <button
+                    className={`btn btn-outline ${page === 1 ? "btn-disabled" : ""} transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110`}
                     onClick={handleBackwardPagination}
-                    disabled = {page === 1}
+                    disabled={page === 1}
                 >
-                    Previous Page
+                    Previous
                 </button>
                 <button
-                    className={`btn btn-outline ${page >= totalPages ? "btn-disabled" : ""}`}
+                    className={`btn btn-outline ${page >= totalPages ? "btn-disabled" : ""} transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110`}
                     onClick={handleForwardPagination}
-                    disabled = {page >= totalPages}
+                    disabled={page >= totalPages}
                 >
-                    Next Page
+                    Next
                 </button>
             </div>
         </HomeLayout>
-    )
+    );
 }
-
 
 export default AllBlogs;
