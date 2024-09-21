@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import BlogStructure from "../Components/Blogs/BlogStructure";
 import BlogSkeleton from "../Components/Blogs/BlogSkeleton.jsx";
 import HomeLayout from "../Layouts/HomeLayout.jsx";
+import ClearAllFav from "../Components/Blogs/ClearAllFav.jsx";
 
 function MyFavourites(){
 
@@ -55,23 +56,30 @@ function MyFavourites(){
                         </>
                     )
                 }
-                {
-                    !isLoading && (
-                        
-                        favblogs?.map((ele) => {
-                            return <BlogStructure
-                                blogId={ele?.blog._id}
-                                key={ele?.blog._id}
-                                thumbnail={ele?.blog?.thumbnail?.secure_url}
-                                title={ele?.blog?.title}
-                                numberOfLikes={ele?.blog?.numberOfLikes}
-                                author={ele?.blogOwner?.username}
-                                blogUserId={ele?.blogOwner?._id}
-                            />
-                        })
-                    )
-                }
+                <section className="flex flex-col justify-center items-center flex-wrap gap-10">
+                    {
+                        !isLoading && (
+                            
+                            favblogs?.map((ele) => {
+                                return <BlogStructure
+                                    blogId={ele?.blog._id}
+                                    key={ele?.blog._id}
+                                    thumbnail={ele?.blog?.thumbnail?.secure_url}
+                                    title={ele?.blog?.title}
+                                    numberOfLikes={ele?.blog?.numberOfLikes}
+                                    author={ele?.blogOwner?.username}
+                                    blogUserId={ele?.blogOwner?._id}
+                                />
+                            })
+                        )
+                    }
+                </section>
+
+                <button onClick={() => document.getElementById("clearFav_modal").showModal()} className="btn btn-error w-[200px] px-6 py-4">
+                    Clear Favourites
+                </button>
             </section>
+            <ClearAllFav />
         </HomeLayout>
     )
 }

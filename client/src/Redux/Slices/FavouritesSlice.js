@@ -36,16 +36,11 @@ export const getAllFavThunk = createAsyncThunk("/favourites/my", async () => {
 
 export const getFavCountThunk = createAsyncThunk("/favourites/my", async ({ blogId }) => {
     try {
-        // Await the axios call
-        const res = await axiosInstance.get(`favourites/countfav/${blogId}`);
 
-        // Log the full response
+        const res = axiosInstance.get(`favourites/countfav/${blogId}`);
         console.log("Full API Response: ", res);
-
-        // Log the data field of the response
         console.log("Response Data: ", res.data);
 
-        // Show a toast with detailed debugging info
         toast.promise(Promise.resolve(res), {
             loading: 'Fetching the count of favourites for your blog',
             success: (response) => {
@@ -55,7 +50,6 @@ export const getFavCountThunk = createAsyncThunk("/favourites/my", async ({ blog
             error: `Error occurred while fetching stars for your blog`
         });
 
-        // Return the actual data from the response
         return res.data;
 
     } catch (err) {
@@ -63,6 +57,21 @@ export const getFavCountThunk = createAsyncThunk("/favourites/my", async ({ blog
     }
 });
 
+export const clearAllFavThunk = createAsyncThunk("/favourites/my", async() => {
+    try{
+        const res = axiosInstance.delete("favourites/clear");
+        toast.promise(res, {
+            loading : 'Removing all favourites',
+            success : (data) => data?.data?.message,
+            error : "Favourites not removed"
+        });
+
+        return ( await res).data;
+
+    }catch(err){
+        console.log(`Error occurred while deleting all favourites : ${err}`);
+    }
+})
 
 const favouriteSlice = createSlice({
     name : 'favourite',
