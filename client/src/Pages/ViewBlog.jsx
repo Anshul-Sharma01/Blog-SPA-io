@@ -10,6 +10,7 @@ import FavCount from '../Components/Blogs/FavCount';
 
 
 
+
 function ViewBlog() {
     const { blogId } = useParams();
     const dispatch = useDispatch();
@@ -89,6 +90,7 @@ function ViewBlog() {
                         </button>
                     </div>
                 )}
+
             </div>
 
             {isOwner && (
@@ -99,6 +101,7 @@ function ViewBlog() {
                     <FavCount blogId={blogId} />
                 </>
             )}
+
         </HomeLayout>
     );
 }

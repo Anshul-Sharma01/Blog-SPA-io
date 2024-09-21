@@ -1,7 +1,7 @@
 import { BiLike } from "react-icons/bi";
 
 
-function Comment({ imgSrc, content = "Good Blog", ownerName }){
+function Comment({ imgSrc,  ownerName, content = "Good Blog", totalLikes = 0 }){
     return(
         <>
             <article className="max-w-2xl px-6 py-24 mx-auto space-y-12 ">
@@ -14,6 +14,7 @@ function Comment({ imgSrc, content = "Good Blog", ownerName }){
                         </div>
                         <div className="flex flex-col justify-center items-center pl-20">
                             <BiLike className="text-2xl text-blue-600" />
+                            <span className="text-lg font-semibold">{totalLikes}</span>
                         </div>
                     </div>
 

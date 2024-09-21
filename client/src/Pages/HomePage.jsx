@@ -8,7 +8,7 @@ import HomeLayout from '../Layouts/HomeLayout';
 import { FaFeatherAlt} from "react-icons/fa";
 import { GiGrowth } from "react-icons/gi";
 import Footer from '../Components/Footer';
-import Comments from '../Components/Comments';
+import Comments from '../Components/Comments/Comments.jsx';
 
 function HomePage() {
     return (
