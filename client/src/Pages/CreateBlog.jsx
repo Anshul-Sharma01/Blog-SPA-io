@@ -1,3 +1,5 @@
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useState } from "react";
 import { MdOutlineWallpaper } from "react-icons/md";
 import HomeLayout from "../Layouts/HomeLayout.jsx";
@@ -27,7 +29,6 @@ function CreateBlog() {
 
     function getThumbnail(e) {
         e.preventDefault();
-
         const uploadedImage = e.target.files[0];
         if (uploadedImage) {
             setBlogData({
@@ -44,8 +45,8 @@ function CreateBlog() {
 
     async function handleFormSubmit(e) {
         e.preventDefault();
-        if(!blogData.title || !blogData.content || !blogData.thumbnail){
-            toast.error("all fields are mandatory");
+        if (!blogData.title || !blogData.content || !blogData.thumbnail) {
+            toast.error("All fields are mandatory");
             return;
         }
         const formData = new FormData();
@@ -54,7 +55,6 @@ function CreateBlog() {
         formData.append("thumbnail", blogData.thumbnail);
 
         const res = await dispatch(createNewBlog(formData));
-
         if (res.meta.requestStatus === "fulfilled") {
             navigate("/blogs/me");
         }
@@ -118,14 +118,13 @@ function CreateBlog() {
                         >
                             Content
                         </label>
-                        <textarea
-                            placeholder="Enter blog content here"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            value={blogData.content}
-                            onChange={handleUserInput}
-                            id="content"
-                            name="content"
-                            rows={6}
+                        <CKEditor
+                            editor={ClassicEditor}
+                            data={blogData.content}
+                            onChange={(event, editor) => {
+                                const data = editor.getData();
+                                setBlogData({ ...blogData, content: data });
+                            }}
                         />
                     </div>
 

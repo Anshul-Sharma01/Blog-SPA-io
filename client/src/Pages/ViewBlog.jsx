@@ -7,6 +7,8 @@ import UpdateBlogData from '../Components/Blogs/UpdateBlogData';
 import UpdateBlogAvatar from '../Components/Blogs/UpdateBlogAvatar';
 import DeleteBlog from '../Components/Blogs/DeleteBlog';
 import FavCount from '../Components/Blogs/FavCount';
+import ReactMarkdown from 'react-markdown';
+
 
 function ViewBlog() {
     const { blogId } = useParams();
@@ -55,9 +57,8 @@ function ViewBlog() {
                     <div
                         className="whitespace-pre-wrap break-words"
                         style={{ width: '100%' }}
-                    >
-                        {blogData?.content || ""}
-                    </div>
+                        dangerouslySetInnerHTML={{ __html: blogData?.content || "" }}
+                    />
                 </div>
 
                 {isOwner && (

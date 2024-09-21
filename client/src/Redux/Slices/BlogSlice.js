@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import axiosInstance from "../../Helpers/axiosInstance.js";
+import DOMPurify from 'dompurify';
+
 
 const initialState = {
     personalBlogsExists: localStorage.getItem('personalBlogsExists') === 'true',
@@ -11,7 +13,9 @@ const initialState = {
 
 export const createNewBlog = createAsyncThunk("/blog/create", async(data) => {
     try {
-        const res = axiosInstance.post("blogs/create", data);
+
+        const sanitizedContent = DOMPurify.sanitize(data.content);
+        const res = axiosInstance.post("blogs/create", { ...data, content: sanitizedContent });
         toast.promise(res, {
             loading: 'Creating new blog...',
             success: "Blog created successfully",
