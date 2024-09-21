@@ -51,33 +51,33 @@ function HomePage() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
                     
                         <div className="group relative bg-white rounded-xl shadow-xl overflow-hidden transition-transform transform hover:scale-105">
-                            <img src="/images/featured-blog-1.jpg" alt="Featured Blog 1" className="w-full h-64 object-cover" />
+                            <img src="https://res.cloudinary.com/dqnzstk72/image/upload/v1726894472/xk7ydwsbkuvn7zjtk9xx.jpg" alt="Featured Blog 1" className="w-full h-64 object-cover" />
                             <div className="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-50 transition duration-300"></div>
                             <div className="absolute bottom-0 left-0 p-4 text-white">
-                                <h3 className="text-2xl font-bold">How to Write Engaging Blog Content</h3>
-                                <Link to="/blogs/view/1">
+                                <h3 className="text-2xl font-bold">The Day I Almost Conquered the Omnitrix</h3>
+                                <Link to="/blogs/view/66ee51864a4f8d8ded109864">
                                     <button className="mt-4 bg-yellow-400 text-black px-6 py-2 rounded-md font-semibold hover:bg-yellow-500 transition duration-300">Read More</button>
                                 </Link>
                             </div>
                         </div>
 
                         <div className="group relative bg-white rounded-xl shadow-xl overflow-hidden transition-transform transform hover:scale-105">
-                            <img src="/images/featured-blog-2.jpg" alt="Featured Blog 2" className="w-full h-64 object-cover" />
+                            <img src="https://res.cloudinary.com/dqnzstk72/image/upload/v1726895104/xp0y7bvts0hib1gqc6qf.jpg" alt="Featured Blog 2" className="w-full h-64 object-cover" />
                             <div className="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-50 transition duration-300"></div>
                             <div className="absolute bottom-0 left-0 p-4 text-white">
-                                <h3 className="text-2xl font-bold">The Future of Blogging: What's Next?</h3>
-                                <Link to="/blogs/view/2">
+                                <h3 className="text-2xl font-bold">The Power of the Ultimatrix: Why It's More Than Just a Watch</h3>
+                                <Link to="/blogs/view/66ee53fff82542978cb34e12">
                                     <button className="mt-4 bg-yellow-400 text-black px-6 py-2 rounded-md font-semibold hover:bg-yellow-500 transition duration-300">Read More</button>
                                 </Link>
                             </div>
                         </div>
 
                         <div className="group relative bg-white rounded-xl shadow-xl overflow-hidden transition-transform transform hover:scale-105">
-                            <img src="/images/featured-blog-3.jpg" alt="Featured Blog 3" className="w-full h-64 object-cover" />
+                            <img src="https://res.cloudinary.com/dqnzstk72/image/upload/v1726895466/uafosqxljmli1wwpthfp.jpg" alt="Featured Blog 3" className="w-full h-64 object-cover" />
                             <div className="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-50 transition duration-300"></div>
                             <div className="absolute bottom-0 left-0 p-4 text-white">
-                                <h3 className="text-2xl font-bold">10 Tips for Becoming a Better Writer</h3>
-                                <Link to="/blogs/view/3">
+                                <h3 className="text-2xl font-bold">Embracing My Power: Why I’m More Than Just Magic</h3>
+                                <Link to="/blogs/view/66ee5568f82542978cb34e58">
                                     <button className="mt-4 bg-yellow-400 text-black px-6 py-2 rounded-md font-semibold hover:bg-yellow-500 transition duration-300">Read More</button>
                                 </Link>
                             </div>
@@ -165,7 +165,7 @@ function HomePage() {
                     <h2 className="text-3xl md:text-4xl font-bold text-gray-800">Join Our Blogging Community!</h2>
                     <p className="text-lg text-gray-600 mt-2">Connect with like-minded individuals and share your passion for writing.</p>
                     <div className="mt-8">
-                        <Link to="/community">
+                        <Link to="/auth/register">
                             <button className="bg-yellow-500 text-black px-6 py-3 rounded-md font-semibold text-lg shadow-lg hover:bg-yellow-600 transition duration-300">
                                 Get Involved
                             </button>
