@@ -4,6 +4,8 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { Like } from "../models/like.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { Blog } from "../models/blog.model.js";
+import { Comment } from "../models/comment.model.js";
+
 
 const toggleBlogLike = asyncHandler(async (req, res, next) => {
     try {
@@ -56,12 +58,20 @@ const toggleCommentLike = asyncHandler(async(req, res, next) => {
         const likedComment = await Like.findOne({likedBy : userId, comment : commentId});
         if(likedComment){
             await likedComment.deleteOne();
+            await Comment.findByIdAndUpdate(
+                commentId,
+                {$inc : { totalLikes : -1 }},
+            )
             return res.status(200).json(new ApiResponse(200, likedComment, "Comment Liked Removed Successfully"));
         }else{
             const commentLiked = await Like.create({
                 likedBy : userId,
                 comment : commentId
             });
+            await Comment.findByIdAndUpdate(
+                commentId,
+                {$inc : {totalLikes : 1}}
+            )
             return res.status(201).json(new ApiResponse(201, commentLiked, "Comment Liked successfully"));
         }
 
