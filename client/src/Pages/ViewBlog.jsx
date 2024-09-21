@@ -7,7 +7,7 @@ import UpdateBlogData from '../Components/Blogs/UpdateBlogData';
 import UpdateBlogAvatar from '../Components/Blogs/UpdateBlogAvatar';
 import DeleteBlog from '../Components/Blogs/DeleteBlog';
 import FavCount from '../Components/Blogs/FavCount';
-import ReactMarkdown from 'react-markdown';
+
 
 
 function ViewBlog() {

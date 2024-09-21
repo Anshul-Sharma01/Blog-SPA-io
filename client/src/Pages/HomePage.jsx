@@ -8,6 +8,7 @@ import HomeLayout from '../Layouts/HomeLayout';
 import { FaFeatherAlt} from "react-icons/fa";
 import { GiGrowth } from "react-icons/gi";
 import Footer from '../Components/Footer';
+import Comments from '../Components/Comments';
 
 function HomePage() {
     return (
@@ -177,6 +178,8 @@ function HomePage() {
                     </div>
                 </div>
             </section>
+
+            <Comments/>
 
 
             <Footer/>
