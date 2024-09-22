@@ -4,6 +4,7 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Logout } from "../Redux/Slices/AuthSlice.js";
 import { useEffect, useState } from "react";
+import ThemeController from "../Components/ThemeController.jsx";
 
 function HomeLayout({ children }) {
     const dispatch = useDispatch();
@@ -98,6 +99,9 @@ function HomeLayout({ children }) {
                                 </li>
                             </>
                         )}
+                        <li>
+                            <ThemeController className="btn btn-ghost"/>
+                        </li>
                     </ul>
                 </div>
             </div>

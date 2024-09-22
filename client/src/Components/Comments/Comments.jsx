@@ -1,8 +1,6 @@
 import { LiaCommentsSolid } from "react-icons/lia";
-
 import { useState } from "react";
 import Comment from "./Comment";
-
 
 function Comments(){
 
@@ -22,6 +20,7 @@ function Comments(){
                     }
                 </div>
             </div>
+        
         </>
     )
 }

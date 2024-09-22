@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { FiEdit } from "react-icons/fi";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { fetchBlogThunk } from '../Redux/Slices/BlogSlice';
-import HomeLayout from '../Layouts/HomeLayout';
-import UpdateBlogData from '../Components/Blogs/UpdateBlogData';
-import UpdateBlogAvatar from '../Components/Blogs/UpdateBlogAvatar';
-import DeleteBlog from '../Components/Blogs/DeleteBlog';
-import FavCount from '../Components/Blogs/FavCount';
+import { fetchBlogThunk } from '../Redux/Slices/BlogSlice.js';
+import HomeLayout from '../Layouts/HomeLayout.jsx';
+import UpdateBlogData from '../Components/Blogs/UpdateBlogData.jsx';
+import UpdateBlogAvatar from '../Components/Blogs/UpdateBlogAvatar.jsx';
+import DeleteBlog from '../Components/Blogs/DeleteBlog.jsx';
+import FavCount from '../Components/Blogs/FavCount.jsx';
+import Comments from '../Components/Comments/Comments.jsx';
 
-
+import AddComment from '../Components/Comments/AddComment.jsx';
 
 
 function ViewBlog() {
@@ -101,6 +103,8 @@ function ViewBlog() {
                     <FavCount blogId={blogId} />
                 </>
             )}
+            <Comments  />
+            <AddComment />
 
         </HomeLayout>
     );
