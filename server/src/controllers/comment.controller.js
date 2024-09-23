@@ -31,7 +31,6 @@ const getBlogComments = asyncHandler ( async(req, res, next) => {
     }
 })
 
-
 const addComment = asyncHandler(async (req, res, next) => {
     try{
         const { blogId } = req.params;
