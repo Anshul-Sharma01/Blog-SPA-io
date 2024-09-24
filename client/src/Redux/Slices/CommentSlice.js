@@ -44,8 +44,16 @@ export const updateCommentThunk = createAsyncThunk("/blogs/view", async(data) =>
     }
 })
 
-export const deleteCommentThunk = createAsyncThunk("/blogs/view", async(data) => {
+export const deleteCommentThunk = createAsyncThunk("/blogs/view", async({ commentId }) => {
     try{
+        const res = axiosInstance.delete(`comments/c/${commentId}`);
+        toast.promise(res, {
+            loading : 'Deleting your comment...',
+            success : (data) => data?.data?.message,
+            error : 'Error occurred while deleting your comment'
+        })
+
+        return (await res).data;
 
     }catch(err){
         console.log(`Error occurred while deleting a comment : ${err}`);

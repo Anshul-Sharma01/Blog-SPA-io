@@ -30,18 +30,24 @@ function Comments({ blogId }) {
         fetchAllComments();
     };
 
+    const handleContentClick = (event) => {
+        event.stopPropagation(); // Prevent the click event from bubbling up
+    };
+
     return (
         <div className="max-w-2xl mx-auto">
             <div
                 tabIndex={0}
                 className="collapse collapse-arrow border border-gray-300 bg-gray-100 rounded-lg shadow-md mb-8"
-                onClick={handleCollapseClick}
             >
-                <div className="collapse-title text-lg font-semibold flex flex-row justify-between items-center p-4">
+                <div 
+                    className="collapse-title text-lg font-semibold flex flex-row justify-between items-center p-4"
+                    onClick={handleCollapseClick}
+                >
                     Click here to view Comments <LiaCommentsSolid className="text-2xl" />
                 </div>
                 {isExpanded && (
-                    <div className="collapse-content p-4 space-y-6">
+                    <div className="collapse-content p-4 space-y-6" onClick={handleContentClick}>
                         {commentsData.length === 0 ? (
                             <h3 className="text-gray-500 text-center">No Comments Yet</h3>
                         ) : (
@@ -52,13 +58,13 @@ function Comments({ blogId }) {
                                     ownerName={comment?.owner?.username}
                                     content={comment.content}
                                     totalLikes={comment.totalLikes || 0}
+                                    commentId={comment?._id}
                                 />
                             ))
                         )}
                     </div>
                 )}
             </div>
-
 
             <AddComment blogId={blogId} onCommentAdded={handleCommentAdded} />
         </div>
