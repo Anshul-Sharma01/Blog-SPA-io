@@ -38,7 +38,7 @@ export const addCommentThunk = createAsyncThunk("/blogs/view", async({ blogId, c
 
 export const updateCommentThunk = createAsyncThunk("/blogs/view", async(data) => {
     try{
-
+        
     }catch(err){
         console.log(`Error occurred while updating a comment : ${err}`);
     }
