@@ -16,7 +16,7 @@ function HomePage() {
             <HomeLayout>
 
             <section className="relative h-[90vh] bg-cover bg-center" style={{ backgroundImage: "url('/images/hero-bg.jpg')" }}>
-                <div className="relative z-20 flex flex-col items-center justify-center text-center text-black h-full space-y-6">
+                <div className="relative z-20 flex flex-col items-center justify-center text-center text-neutral h-full space-y-6">
                 
                     <h1 className="text-6xl md:text-7xl font-bold tracking-wide leading-tight animate-fade-in shadow-text">
                         Welcome to Your Blogging Universe
@@ -179,7 +179,6 @@ function HomePage() {
                 </div>
             </section>
 
-            <Comments/>
 
 
             <Footer/>

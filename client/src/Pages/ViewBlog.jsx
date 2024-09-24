@@ -9,12 +9,13 @@ import UpdateBlogAvatar from '../Components/Blogs/UpdateBlogAvatar.jsx';
 import DeleteBlog from '../Components/Blogs/DeleteBlog.jsx';
 import FavCount from '../Components/Blogs/FavCount.jsx';
 import Comments from '../Components/Comments/Comments.jsx';
-
+import { MdOutlineAddComment } from "react-icons/md";
 import AddComment from '../Components/Comments/AddComment.jsx';
 
 
 function ViewBlog() {
     const { blogId } = useParams();
+    const [ blogID, setBlogID ] = useState(blogId);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -103,8 +104,13 @@ function ViewBlog() {
                     <FavCount blogId={blogId} />
                 </>
             )}
-            <Comments  />
-            <AddComment />
+            <button className='text-4xl' onClick={() => document.getElementById("comment_modal").showModal()}>
+                <MdOutlineAddComment/>
+            </button>
+
+
+            <Comments blogId={blogID}/>
+            <AddComment blogId={blogID}/>
 
         </HomeLayout>
     );

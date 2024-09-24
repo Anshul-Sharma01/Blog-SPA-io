@@ -1,22 +1,32 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { addCommentThunk } from "../../Redux/Slices/CommentSlice";
 
-
-
-function AddComment({ blogId }){
-
-    
+function AddComment({ blogId, onCommentAdded }) {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
-    
-    const [ blogContent, setBlogContent ] = useState();
+    const [blogContent, setBlogContent] = useState("");
 
-    function closeModal(){
+    function closeModal() {
         document.getElementById("comment_modal").close();
     }
 
-    return(
+
+    async function handleAddComment(e) {
+        e.preventDefault();
+
+        const res = await dispatch(addCommentThunk({ blogId, content: blogContent }));
+        console.log("Comment thunk response : ", res);
+
+        if (res?.payload?.success) {
+            
+            onCommentAdded(); 
+        }
+
+        closeModal();
+        setBlogContent(''); 
+    }
+
+    return (
         <>
             <dialog id="comment_modal" className="modal">
                 <div className="modal-box">
@@ -27,22 +37,22 @@ function AddComment({ blogId }){
                         ✕
                     </button>
                     <h1 className="text-center text-xl uppercase tracking-wider font-serif font-bold">Add Comment</h1>
-                    <form  className="flex flex-col gap-2 justify-center items-center">
-                        <textarea 
+                    <form className="flex flex-col gap-2 justify-center items-center" onSubmit={handleAddComment}>
+                        <textarea
                             name="content" 
-                            placeholder="Enter new content here"
+                            placeholder="Enter new comment here"
                             className="textarea textarea-bordered w-full"
                             value={blogContent}
                             onChange={(e) => setBlogContent(e.target.value)}
                         />
                         <button className="btn btn-accent w-full" type="submit">
-                            Add a new Blog
+                            Add Comment
                         </button>
                     </form>
                 </div>
             </dialog>
         </>
-    )
+    );
 }
 
 export default AddComment;

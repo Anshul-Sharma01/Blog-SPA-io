@@ -16,10 +16,12 @@ const getBlogComments = asyncHandler ( async(req, res, next) => {
             throw new ApiError(400, "Invalid Blog Id");
         }
 
-        const blogComments = await Comment.find({ blog : blogId });
+        const blogComments = await Comment.find({ blog : blogId }).populate("owner","username avatar");
 
         if(blogComments.length === 0){
-            throw new ApiError(400, "No comments found");
+            return res.status(200).json(
+                new ApiResponse(200, blogComments, "No comments yet")
+            );
         }
 
         return res.status(200).json(
