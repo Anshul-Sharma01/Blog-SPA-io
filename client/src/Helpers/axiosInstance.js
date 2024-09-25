@@ -32,29 +32,35 @@ axiosInstance.interceptors.response.use(
         const originalRequest = error.config;
 
         if (error.response) {
-        if (error.response.status === 401 && !originalRequest._retry) {
-            originalRequest._retry = true;
+            if (error.response.status === 401 && !originalRequest._retry) {
+                originalRequest._retry = true;
 
-            try {
-                const refreshToken = Cookies.get('refreshToken');
-                const response = await axiosInstance.post('/users/refresh-token', {
-                    refreshToken,
-                });
+                try {
+                    const refreshToken = Cookies.get('refreshToken');
+                    const response = await axiosInstance.post('/refresh-token', {
+                        refreshToken,
+                    });
 
-                const newAccessToken = response.data.accessToken;
-                const newRefreshToken = response.data.refreshToken;
+                    const newAccessToken = response.data.accessToken;
+                    const newRefreshToken = response.data.refreshToken;
 
-                Cookies.set('accessToken', newAccessToken);
-                Cookies.set('refreshToken', newRefreshToken);
+                    Cookies.set('accessToken', newAccessToken);
+                    Cookies.set('refreshToken', newRefreshToken);
 
-                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                    originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
-                return axiosInstance(originalRequest);
-            } catch (err) {
-                console.error('Error refreshing access token:', err);
-                return Promise.reject(err);
+                    return axiosInstance(originalRequest);
+                } catch (err) {
+
+                    if (err.response && err.response.status === 401) {
+                        localStorage.clear();
+                        Cookies.remove('accessToken');
+                        Cookies.remove('refreshToken');
+                        window.location.href = 'http://localhost:5173/auth/login';
+                    }
+                    return Promise.reject(err);
+                }
             }
-        }
         } else {
             console.error('Error with the request:', error.message);
         }
@@ -62,5 +68,4 @@ axiosInstance.interceptors.response.use(
         return Promise.reject(error);
     }
 );
-
 export default axiosInstance;
