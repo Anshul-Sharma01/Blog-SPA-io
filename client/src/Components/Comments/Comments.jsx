@@ -58,7 +58,7 @@ function Comments({ blogId }) {
                                 ownerName={comment?.owner?.username}
                                 content={comment.content}
                                 totalLikes={comment.totalLikes || 0}
-                                commentId={comment?._id}
+                                commentId={comment._id}
                                 handleCommentsFetch={handleCommentsFetch}
                             />
                         ))

@@ -1,17 +1,23 @@
-import React from 'react';
-import { BiLike } from "react-icons/bi";
+import React, { useState } from 'react';
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import DeleteComment from './DeleteComment.jsx';
-import { toggleCommentLikeThunk } from '../../Redux/Slices/LikeSlice.js';
 import ToggleLike from '../Like/ToggleLike.jsx';
-
 
 function Comment({ imgSrc, ownerName, commentId, content, totalLikes, handleCommentsFetch }) {
     const dispatch = useDispatch();
     const userName = useSelector((state) => state?.auth?.userData?.username);
+    const [showModal, setShowModal] = useState(false);
 
+    const openDeleteModal = () => {
+        console.log("Opening Modal for comment ID:", commentId);
+        setShowModal(true);
+    };
 
+    const closeDeleteModal = () => {
+        console.log("Closing Modal");
+        setShowModal(false);  
+    };
 
     return (
         <div className="bg-gray-50 border border-gray-200 rounded-lg shadow-sm p-4">
@@ -26,12 +32,12 @@ function Comment({ imgSrc, ownerName, commentId, content, totalLikes, handleComm
                         <h4 className="text-md font-semibold text-gray-800">{ownerName || "Unknown"}</h4>
                         <div className="flex items-center space-x-2">
                             <div className="flex items-center space-x-2">
-                                <ToggleLike numberOfLikes={totalLikes} isBlog={false} isComment={true} commentId={commentId}/>
+                                <ToggleLike numberOfLikes={totalLikes} isBlog={false} isComment={true} commentId={commentId} />
                             </div>
                             {userName === ownerName && (
                                 <button
                                     className="text-red-600 hover:text-red-800"
-                                    onClick={() => document.getElementById("delete_comment").showModal()}
+                                    onClick={openDeleteModal} 
                                 >
                                     <MdOutlineDeleteForever className="text-lg" />
                                 </button>
@@ -42,7 +48,13 @@ function Comment({ imgSrc, ownerName, commentId, content, totalLikes, handleComm
                 </div>
             </div>
 
-            <DeleteComment commentId={commentId} handleCommentsFetch={handleCommentsFetch} />
+            {showModal && (
+                <DeleteComment
+                    commentId={commentId}
+                    handleCommentsFetch={handleCommentsFetch}
+                    closeModal={closeDeleteModal} 
+                />
+            )}
         </div>
     );
 }

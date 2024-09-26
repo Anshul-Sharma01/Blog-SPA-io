@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { deleteCommentThunk } from "../../Redux/Slices/CommentSlice.js";
 
-function DeleteComment({ commentId, handleCommentsFetch }) {
+function DeleteComment({ commentId, handleCommentsFetch, closeModal }) {
     const dispatch = useDispatch();
 
     async function handleDeleteComment(e) {
@@ -22,14 +22,9 @@ function DeleteComment({ commentId, handleCommentsFetch }) {
         }
     }
 
-    function closeModal() {
-        console.log("Closing Modal");
-        document.getElementById("delete_comment").close();
-    }
-
     return (
-        <dialog id="delete_comment" className="modal backdrop-blur-sm bg-black/30">
-            <div className="modal-box bg-white rounded-lg p-6 shadow-lg relative">
+        <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm bg-black/30">
+            <div className="bg-white rounded-lg p-6 shadow-lg relative">
                 <button 
                     className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-gray-500 hover:text-gray-800 transition-colors"
                     onClick={closeModal}
@@ -58,7 +53,7 @@ function DeleteComment({ commentId, handleCommentsFetch }) {
                     </button>
                 </form>
             </div>
-        </dialog>
+        </div>
     );
 }
 

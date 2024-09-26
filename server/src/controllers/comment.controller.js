@@ -99,28 +99,34 @@ const updateComment = asyncHandler(async (req, res, next) =>{
 })
 
 const deleteComment = asyncHandler(async(req, res, next) => {
-    try{
+    try {
         const { commentId } = req.params;
+        console.log("Comment ID:", commentId);
+
         
-        if(!isValidObjectId(commentId)){
+        if (!isValidObjectId(commentId)) {
             throw new ApiError(400, "Invalid Comment Id");
         }
 
-        const deletedComment = await Comment.findByIdAndDelete(commentId);
+        
+        const comment = await Comment.findById(commentId);
 
-        if(!deletedComment){
-            throw new ApiError(400, "Comment not found");
+        if (!comment) {
+            throw new ApiError(404, "Comment not found");
         }
 
+
+        const deletedComment = await Comment.findByIdAndDelete(commentId);
+
+        
         return res.status(200).json(
             new ApiResponse(200, deletedComment, "Comment deleted successfully")
         );
 
-    }catch(err){
-        throw new ApiError(400, "Error occurred while deleting the comment");
+    } catch (err) {
+        throw new ApiError(400, `Error occurred while deleting the comment: ${err.message}`);
     }
-})
-
+});
 
 export {
     getBlogComments,
