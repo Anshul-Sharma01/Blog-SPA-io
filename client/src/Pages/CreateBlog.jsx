@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createNewBlog } from "../Redux/Slices/BlogSlice.js";
 import toast from "react-hot-toast";
+import DOMPurify from "dompurify";  
 
 function CreateBlog() {
     const dispatch = useDispatch();
@@ -49,9 +50,14 @@ function CreateBlog() {
             toast.error("All fields are mandatory");
             return;
         }
+
+
+        const sanitizedContent = DOMPurify.sanitize(blogData.content);
+
+
         const formData = new FormData();
         formData.append("title", blogData.title);
-        formData.append("content", blogData.content);
+        formData.append("content", sanitizedContent);
         formData.append("thumbnail", blogData.thumbnail);
 
         const res = await dispatch(createNewBlog(formData));

@@ -16,39 +16,50 @@ const toggleBlogLike = asyncHandler(async (req, res, next) => {
             throw new ApiError(400, "Invalid Blog Id");
         }
 
-        const likedBlogs = await Like.findOne({ likedBy: userId, blog: blogId });
+        const likedBlog = await Like.findOne({ likedBy: userId, blog: blogId });
 
-        if (likedBlogs) {
-            await likedBlogs.deleteOne();
+        if (likedBlog) {
+
+            await likedBlog.deleteOne();
+
             const blog = await Blog.findByIdAndUpdate(
                 blogId,
-                {
-                    $inc: { numberOfLikes: -1 },
-                    $max: { numberOfLikes: 0 }
-                },
+                { $inc: { numberOfLikes: -1 } },
                 { new: true }
             );
-            return res.status(200).json(new ApiResponse(200, likedBlogs, "Blog Like removed successfully"));
+
+
+            if (blog.numberOfLikes < 0) {
+                blog.numberOfLikes = 0;
+                await blog.save();
+            }
+
+            return res.status(200).json(new ApiResponse(200, likedBlog, "Blog Like removed successfully"));
         } else {
+
             const blog = await Blog.findByIdAndUpdate(
                 blogId,
                 { $inc: { numberOfLikes: 1 } },
                 { new: true }
             );
+
             const blogLiked = await Like.create({
                 likedBy: userId,
                 blog: blogId
             });
+
             return res.status(201).json(new ApiResponse(201, blogLiked, "Blog Liked successfully"));
         }
     } catch (err) {
-        throw new ApiError(400, "Error occurred while toggling Blog like");
+        throw new ApiError(400, `Error occurred while toggling Blog like: ${err}`);
     }
 });
+
 
 const toggleCommentLike = asyncHandler(async(req, res, next) => {
     try{
         const { commentId } = req.params;
+        console.log(commentId);
         const userId = req.user._id;
 
         if(!isValidObjectId(commentId)){

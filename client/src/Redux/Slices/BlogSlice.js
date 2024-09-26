@@ -13,9 +13,7 @@ const initialState = {
 
 export const createNewBlog = createAsyncThunk("/blog/create", async(data) => {
     try {
-
-        const sanitizedContent = DOMPurify.sanitize(data.content);
-        const res = axiosInstance.post("blogs/create", { ...data, content: sanitizedContent });
+        const res = axiosInstance.post("blogs/create", data);
         toast.promise(res, {
             loading: 'Creating new blog...',
             success: "Blog created successfully",

@@ -44,6 +44,10 @@ function AllBlogs() {
         }
     }
 
+    function handleBlogsFetch(){
+        fetchAllBlogs();
+    }
+
     function handleBackwardPagination() {
         if (page > 1) {
             setPage((prev) => prev - 1);
@@ -76,6 +80,7 @@ function AllBlogs() {
                             numberOfLikes={ele.numberOfLikes}
                             author={ele.owner.username}
                             blogUserId={ele.blogUserId}
+                            handleBlogsFetch = {handleBlogsFetch}
                         />
                     ))}
                 </section>

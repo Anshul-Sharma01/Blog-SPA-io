@@ -16,7 +16,6 @@ const viewAllBlogs = asyncHandler(async (req, res, next) => {
 
         const skip = (page - 1) * limit;
 
-        // Fetch all blogs and populate owner details
         const allBlogs = await Blog.find({})
             .skip(skip)
             .limit(limit)
@@ -144,7 +143,8 @@ const createBlog = asyncHandler(async (req, res, next) => {
     try{
         const { title, content } = req.body;
         const userId = req.user._id;
-
+        console.log("Title", title);
+        console.log(" and content : ", content);
         if(!title || !content){
             throw new ApiError(400, "All Fields are mandatory");
         }

@@ -14,4 +14,4 @@ router.route("/blogs")
 .get(getLikedBlogs);
 
 
-export default Router;
+export default router;

@@ -5,8 +5,9 @@ import { MdOutlineStar, MdStar } from "react-icons/md";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toggleFavThunk } from "../../Redux/Slices/FavouritesSlice";
+import ToggleLike from "../Like/ToggleLike";
 
-function BlogStructure({ thumbnail, title, numberOfLikes, author, blogId, blogUserId }) {
+function BlogStructure({ thumbnail, title, numberOfLikes, author, blogId, blogUserId, handleBlogsFetch }) {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -39,10 +40,7 @@ function BlogStructure({ thumbnail, title, numberOfLikes, author, blogId, blogUs
 
                 <div className="flex items-center justify-between text-gray-600">
                     <div className="flex items-center space-x-4">
-                        <div className="flex items-center space-x-2">
-                            <BiLike className="text-2xl text-blue-600" />
-                            <span className="text-lg font-semibold">{numberOfLikes}</span>
-                        </div>
+                        <ToggleLike isBlog={true} numberOfLikes={numberOfLikes} blogId={blogId} fetchBlogs={handleBlogsFetch}  />
 
                         <button
                             onClick={handletoggleFavourite}

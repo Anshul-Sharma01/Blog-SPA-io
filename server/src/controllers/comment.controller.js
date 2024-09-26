@@ -38,6 +38,7 @@ const addComment = asyncHandler(async (req, res, next) => {
         const { blogId } = req.params;
         const userId = req.user._id;
         const { content } = req.body;
+        console.log("content", content);
 
         if(!isValidObjectId(blogId)){
             throw new ApiError(400, "Invalid Blog Id");
