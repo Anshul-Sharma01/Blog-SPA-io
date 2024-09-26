@@ -19,7 +19,6 @@ const toggleBlogLike = asyncHandler(async (req, res, next) => {
         const likedBlog = await Like.findOne({ likedBy: userId, blog: blogId });
 
         if (likedBlog) {
-
             await likedBlog.deleteOne();
 
             const blog = await Blog.findByIdAndUpdate(
@@ -28,15 +27,16 @@ const toggleBlogLike = asyncHandler(async (req, res, next) => {
                 { new: true }
             );
 
-
             if (blog.numberOfLikes < 0) {
                 blog.numberOfLikes = 0;
                 await blog.save();
             }
 
-            return res.status(200).json(new ApiResponse(200, likedBlog, "Blog Like removed successfully"));
+            return res.status(200).json(new ApiResponse(200, {
+                likedBlog,
+                numberOfLikes: blog.numberOfLikes
+            }, "Blog Like removed successfully"));
         } else {
-
             const blog = await Blog.findByIdAndUpdate(
                 blogId,
                 { $inc: { numberOfLikes: 1 } },
@@ -48,48 +48,59 @@ const toggleBlogLike = asyncHandler(async (req, res, next) => {
                 blog: blogId
             });
 
-            return res.status(201).json(new ApiResponse(201, blogLiked, "Blog Liked successfully"));
+            return res.status(201).json(new ApiResponse(201, {
+                blogLiked,
+                numberOfLikes: blog.numberOfLikes
+            }, "Blog Liked successfully"));
         }
     } catch (err) {
         throw new ApiError(400, `Error occurred while toggling Blog like: ${err}`);
     }
 });
 
-
-const toggleCommentLike = asyncHandler(async(req, res, next) => {
-    try{
+const toggleCommentLike = asyncHandler(async (req, res, next) => {
+    try {
         const { commentId } = req.params;
-        console.log(commentId);
         const userId = req.user._id;
 
-        if(!isValidObjectId(commentId)){
+        if (!isValidObjectId(commentId)) {
             throw new ApiError(400, 'Invalid Comment Id');
         }
 
-        const likedComment = await Like.findOne({likedBy : userId, comment : commentId});
-        if(likedComment){
+        const likedComment = await Like.findOne({ likedBy: userId, comment: commentId });
+        if (likedComment) {
             await likedComment.deleteOne();
-            await Comment.findByIdAndUpdate(
+            const updatedComment = await Comment.findByIdAndUpdate(
                 commentId,
-                {$inc : { totalLikes : -1 }},
-            )
-            return res.status(200).json(new ApiResponse(200, likedComment, "Comment Liked Removed Successfully"));
-        }else{
-            const commentLiked = await Like.create({
-                likedBy : userId,
-                comment : commentId
-            });
-            await Comment.findByIdAndUpdate(
-                commentId,
-                {$inc : {totalLikes : 1}}
-            )
-            return res.status(201).json(new ApiResponse(201, commentLiked, "Comment Liked successfully"));
-        }
+                { $inc: { totalLikes: -1 } },
+                { new: true }
+            );
 
-    }catch(err){
+            return res.status(200).json(new ApiResponse(200, {
+                likedComment,
+                numberOfLikes: updatedComment.totalLikes
+            }, "Comment Liked Removed Successfully"));
+        } else {
+            const commentLiked = await Like.create({
+                likedBy: userId,
+                comment: commentId
+            });
+            const updatedComment = await Comment.findByIdAndUpdate(
+                commentId,
+                { $inc: { totalLikes: 1 } },
+                { new: true }
+            );
+
+            return res.status(201).json(new ApiResponse(201, {
+                commentLiked,
+                numberOfLikes: updatedComment.totalLikes
+            }, "Comment Liked successfully"));
+        }
+    } catch (err) {
         throw new ApiError(400, "Error occurred while toggling comment like");
     }
-})
+});
+
 
 const getLikedBlogs = asyncHandler(async(req, res, next) => {
     try{

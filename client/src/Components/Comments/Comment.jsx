@@ -26,7 +26,7 @@ function Comment({ imgSrc, ownerName, commentId, content, totalLikes, handleComm
                         <h4 className="text-md font-semibold text-gray-800">{ownerName || "Unknown"}</h4>
                         <div className="flex items-center space-x-2">
                             <div className="flex items-center space-x-2">
-                                <ToggleLike numberOfLikes={totalLikes} isBlog={false} isComment={true} commentId={commentId} fetchComments={handleCommentsFetch} />
+                                <ToggleLike numberOfLikes={totalLikes} isBlog={false} isComment={true} commentId={commentId}/>
                             </div>
                             {userName === ownerName && (
                                 <button

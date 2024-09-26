@@ -1,10 +1,13 @@
 import { useDispatch } from "react-redux";
 import { toggleBlogLikeThunk, toggleCommentLikeThunk } from "../../Redux/Slices/LikeSlice";
 import { BiLike } from "react-icons/bi";
+import { useState } from "react";
 
 
-function ToggleLike({ numberOfLikes, isBlog, blogId, fetchBlogs, isComment, commentId, fetchComments }) {
+function ToggleLike({ numberOfLikes, isBlog, blogId, isComment, commentId}) {
     const dispatch = useDispatch();
+
+    const [ totalLikes, setTotalLikes ] = useState(null);
 
     async function handleToggleLike(e) {
         e.preventDefault();
@@ -12,15 +15,13 @@ function ToggleLike({ numberOfLikes, isBlog, blogId, fetchBlogs, isComment, comm
         if (isBlog) {
             const res = await dispatch(toggleBlogLikeThunk({ blogId }));
             console.log("Like response:", res);
-            if (fetchBlogs) {
-                fetchBlogs(); 
-            }
+            setTotalLikes(res?.payload?.data?.numberOfLikes);
+
         } else if (isComment) {
             const res = await dispatch(toggleCommentLikeThunk({ commentId }));
+            setTotalLikes(res?.payload?.data?.numberOfLikes);
             console.log("Like response:", res);
-            if (fetchComments) {
-                fetchComments();  
-            }
+
         }
     }
 
@@ -30,7 +31,7 @@ function ToggleLike({ numberOfLikes, isBlog, blogId, fetchBlogs, isComment, comm
                 <BiLike className="text-2xl text-blue-600" />
             </button>
             <span className="text-lg font-semibold">
-                {numberOfLikes || 0}
+                {totalLikes != null ? totalLikes : numberOfLikes}
             </span>
         </div>
     );

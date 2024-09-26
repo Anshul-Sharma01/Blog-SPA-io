@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { toggleFavThunk } from "../../Redux/Slices/FavouritesSlice";
 import ToggleLike from "../Like/ToggleLike";
 
-function BlogStructure({ thumbnail, title, numberOfLikes, author, blogId, blogUserId, handleBlogsFetch }) {
+function BlogStructure({ thumbnail, title, numberOfLikes, author, blogId, blogUserId}) {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -40,7 +40,7 @@ function BlogStructure({ thumbnail, title, numberOfLikes, author, blogId, blogUs
 
                 <div className="flex items-center justify-between text-gray-600">
                     <div className="flex items-center space-x-4">
-                        <ToggleLike isBlog={true} numberOfLikes={numberOfLikes} blogId={blogId} fetchBlogs={handleBlogsFetch}  />
+                        <ToggleLike isBlog={true} numberOfLikes={numberOfLikes} blogId={blogId}/>
 
                         <button
                             onClick={handletoggleFavourite}
