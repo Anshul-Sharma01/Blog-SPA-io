@@ -7,8 +7,8 @@ import { useState } from "react";
 function ToggleLike({ numberOfLikes, isBlog, blogId, isComment, commentId}) {
     const dispatch = useDispatch();
 
-    const [ totalLikes, setTotalLikes ] = useState(null);
-
+    const [totalLikes, setTotalLikes] = useState(numberOfLikes);
+    console.log("Number of Likes : ", numberOfLikes);
     async function handleToggleLike(e) {
         e.preventDefault();
 
@@ -21,7 +21,6 @@ function ToggleLike({ numberOfLikes, isBlog, blogId, isComment, commentId}) {
             const res = await dispatch(toggleCommentLikeThunk({ commentId }));
             setTotalLikes(res?.payload?.data?.numberOfLikes);
             console.log("Like response:", res);
-
         }
     }
 
@@ -31,11 +30,10 @@ function ToggleLike({ numberOfLikes, isBlog, blogId, isComment, commentId}) {
                 <BiLike className="text-2xl text-blue-600" />
             </button>
             <span className="text-lg font-semibold">
-                {totalLikes != null ? totalLikes : numberOfLikes}
+                {totalLikes}
             </span>
         </div>
     );
 }
-
 export default ToggleLike;
 

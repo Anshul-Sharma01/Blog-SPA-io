@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import {toast} from "react-hot-toast";
 import  { LoginUser }  from "../Redux/Slices/AuthSlice.js";
+import DummyAccount from "../Components/Users/DummyAccount.jsx";
 
 function Login(){
 
@@ -87,10 +88,12 @@ function Login(){
                             </button>
                         </div>
                     </form>
+                    
                     <p>
                         Don't have an account ?  <Link to="/auth/register" className="link text-accent cursor-pointer">Create an Account</Link>
                     </p>
                     <p className="text-left "><Link to="/auth/reset" className="link text-accent cursor-pointer">Forgot Password ?</Link></p>
+                    <DummyAccount />
                 </div>
 
             </section>

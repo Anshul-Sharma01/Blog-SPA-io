@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { isEmail, isPassword } from "../Helpers/regexMatcher.js";
 import { useDispatch } from "react-redux";
 import { createAccount } from "../Redux/Slices/AuthSlice.js";
+import DummyAccount from "../Components/Users/DummyAccount.jsx";
 
 function Register() {
     const dispatch = useDispatch();
@@ -21,7 +22,7 @@ function Register() {
 
     function handleAvatarUpload(event) {
         event.preventDefault();
-        // getting the image
+        
         const uploadedImage = event.target.files[0];
 
         if(uploadedImage) {
@@ -170,6 +171,7 @@ function Register() {
                     <p>
                         Already have an account? <Link to="/auth/login" className='link text-accent cursor-pointer'> Login</Link>
                     </p>
+                    <DummyAccount />
                 </div>
             </section>
         </>
