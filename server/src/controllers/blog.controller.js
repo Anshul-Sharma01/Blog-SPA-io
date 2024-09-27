@@ -11,13 +11,13 @@ import { isValidObjectId } from "mongoose";
 const viewAllBlogs = asyncHandler(async (req, res, next) => {
     try {
         let { page, limit } = req.query;
-        page = parseInt(page) || 1;  // Default to page 1
-        limit = parseInt(limit) || 3;  // Default limit per page
+        page = parseInt(page) || 1; 
+        limit = parseInt(limit) || 3;
 
-        // Get the total number of blogs
+        
         const totalBlogs = await Blog.countDocuments();
 
-        // If no blogs exist, return response with empty array
+
         if (totalBlogs === 0) {
             return res.status(200).json(
                 new ApiResponse(
@@ -35,28 +35,29 @@ const viewAllBlogs = asyncHandler(async (req, res, next) => {
 
         const totalPages = Math.ceil(totalBlogs / limit);
 
-        // Fetch blogs in random order using MongoDB's aggregation with $sample
+
         const allBlogs = await Blog.aggregate([
-            { $sample: { size: totalBlogs } }, // Randomize all blogs
-            { $skip: (page - 1) * limit },     // Skip based on current page
-            { $limit: limit },                 // Limit the number of blogs per page
+            { $sample: { size: totalBlogs } }, 
+            { $skip: (page - 1) * limit },     
+            { $limit: limit },                 
             {
-                $lookup: {                      // Join with the "owner" collection
-                    from: "users",              // Assuming the users collection is "users"
+                $lookup: {                      
+                    from: "users",              
                     localField: "owner",
                     foreignField: "_id",
                     as: "owner"
                 }
             },
             {
-                $unwind: "$owner"        // Unwind the array of ownerDetails
+                $unwind: "$owner"        
             },
             {
-                $project: {                     // Select fields you want to return
+                $project: {                     
                     _id: 1,
                     title: 1,
                     content: 1,
                     thumbnail: 1,
+                    numberOfLikes : 1,
                     "owner.username": 1,
                     "owner.name": 1,
                     blogUserId: "$owner._id"
@@ -64,7 +65,7 @@ const viewAllBlogs = asyncHandler(async (req, res, next) => {
             }
         ]);
 
-        // If no blogs are found on the page (edge case)
+        
         if (allBlogs.length === 0) {
             return res.status(200).json(
                 new ApiResponse(
@@ -80,12 +81,12 @@ const viewAllBlogs = asyncHandler(async (req, res, next) => {
             );
         }
 
-        // Return paginated blogs in random order
+        
         return res.status(200).json(
             new ApiResponse(
                 200,
                 {
-                    allBlogs,  // Blogs are already formatted with random order and owner info
+                    allBlogs, 
                     totalBlogs,
                     totalPages,
                     currentPage: page

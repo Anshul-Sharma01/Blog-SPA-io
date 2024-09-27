@@ -2,9 +2,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { deleteBlogThunk } from "../../Redux/Slices/BlogSlice";
 
-
-function DeleteBlog({ blogId }){
-
+function DeleteBlog({ blogId }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -13,7 +11,7 @@ function DeleteBlog({ blogId }){
     }
 
     async function handleDeleteBlog(event) {
-        event.preventDefault(); 
+        event.preventDefault();
         try {
             const res = await dispatch(deleteBlogThunk({ blogId }));
 
@@ -26,35 +24,32 @@ function DeleteBlog({ blogId }){
             }
         } catch (error) {
             console.error("Error deleting blog:", error);
-            // Optionally show an error message to the user
+            
         }
     }
 
-
-
-
-    return(
+    return (
         <>
             <dialog id="delete_blog_modal" className="modal">
-                <div className="modal-box">
+                <div className="modal-box bg-white rounded-lg shadow-lg p-6">
                     <button
-                        className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                        className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-gray-500 hover:text-gray-800"
                         onClick={closeModal}
                     >
                         ✕
                     </button>
-                    <p className="text-center text-md font-serif  p-8">Are u sure u want to delete the blog permanently ? </p>
-                    <form onSubmit={handleDeleteBlog} className="flex flex-col gap-2 justify-center items-center">
-                        <button className="btn btn-error w-full" type="submit">
+                    <p className="text-center text-lg font-serif text-gray-800 py-4">
+                        Are you sure you want to delete the blog permanently?
+                    </p>
+                    <form onSubmit={handleDeleteBlog} className="flex flex-col gap-4 justify-center items-center">
+                        <button className="btn btn-error w-full p-3 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition duration-200" type="submit">
                             Delete Permanently
                         </button>
                     </form>
                 </div>
             </dialog>
         </>
-    )
+    );
 }
 
-
 export default DeleteBlog;
-

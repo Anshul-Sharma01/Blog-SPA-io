@@ -12,16 +12,16 @@ function UpdateProfile() {
     async function handleUpdateUser(e) {
         e.preventDefault();
 
-        if(userName.trim() === ""){
+        if (userName.trim() === "") {
             toast.error("Please fill in name");
+            return; 
         }
 
-        const res = await dispatch(updateUserThunk({ name : userName }));
-
-        navigate("/me/profile");
+        const res = await dispatch(updateUserThunk({ name: userName }));
         closeModal();
         setUserName("");
-        
+
+        navigate("/me/profile");
     }
 
     function closeModal() {
@@ -31,23 +31,23 @@ function UpdateProfile() {
     return (
         <>
             <dialog id="my_modal_3" className="modal">
-                <div className="modal-box">
+                <div className="modal-box bg-white rounded-lg shadow-lg p-6">
                     <button 
-                        className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                        className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-gray-500 hover:text-gray-800"
                         onClick={closeModal}
                     >
                         ✕
                     </button>
-                    <h1 className="text-center text-xl uppercase tracking-wider font-serif font-bold">Update Name</h1>
-                    <form onSubmit={handleUpdateUser} className="flex flex-col gap-2 justify-center items-center">
+                    <h1 className="text-center text-xl font-serif font-bold text-gray-800 uppercase tracking-wider py-4">Update Name</h1>
+                    <form onSubmit={handleUpdateUser} className="flex flex-col gap-4 justify-center items-center">
                         <input 
                             type="text" 
                             placeholder="Enter new name"
-                            className="input input-bordered w-full"
+                            className="input input-bordered w-full p-2 border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
                             value={userName}
                             onChange={(e) => setUserName(e.target.value)}
                         />
-                        <button className="btn btn-accent w-full" type="submit">
+                        <button className="btn btn-accent w-full p-3 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition duration-200" type="submit">
                             Update Changes
                         </button>
                     </form>

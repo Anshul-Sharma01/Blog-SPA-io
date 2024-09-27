@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'; 
 import { FiEdit } from "react-icons/fi";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -11,7 +11,6 @@ import FavCount from '../Components/Blogs/FavCount.jsx';
 import Comments from '../Components/Comments/Comments.jsx';
 import { MdOutlineAddComment } from "react-icons/md";
 import AddComment from '../Components/Comments/AddComment.jsx';
-
 
 function ViewBlog() {
     const { blogId } = useParams();
@@ -68,32 +67,31 @@ function ViewBlog() {
                 {isOwner && (
                     <div className="flex flex-row gap-6 justify-center items-center mt-8">
                         <button
-                            className="btn btn-warning px-6 py-3 text-lg shadow-lg transition duration-300 ease-in-out hover:bg-yellow-500"
+                            className="px-6 py-3 text-lg font-semibold text-white bg-yellow-400 rounded-md shadow-lg transition duration-300 ease-in-out hover:bg-yellow-500 hover:scale-105"
                             onClick={() => document.getElementById("blog_avatar_modal").showModal()}
                         >
                             Update Thumbnail
                         </button>
                         <button
-                            className="btn btn-success px-6 py-3 text-lg shadow-lg transition duration-300 ease-in-out hover:bg-green-500"
+                            className="px-6 py-3 text-lg font-semibold text-white bg-green-500 rounded-md shadow-lg transition duration-300 ease-in-out hover:bg-green-600 hover:scale-105"
                             onClick={() => document.getElementById("blog_modal_1").showModal()}
                         >
                             Update Blog
                         </button>
                         <button
-                            className="btn btn-error px-6 py-3 text-lg shadow-lg transition duration-300 ease-in-out hover:bg-red-500"
+                            className="px-6 py-3 text-lg font-semibold text-white bg-red-500 rounded-md shadow-lg transition duration-300 ease-in-out hover:bg-red-600 hover:scale-105"
                             onClick={() => document.getElementById('delete_blog_modal').showModal()}
                         >
                             Delete Blog
                         </button>
                         <button
-                            className="btn btn-accent px-6 py-3 text-lg shadow-lg transition duration-300 ease-in-out hover:bg-yellow-400"
+                            className="px-6 py-3 text-lg font-semibold text-white bg-blue-500 rounded-md shadow-lg transition duration-300 ease-in-out hover:bg-blue-600 hover:scale-105"
                             onClick={() => document.getElementById('favCount_modal').showModal()}
                         >
                             Stars Count
                         </button>
                     </div>
                 )}
-
             </div>
 
             {isOwner && (
@@ -104,14 +102,12 @@ function ViewBlog() {
                     <FavCount blogId={blogId} />
                 </>
             )}
-            <button className='text-4xl' onClick={() => document.getElementById("comment_modal").showModal()}>
-                <MdOutlineAddComment/>
+            <button className='text-4xl fixed bottom-4 right-4 bg-blue-500 text-white p-3 rounded-full shadow-lg transition duration-300 ease-in-out hover:bg-blue-600 hover:scale-110' onClick={() => document.getElementById("comment_modal").showModal()}>
+                <MdOutlineAddComment />
             </button>
 
-
-            <Comments blogId={blogID}/>
-            <AddComment blogId={blogID}/>
-
+            <Comments blogId={blogID} />
+            <AddComment blogId={blogID} />
         </HomeLayout>
     );
 }
