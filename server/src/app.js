@@ -40,14 +40,3 @@ app.use("/api/v1/server", serverCheckRouter);
 
 export { app }; 
 
-
-
-
-
-
-
-
-
-
-
-

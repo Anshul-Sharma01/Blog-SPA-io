@@ -5,7 +5,7 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   daisyui: {
-    themes: ["light", "black", "lemonade", "winter", ],
+    themes: ["light", "nord", "lemonade", "winter", ],
   },
   plugins: [
     require('daisyui'),

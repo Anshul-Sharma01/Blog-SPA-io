@@ -54,16 +54,6 @@ function ThemeController() {
                             type="radio"
                             name="theme-dropdown"
                             className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-                            aria-label="Black"
-                            value="black"
-                            onChange={changeTheme} 
-                        />
-                    </li>
-                    <li>
-                        <input
-                            type="radio"
-                            name="theme-dropdown"
-                            className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
                             aria-label="Lemonade"
                             value="lemonade"
                             onChange={changeTheme}

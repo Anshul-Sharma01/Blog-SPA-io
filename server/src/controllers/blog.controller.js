@@ -11,27 +11,21 @@ import { isValidObjectId } from "mongoose";
 const viewAllBlogs = asyncHandler(async (req, res, next) => {
     try {
         let { page, limit } = req.query;
-        page = parseInt(page) || 3;
-        limit = parseInt(limit) || 3;
+        page = parseInt(page) || 1;  // Default to page 1
+        limit = parseInt(limit) || 3;  // Default limit per page
 
-        const skip = (page - 1) * limit;
-
-        const allBlogs = await Blog.find({})
-            .skip(skip)
-            .limit(limit)
-            .populate("owner", "username name _id");
-
+        // Get the total number of blogs
         const totalBlogs = await Blog.countDocuments();
 
         // If no blogs exist, return response with empty array
-        if (allBlogs.length === 0) {
+        if (totalBlogs === 0) {
             return res.status(200).json(
                 new ApiResponse(
                     200,
                     {
-                        allBlogs,
+                        allBlogs: [],
                         totalBlogs,
-                        totalPages: Math.ceil(totalBlogs / limit),
+                        totalPages: 0,
                         currentPage: page
                     },
                     "Blogs don't exist"
@@ -39,25 +33,61 @@ const viewAllBlogs = asyncHandler(async (req, res, next) => {
             );
         }
 
-        // If blogs exist, include the blogUserId in the response
-        const blogDataWithBlogUserId = allBlogs.map((blog) => {
-            return {
-                ...blog._doc, // Spread the blog details
-                blogUserId: blog.owner._id, // Rename owner's _id to blogUserId
-                owner: {
-                    ...blog.owner._doc, // Spread owner details
-                    _id: undefined, // Remove the original _id to avoid conflict
-                }
-            };
-        });
+        const totalPages = Math.ceil(totalBlogs / limit);
 
+        // Fetch blogs in random order using MongoDB's aggregation with $sample
+        const allBlogs = await Blog.aggregate([
+            { $sample: { size: totalBlogs } }, // Randomize all blogs
+            { $skip: (page - 1) * limit },     // Skip based on current page
+            { $limit: limit },                 // Limit the number of blogs per page
+            {
+                $lookup: {                      // Join with the "owner" collection
+                    from: "users",              // Assuming the users collection is "users"
+                    localField: "owner",
+                    foreignField: "_id",
+                    as: "owner"
+                }
+            },
+            {
+                $unwind: "$owner"        // Unwind the array of ownerDetails
+            },
+            {
+                $project: {                     // Select fields you want to return
+                    _id: 1,
+                    title: 1,
+                    content: 1,
+                    thumbnail: 1,
+                    "owner.username": 1,
+                    "owner.name": 1,
+                    blogUserId: "$owner._id"
+                }
+            }
+        ]);
+
+        // If no blogs are found on the page (edge case)
+        if (allBlogs.length === 0) {
+            return res.status(200).json(
+                new ApiResponse(
+                    200,
+                    {
+                        allBlogs: [],
+                        totalBlogs,
+                        totalPages,
+                        currentPage: page
+                    },
+                    "No blogs found on this page"
+                )
+            );
+        }
+
+        // Return paginated blogs in random order
         return res.status(200).json(
             new ApiResponse(
                 200,
                 {
-                    allBlogs: blogDataWithBlogUserId, // Return the transformed data with blogUserId
+                    allBlogs,  // Blogs are already formatted with random order and owner info
                     totalBlogs,
-                    totalPages: Math.ceil(totalBlogs / limit),
+                    totalPages,
                     currentPage: page
                 },
                 "All Blogs Fetched Successfully"
@@ -67,6 +97,7 @@ const viewAllBlogs = asyncHandler(async (req, res, next) => {
         throw new ApiError(400, err?.message || "Error occurred while fetching blogs");
     }
 });
+
 
 const viewBlog = asyncHandler( async (req, res, next) => {
     try{

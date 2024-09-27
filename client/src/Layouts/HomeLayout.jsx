@@ -28,7 +28,7 @@ function HomeLayout({ children }) {
         drawerSide[0].style.width = 0;
     }
 
-    // Logout handling
+
     async function handleLogout(e) {
         e.preventDefault();
         const res = await dispatch(Logout());
