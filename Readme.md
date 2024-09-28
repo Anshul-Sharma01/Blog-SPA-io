@@ -1,17 +1,28 @@
-# Blogging-Site-Backend
+# Blogging-Site (Full Stack)
 
-**A comprehensive backend for a blogging platform that handles user management, blog creation, comments, likes, and more with secure authentication and efficient APIs.**
+**A comprehensive blogging platform with secure authentication, efficient APIs, and a user-friendly interface for managing blogs, comments, likes, and more.**
 
 ## Features
 
+### Backend
 - **User Authentication**: Secure login, registration, and session management using JWT.
 - **Blog Management**: Create, update, delete, and manage blog posts with dynamic content handling.
 - **Commenting System**: Add, edit, and manage comments on blogs with user authentication.
 - **Like & Favourite Functionality**: Toggle likes and add blogs to favorites for personalized engagement.
 - **Search and Filter**: Find blogs by title, category, or author, with advanced sorting options.
 
+### Frontend
+- **Single Page Application (SPA)**: Seamless user experience with dynamic content loading and navigation using React.
+- **Responsive Design**: Optimized for all devices with a mobile-first approach.
+- **Profile Management**: Users can update their profile information, including avatars.
+- **Comments & Likes**: Real-time interaction with the ability to like blogs and leave comments.
+- **Blog Editing & Creation**: Rich-text blog editor with image upload functionality.
+- **Custom Comment Section**: A custom-built comment section for engaging with blog content.
+- **DaisyUI & TailwindCSS**: Modern design with eye-catching elements using DaisyUI and TailwindCSS.
+
 ## Technologies Used
 
+### Backend
 - **Node.js**: JavaScript runtime for server-side development.
 - **Express**: Fast, minimalist web framework for creating robust APIs.
 - **MongoDB**: NoSQL database for handling blogs, users, comments, and likes.
@@ -23,15 +34,37 @@
 - **cors**: Enabling cross-origin requests for frontend integration.
 - **cookie-parser**: For managing cookies in session handling.
 
+### Frontend
+- **React**: For building interactive user interfaces.
+- **Axios**: For making API requests to the backend.
+- **TailwindCSS**: Utility-first CSS framework for styling.
+- **DaisyUI**: Tailwind CSS component library for modern UI components.
+- **React Router**: For SPA-style navigation between different pages.
+- **JWT**: Frontend integration for handling authentication.
+- **Redux**: For state management across components.
+- **Axios Interceptors**: For handling authentication token refresh mechanisms.
+
 ## Project Structure
 
-- **controllers**: Contains logic for handling different API requests and business logic.
-- **models**: Mongoose schemas defining the structure of users, blogs, comments, likes, and favorites.
-- **routes**: API endpoints for user, blog, comment, like, and favorites functionalities.
-- **middlewares**: Custom middleware for authentication, authorization, and error handling.
-- **utils**: Helper functions, reusable classes, and utility methods for various tasks.
-
+```bash
+📦 blog-SPA-io
+├── 📁 backend
+│   ├── 📁 controllers
+│   ├── 📁 models
+│   ├── 📁 routes
+│   ├── 📁 middlewares
+│   └── 📁 utils
+├── 📁 frontend
+│   ├── 📁 components
+│   ├── 📁 pages
+│   ├── 📁 redux
+│   └── 📁 assets
+├── 📄 package.json
+├── 📄 .env
+└── 📄 README.md
+```
 ## Future Work
 
-- **Frontend Development**: Integration of a user-friendly frontend interface is in progress.
-- **Additional Features**: Enhanced search, notifications, and blog analytics to be added.
+- **Enhanced Search**: Add more filters and search parameters.
+- **Notifications**: Implement a real-time notification system for likes, comments, and blog interactions.
+- **Blog Analytics**: Add features to analyze blog performance, including views, likes, and comments.
