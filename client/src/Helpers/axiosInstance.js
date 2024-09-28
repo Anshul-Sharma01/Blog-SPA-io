@@ -91,59 +91,12 @@ axiosInstance.interceptors.response.use(
             localStorage.clear();
             Cookies.remove('accessToken');
             Cookies.remove('refreshToken');
-            window.location.href = '/auth/login';
+            window.location.href = 'https://blog-io-88y6.onrender.com/auth/login';
         }
 
         return Promise.reject(error);
     }
 );
 
-
-
-axiosInstance.interceptors.response.use(
-    (response) => {
-        return response;
-    },
-    async (error) => {
-        const originalRequest = error.config;
-        
-        if (error.response) {
-            if (error.response.status === 403 && !originalRequest._retry) {
-                originalRequest._retry = true;
-
-                try {
-                    const refreshToken = Cookies.get('refreshToken');
-                    const response = await axiosInstance.post('/users/refresh-token', {
-                        refreshToken,
-                    });
-
-                    const newAccessToken = response.data.accessToken;
-                    const newRefreshToken = response.data.refreshToken;
-
-                    Cookies.set('accessToken', newAccessToken);
-                    Cookies.set('refreshToken', newRefreshToken);
-
-                    originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-
-                    return axiosInstance(originalRequest);
-                } catch (err) {
-                    console.error('Error refreshing access token:', err);
-                    return Promise.reject(err);
-                }
-            }else if(error.response.status === 401){
-                toast.error("Please Log In again!");
-                console.log("please log in again!");
-                localStorage.clear();
-                Cookies.remove('accessToken');
-                Cookies.remove('refreshToken');
-                window.location.href = 'http://localhost:5173/auth/login';
-            }
-        } else {
-            console.error('Error with the request:', error.message);
-        }
-
-        return Promise.reject(error);
-    }
-);
 
 export default axiosInstance;
