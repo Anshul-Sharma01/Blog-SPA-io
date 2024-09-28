@@ -30,6 +30,10 @@ import serverCheckRouter from "./routes/serverCheck.routes.js";
 //     next();
 // });
 
+app.get("/", (req, res) => {
+    res.send("BackEnd running properly..");
+})
+
 
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/blogs", blogRoutes);
