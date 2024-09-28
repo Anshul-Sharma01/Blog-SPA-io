@@ -13,7 +13,7 @@ const cookieOptions = {
     maxAge : 7 * 24 * 60 * 60 * 1000,
     secure : true,
     httpOnly : true,
-    sameSite : none,
+    sameSite : 'none',
 }
 
 const generateAcessAndRefreshTokens = async(userId) => {
