@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 
 
-const BASE_URL = "https://blog-spa-p7s33f3h4-anshul-sharmas-projects-ad06359a.vercel.app/api/v1";
+const BASE_URL = "https://blog-spa-io-backend.vercel.app/api/v1";
 
 const axiosInstance = axios.create({
     baseURL: BASE_URL,
