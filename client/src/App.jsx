@@ -13,10 +13,10 @@ import PermissionDenied from './Components/PermissionDenied.jsx'
 import ResetPassword from './Pages/ResetPassword.jsx'
 import ResetToken from './Pages/ResetToken.jsx'
 import ChangePassword from './Pages/ChangePassword.jsx'
-import UpdateProfile from "./Components/Users/UpdateProfile.jsx"
 import AllBlogs from './Pages/AllBlogs.jsx'
 import ViewBlog from './Pages/ViewBlog.jsx'
 import MyFavourites from './Pages/MyFavourites.jsx'
+import AdminPage from './Pages/AdminPage.jsx'
 
 
 function App() {
@@ -47,6 +47,7 @@ function App() {
 
 
         <Route path='/denied' element={<PermissionDenied/>}></Route>
+        <Route path='/dashboard' element={<AdminPage />} />
 
         {/* NOT FOUND */}
 
