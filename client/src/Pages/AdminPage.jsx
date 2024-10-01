@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Dashboard from "../Components/Admin/Dashboard";
 
 function AdminPage() {
   const [activeSection, setActiveSection] = useState("Dashboard");
@@ -29,7 +30,7 @@ function AdminPage() {
   const renderSection = () => {
     switch (activeSection) {
       case "Dashboard":
-        return <h1 className="text-2xl font-semibold">Dashboard</h1>;
+        return <Dashboard />;
       case "Posts":
         return <h1 className="text-2xl font-semibold">Posts</h1>;
       case "Users":
@@ -46,7 +47,7 @@ function AdminPage() {
   };
 
   return (
-    <div className="flex h-[100vh] w-[100vw] bg-gray-200">
+    <div className="flex gap-2 bg-gray-200">
       <aside className="w-64 bg-gray-800 text-white flex-shrink-0">
         <div className="p-4">
           <h2 className="text-lg font-bold">Admin Panel</h2>
@@ -105,7 +106,7 @@ function AdminPage() {
         </nav>
       </aside>
 
-      <main className="flex-1 p-6 bg-gray-100">
+      <main className="flex-1 bg-gray-100">
         {renderSection()}
       </main>
     </div>
