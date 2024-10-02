@@ -265,19 +265,7 @@ const changePassword = asyncHandler(async (req, res, next) => {
 
 
 
-const getAllUsers = asyncHandler(async (req, res, next) => {
-    try{
-        const allUsers = await User.find({});
-        if(allUsers.length === 0){
-            throw new ApiError(400, "No Users Exists");
-        }
-        return res.status(200).json(
-            new ApiResponse(200, allUsers, "All Users fetched Successfully")
-        );
-    }catch(err){
-        throw new ApiError(400,err?.message || "Error occurred while fetching all the users");
-    }
-})
+
 
 const updateUser = asyncHandler( async (req, res, next) => {
     const {  name } = req.body;
@@ -343,26 +331,6 @@ const updateUserAvatar = asyncHandler( async (req, res, next) => {
     }
 })
 
-const deleteUser = asyncHandler( async (req, res, next) => {
-    try{
-        const { userId } = req.params;
-
-        if(!isValidObjectId(userId)){
-            throw new ApiError(400,"Invalid user-id");
-        }
-
-        const deletedUser = await User.findByIdAndDelete(userId);
-        if(!deletedUser){
-            throw new ApiError(400,"User does not exists");
-        }
-        return res.status(200).json(
-            new ApiResponse(200,deletedUser, "User deleted Successfully")
-        );
-
-    }catch(err){
-        throw new ApiError(400, err?.message || "Error occurred while deleting the user");
-    }
-})
 
 const addNewUser = asyncHandler(async (req, res, next) => {
     try{
@@ -452,10 +420,8 @@ export {
     forgotPassword,
     resetPassword,
     changePassword,
-    getAllUsers,
     updateUser,
     updateUserAvatar,
-    deleteUser,
     addNewUser,
     refreshAccessToken
 }

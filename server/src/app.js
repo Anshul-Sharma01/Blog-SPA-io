@@ -24,6 +24,7 @@ import commentRoutes from "./routes/comment.routes.js";
 import likeRoutes from "./routes/like.routes.js";
 import favouritesRoutes from "./routes/favourites.routes.js";
 import serverCheckRouter from "./routes/serverCheck.routes.js";
+import adminRoutes from "./routes/admin.routes.js";
 
 // app.use((req, res, next) => {
 //     req.setTimeout(5000); // 5 seconds timeout
@@ -41,6 +42,7 @@ app.use("/api/v1/comments", commentRoutes);
 app.use("/api/v1/like", likeRoutes);
 app.use("/api/v1/favourites", favouritesRoutes);
 app.use("/api/v1/server", serverCheckRouter);
+app.use("/api/v1/admin", adminRoutes);
 
 export { app }; 
 
