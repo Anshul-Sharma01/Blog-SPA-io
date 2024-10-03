@@ -83,6 +83,36 @@ const deleteUser = asyncHandler( async (req, res, next) => {
     }
 })
 
+const fetchAllComments = asyncHandler(async(req, res, next) => {
+    try{
+        const allComments = await Comment.find({});
+        if(allComments.length == 0){
+            return res.status(200)
+            .json(
+                new ApiResponse(
+                    200,
+                    allComments,
+                    "No User has commented yet !!"
+                )
+            )
+        }
+
+
+        return res.status(200)
+        .json(
+            new ApiResponse(
+                200,
+                allComments,
+                "All comments fetched Successfully"
+            )
+        ) 
+    }catch(err){
+        console.error(`Error occurred while fetching all comments : ${err}`);
+        throw new ApiError(400, "Error occurred while fetching all comments");
+    }
+})
+
+
 
 export {
     getTotalCount,
