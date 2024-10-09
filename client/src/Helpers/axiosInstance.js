@@ -1,6 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
+import { Navigate } from "react-router-dom";
 
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
@@ -91,7 +92,8 @@ axiosInstance.interceptors.response.use(
             localStorage.clear();
             Cookies.remove('accessToken');
             Cookies.remove('refreshToken');
-            window.location.href = 'https://blog-io-88y6.onrender.com/auth/login';
+            console.log("Redirected..");
+            window.location.href = import.meta.env.VITE_LOGIN_URL;
         }
 
         return Promise.reject(error);

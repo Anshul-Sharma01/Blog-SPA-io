@@ -99,7 +99,6 @@ const viewAllBlogs = asyncHandler(async (req, res, next) => {
     }
 });
 
-
 const viewBlog = asyncHandler( async (req, res, next) => {
     try{
         const { blogId } = req.params;
