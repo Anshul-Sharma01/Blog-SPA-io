@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
-
 import HomeLayout from "../Layouts/HomeLayout.jsx";
 import { fetchAllBlogsThunk } from "../Redux/Slices/BlogSlice.js";
 import BlogSkeleton from "../Components/Blogs/BlogSkeleton.jsx";
@@ -43,8 +42,6 @@ function AllBlogs() {
             setPage((prev) => prev + 1);
         }
     }
-
-
 
     function handleBackwardPagination() {
         if (page > 1) {

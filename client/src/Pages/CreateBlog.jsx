@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createNewBlog } from "../Redux/Slices/BlogSlice.js";
 import toast from "react-hot-toast";
-import DOMPurify from "dompurify";  
+import DOMPurify from "dompurify";
 
 function CreateBlog() {
     const dispatch = useDispatch();
@@ -51,9 +51,7 @@ function CreateBlog() {
             return;
         }
 
-
         const sanitizedContent = DOMPurify.sanitize(blogData.content);
-
 
         const formData = new FormData();
         formData.append("title", blogData.title);
@@ -68,22 +66,22 @@ function CreateBlog() {
 
     return (
         <HomeLayout>
-            <section className="flex flex-row justify-center items-center h-[100vh] ">
+            <section className="flex flex-col h-full min-h-screen bg-gray-100 p-8">
                 <form
                     onSubmit={handleFormSubmit}
-                    className="bg-white shadow-md rounded-lg p-8 w-full max-w-lg"
+                    className="bg-white shadow-md rounded-lg p-8 w-full h-full max-h-[90vh] overflow-y-auto"
                 >
                     <div className="mb-6">
                         <figure className="flex justify-center mb-4">
                             <label
                                 htmlFor="thumbnailUpload"
-                                className="cursor-pointer h-[200px] flex justify-center items-center w-full border border-dashed border-gray-300 rounded-lg"
+                                className="cursor-pointer h-[300px] flex justify-center items-center w-full border border-dashed border-gray-300 rounded-lg"
                             >
                                 {!thumbnailUrl ? (
                                     <MdOutlineWallpaper className="w-20 h-full text-gray-400" />
                                 ) : (
                                     <img
-                                        className="h-[200px] object-cover rounded-md"
+                                        className="h-[300px] object-cover rounded-md"
                                         src={thumbnailUrl}
                                         alt="Thumbnail"
                                     />
