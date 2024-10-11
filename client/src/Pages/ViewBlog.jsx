@@ -96,7 +96,7 @@ function ViewBlog() {
 
             {isOwner && (
                 <>
-                    <UpdateBlogData blogId={blogId} />
+                    <UpdateBlogData blogId={blogId} blogData={blogData} />
                     <UpdateBlogAvatar blogId={blogId} />
                     <DeleteBlog blogId={blogId} />
                     <FavCount blogId={blogId} />
