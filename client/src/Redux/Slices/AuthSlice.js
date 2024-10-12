@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import axiosInstance from "../../Helpers/axiosInstance.js";
-import Cookies from "js-cookie";  // Import js-cookie
-import axios from "axios";
+import Cookies from "js-cookie"; 
+
 
 const initialState = {
     isLoggedIn: localStorage.getItem('isLoggedIn') === 'true', 
