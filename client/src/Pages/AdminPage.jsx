@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import Dashboard from "../Components/Admin/Dashboard";
 import { useDispatch } from "react-redux";
 import { fetchTotalCount } from "../Redux/Slices/AdminSlice";
+import Users from "../Components/Admin/Users";
 
 function AdminPage() {
   const [activeSection, setActiveSection] = useState("Dashboard");
   const [totalCountData, setTotalCountData] = useState();
   const dispatch = useDispatch();
-
 
   useEffect(() => {
     const root = document.getElementById("root");
@@ -18,12 +18,10 @@ function AdminPage() {
       textAlign: root.style.textAlign,
     };
 
-
     root.style.padding = "0";
     root.style.margin = "0";
     root.style.maxWidth = "100%";
     root.style.textAlign = "center";
-
 
     return () => {
       root.style.padding = originalStyles.padding;
@@ -32,7 +30,6 @@ function AdminPage() {
       root.style.textAlign = originalStyles.textAlign;
     };
   }, []);
-
 
   const fetchCount = async () => {
     const response = await dispatch(fetchTotalCount());
@@ -43,15 +40,14 @@ function AdminPage() {
     fetchCount();
   }, [dispatch]);
 
-
   const renderSection = () => {
     switch (activeSection) {
       case "Dashboard":
         return <Dashboard totalCountData={totalCountData} />;
+      case "Users":
+        return <Users />;
       case "Posts":
         return <h1 className="text-2xl font-semibold">Posts</h1>;
-      case "Users":
-        return <h1 className="text-2xl font-semibold">Users</h1>;
       case "Comments":
         return <h1 className="text-2xl font-semibold">Comments</h1>;
       case "Analytics":
@@ -69,21 +65,25 @@ function AdminPage() {
         </div>
         <nav className="mt-4">
           <ul>
-            {["Dashboard", "Posts", "Users", "Comments"].map((section) => (
-              <li key={section}>
-                <button
-                  onClick={() => setActiveSection(section)}
-                  className="w-full text-left px-4 py-2 hover:bg-gray-700"
-                >
-                  {section}
-                </button>
-              </li>
-            ))}
+            {["Dashboard", "Users", "Posts", "Comments", "Analytics"].map(
+              (section) => (
+                <li key={section}>
+                  <button
+                    onClick={() => setActiveSection(section)}
+                    className="w-full text-left px-4 py-2 hover:bg-gray-700"
+                  >
+                    {section}
+                  </button>
+                </li>
+              )
+            )}
           </ul>
         </nav>
       </aside>
 
-      <main className="flex-1 bg-gray-100">{renderSection()}</main>
+      <main className="flex-1 bg-gray-100 min-h-screen">
+        {renderSection()}
+      </main>
     </div>
   );
 }

@@ -5,7 +5,7 @@ import { verifyAdmin } from "../middlewares/auth.middleware.js";
 const router = Router();
 
 
-router.use(verifyAdmin);
+// router.use(verifyAdmin);
 
 
 router.route("/get-total-count").get(getTotalCount);

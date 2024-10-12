@@ -39,7 +39,7 @@ const getTotalCount = asyncHandler(async(req, res, next) => {
 
 const fetchAllUsers = asyncHandler(async(req, res, next) => {
     try{
-        const allUsers = await User.find({});
+        const allUsers = await User.find({}).select("-refreshToken -favourites");
 
         if(allUsers.length == 0){
             return res.status(200)
