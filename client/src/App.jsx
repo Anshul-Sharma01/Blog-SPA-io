@@ -47,7 +47,9 @@ function App() {
 
 
         <Route path='/denied' element={<PermissionDenied/>}></Route>
-        <Route path='/dashboard' element={<AdminPage />} />
+        <Route element={<RequireAuth allowedRoles={['USER','ADMIN']} />}>
+          <Route path='/dashboard' element={<AdminPage />} />
+        </Route>
 
         {/* NOT FOUND */}
 
