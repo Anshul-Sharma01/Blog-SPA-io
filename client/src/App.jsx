@@ -17,6 +17,7 @@ import AllBlogs from './Pages/AllBlogs.jsx'
 import ViewBlog from './Pages/ViewBlog.jsx'
 import MyFavourites from './Pages/MyFavourites.jsx'
 import AdminPage from './Pages/AdminPage.jsx'
+import AuthorProfile from './Pages/AuthorProfile.jsx'
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
         <Route path='/auth/password/change' element={<ChangePassword/>}></Route>
 
         <Route path='/blogs/view/:blogId' element={<ViewBlog/>}></Route>
+        <Route path='/view/author-profile/:authorId' element={<AuthorProfile/>}></Route>
 
         <Route path='/blogs/all' element={<AllBlogs/>}></Route>
         <Route element={<RequireAuth allowedRoles={['USER','ADMIN']} />}>
@@ -44,6 +46,7 @@ function App() {
 
           <Route path='/favourites/my' element={<MyFavourites/>}></Route>
         </Route>
+
 
 
         <Route path='/denied' element={<PermissionDenied/>}></Route>

@@ -57,6 +57,7 @@ function PersonalBlogs() {
                             title={ele.title}
                             numberOfLikes={ele.numberOfLikes}
                             blogUserId={ele.owner}
+                            category={ele.category}
                         />
                     ))}
                 </section>

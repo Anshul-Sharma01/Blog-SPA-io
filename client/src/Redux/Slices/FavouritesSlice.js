@@ -2,9 +2,9 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../Helpers/axiosInstance.js";
 import toast from "react-hot-toast";
 
-export const toggleFavThunk = createAsyncThunk("/favorites/add", async({ blogId, blogUserId }) => {
+export const toggleFavThunk = createAsyncThunk("/favorites/add", async({ blogId, authorId }) => {
     try{
-        const res = axiosInstance.post(`favourites/fav/${blogId}`, { blogUserId });
+        const res = axiosInstance.post(`favourites/fav/${blogId}`, { authorId });
         toast.promise(res, {
             loading : 'Wait For a moment',
             success : (data) => data?.data?.message,

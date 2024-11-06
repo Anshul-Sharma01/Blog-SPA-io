@@ -74,9 +74,9 @@ export const fetchBlogThunk = createAsyncThunk("/blog/view/:blogId", async(data)
 })
 
 
-export const updateBlogThunk = createAsyncThunk("/blogs/update/:blogId", async({ title, content, blogId }) => {
+export const updateBlogThunk = createAsyncThunk("/blogs/update/:blogId", async({ title, content, blogId, category }) => {
     try{
-        const res = axiosInstance.patch(`/blogs/update/${blogId}`, { title, content });
+        const res = axiosInstance.patch(`/blogs/update/${blogId}`, { title, content, category });
         toast.promise(res, {
             loading : 'Updating blod data',
             success : "Blog details updated successfully",

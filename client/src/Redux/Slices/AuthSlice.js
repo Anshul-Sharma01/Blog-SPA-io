@@ -70,6 +70,22 @@ export const Logout = createAsyncThunk("/auth/logout", async (req, res) => {
     }
 })
 
+export const fetchAuthorProfile = createAsyncThunk("/view/author-profile", async({ authorId }) => {
+    try{
+        const res = axiosInstance.get(`users/author/${authorId}`);
+        toast.promise(res, {
+            loading : 'Fetching Author profile...',
+            success : (data) => data?.data?.message,
+            error : "Failed to fetch author profile !!"
+        })
+
+        return (await res).data;
+        
+    }catch(err){
+        console.error(`Error occurred while fetching author profile : ${err}`);
+    }
+})
+
 export const resetUserPassword = createAsyncThunk("/auth/reset", async(data) => {
     try{
         console.log(data);

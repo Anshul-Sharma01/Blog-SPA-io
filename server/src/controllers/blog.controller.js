@@ -14,6 +14,8 @@ const fetchAllBlogs = asyncHandler(async (req, res, next) => {
         page = parseInt(page) || 1; 
         limit = parseInt(limit) || 3;
 
+        const skip = (page - 1) * limit;
+
         
         const totalBlogs = await Blog.countDocuments();
 
@@ -36,34 +38,46 @@ const fetchAllBlogs = asyncHandler(async (req, res, next) => {
         const totalPages = Math.ceil(totalBlogs / limit);
 
 
-        const allBlogs = await Blog.aggregate([
-            { $sample: { size: totalBlogs } }, 
-            { $skip: (page - 1) * limit },     
-            { $limit: limit },                 
-            {
-                $lookup: {                      
-                    from: "users",              
-                    localField: "owner",
-                    foreignField: "_id",
-                    as: "owner"
-                }
-            },
-            {
-                $unwind: "$owner"        
-            },
-            {
-                $project: {                     
-                    _id: 1,
-                    title: 1,
-                    content: 1,
-                    thumbnail: 1,
-                    numberOfLikes : 1,
-                    "owner.username": 1,
-                    "owner.name": 1,
-                    blogUserId: "$owner._id"
-                }
-            }
-        ]);
+        // const allBlogs = await Blog.aggregate([
+        //     { $sample: { size: totalBlogs } }, 
+        //     { $skip: (page - 1) * limit },     
+        //     { $limit: limit },                 
+        //     {
+        //         $lookup: {                      
+        //             from: "users",              
+        //             localField: "owner",
+        //             foreignField: "_id",
+        //             as: "owner"
+        //         }
+        //     },
+        //     {
+        //         $unwind: "$owner"        
+        //     },
+        //     {
+        //         $project: {                     
+        //             _id: 1,
+        //             title: 1,
+        //             content: 1,
+        //             thumbnail: 1,
+        //             numberOfLikes : 1,
+        //             "owner.username": 1,
+        //             "owner.name": 1,
+        //             blogUserId: "$owner._id"
+        //         }
+        //     }
+        // ]);
+
+        const allBlogs = await Blog.find({})
+        .populate({
+            path: "owner", 
+            select: "username name"  
+        })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit);
+
+
+
 
         
         if (allBlogs.length === 0) {
@@ -312,6 +326,8 @@ const updateBlogDetails = asyncHandler(async (req, res, next) => {
         if(category){
             updatedFields.category = category;
         }
+
+        // console.log("Updated fields : ", updatedFields);
 
         const updatedBlog = await Blog.findByIdAndUpdate(
             blogId,

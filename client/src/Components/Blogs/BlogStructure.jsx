@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { toggleFavThunk } from "../../Redux/Slices/FavouritesSlice";
 import ToggleLike from "../Like/ToggleLike";
 
-function BlogStructure({ thumbnail, title, numberOfLikes, author, blogId, blogUserId, category}) {
+function BlogStructure({ thumbnail, title, numberOfLikes, author, authorId, blogId, category}) {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -17,7 +17,7 @@ function BlogStructure({ thumbnail, title, numberOfLikes, author, blogId, blogUs
     async function handletoggleFavourite(e) {
         e.preventDefault();
 
-        const res = await dispatch(toggleFavThunk({ blogId, blogUserId }));
+        const res = await dispatch(toggleFavThunk({ blogId, authorId }));
         navigate("/blogs/all");
 
         if (res?.payload?.success === true) {
@@ -37,7 +37,7 @@ function BlogStructure({ thumbnail, title, numberOfLikes, author, blogId, blogUs
 
             <div className="p-6 space-y-4">
                 <Link to={`/blogs/view/${blogId}`}>
-                    <h1 className="text-2xl font-bold text-gray-800 hover:text-gray-900 transition-colors duration-300 cursor-pointer">
+                    <h1 className="text-2xl font-bold text-gray-800 transition-colors duration-150 cursor-pointer hover:text-blue-600">
                         {title}
                     </h1>
                 </Link>
@@ -64,10 +64,12 @@ function BlogStructure({ thumbnail, title, numberOfLikes, author, blogId, blogUs
 
                     {author && (
                         <div className="flex items-center space-x-2 text-gray-800">
-                            <FaRegUserCircle className="text-2xl" />
-                            <span className="text-sm font-semibold uppercase tracking-wider">
-                                {author}
-                            </span>
+                            <Link to={`/view/author-profile/${authorId}`} className="hover:text-blue-700 flex flex-row gap-[4px]">
+                                <FaRegUserCircle className="text-2xl" />
+                                <span className="text-sm font-semibold uppercase tracking-wider">
+                                    {author}
+                                </span>
+                            </Link>
                         </div>
                     )}
                 </div>

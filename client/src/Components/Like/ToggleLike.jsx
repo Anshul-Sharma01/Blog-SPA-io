@@ -14,13 +14,13 @@ function ToggleLike({ numberOfLikes, isBlog, blogId, isComment, commentId}) {
 
         if (isBlog) {
             const res = await dispatch(toggleBlogLikeThunk({ blogId }));
-            console.log("Like response:", res);
+            // console.log("Like response:", res);
             setTotalLikes(res?.payload?.data?.numberOfLikes);
 
         } else if (isComment) {
             const res = await dispatch(toggleCommentLikeThunk({ commentId }));
             setTotalLikes(res?.payload?.data?.numberOfLikes);
-            console.log("Like response:", res);
+            // console.log("Like response:", res);
         }
     }
 

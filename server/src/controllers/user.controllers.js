@@ -175,6 +175,7 @@ const getProfile = asyncHandler( async (req, res, next) => {
 const fetchAuthorProfile = asyncHandler(async (req, res, next) => {
     try{
         const { authorId } = req.params;
+        console.log("Author-Id : ", authorId);
         if(!isValidObjectId(authorId)){
             throw new ApiError(400, "Invalid Author Id");
         }
