@@ -72,6 +72,7 @@ function AllBlogs() {
                             key={ele._id}
                             thumbnail={ele.thumbnail.secure_url}
                             title={ele.title}
+                            category = {ele.category}
                             numberOfLikes={ele.numberOfLikes}
                             author={ele.owner.username}
                             blogUserId={ele.blogUserId}

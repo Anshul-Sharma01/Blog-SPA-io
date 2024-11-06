@@ -1,4 +1,4 @@
-import { BiLike } from "react-icons/bi";
+
 import { FaRegUserCircle } from "react-icons/fa"; 
 import { Link, useNavigate } from "react-router-dom";
 import { MdOutlineStar, MdStar } from "react-icons/md"; 
@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { toggleFavThunk } from "../../Redux/Slices/FavouritesSlice";
 import ToggleLike from "../Like/ToggleLike";
 
-function BlogStructure({ thumbnail, title, numberOfLikes, author, blogId, blogUserId}) {
+function BlogStructure({ thumbnail, title, numberOfLikes, author, blogId, blogUserId, category}) {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -27,20 +27,28 @@ function BlogStructure({ thumbnail, title, numberOfLikes, author, blogId, blogUs
 
     return (
         <div className="w-[450px] rounded-lg border border-gray-200 shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out transform hover:-translate-y-2 bg-white overflow-hidden">
-            <img
-                src={thumbnail}
-                alt="Blog Thumbnail"
-                className="h-[200px] w-full object-cover rounded-t-lg transition-transform duration-300 ease-in-out hover:scale-105"
-            />
+            <Link to={`/blogs/view/${blogId}`}>
+                <img
+                    src={thumbnail}
+                    alt="Blog Thumbnail"
+                    className="h-[200px] w-full object-cover rounded-t-lg transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer"
+                />
+            </Link>
 
             <div className="p-6 space-y-4">
-                <h1 className="text-2xl font-bold text-gray-800 hover:text-gray-900 transition-colors duration-300">
-                    {title}
-                </h1>
+                <Link to={`/blogs/view/${blogId}`}>
+                    <h1 className="text-2xl font-bold text-gray-800 hover:text-gray-900 transition-colors duration-300 cursor-pointer">
+                        {title}
+                    </h1>
+                </Link>
 
-                <div className="flex items-center justify-between text-gray-600">
+                <div className="inline-block bg-blue-500 text-white px-3 py-1 rounded-lg font-semibold shadow-md">
+                    {category || "Category not added"}
+                </div>
+
+                <div className="flex items-center justify-between text-gray-600 mt-4">
                     <div className="flex items-center space-x-4">
-                        <ToggleLike isBlog={true} numberOfLikes={numberOfLikes} blogId={blogId}/>
+                        <ToggleLike isBlog={true} numberOfLikes={numberOfLikes} blogId={blogId} />
 
                         <button
                             onClick={handletoggleFavourite}
@@ -63,15 +71,6 @@ function BlogStructure({ thumbnail, title, numberOfLikes, author, blogId, blogUs
                         </div>
                     )}
                 </div>
-
-                <Link to={`/blogs/view/${blogId}`}>
-                    <button
-                        type="button"
-                        className="mt-4 w-full bg-blue-600 text-white py-2 rounded-md text-sm font-medium shadow-md hover:shadow-lg transition-shadow duration-300 hover:bg-blue-700"
-                    >
-                        Read Blog
-                    </button>
-                </Link>
             </div>
         </div>
     );

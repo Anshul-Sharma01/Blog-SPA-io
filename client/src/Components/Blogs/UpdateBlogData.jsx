@@ -10,6 +10,7 @@ import DOMPurify from "dompurify";
 function UpdateBlogData({ blogId, blogData }) {
     const [title, setTitle] = useState(blogData?.title || "");
     const [content, setContent] = useState(blogData?.content || "");
+    const [category, setCategory] = useState(blogData?.category || "");
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -17,18 +18,19 @@ function UpdateBlogData({ blogId, blogData }) {
     async function handleUpdateBlogData(e) {
         e.preventDefault();
 
-        if (!title && !content) {
+        if (!title && !content && !category) {
             toast.error("At least one field is required");
             return;
         }
         
         const sanitizedContent = DOMPurify.sanitize(content);
 
-        await dispatch(updateBlogThunk({ title, content : sanitizedContent, blogId }));
+        await dispatch(updateBlogThunk({ title, content : sanitizedContent, blogId, category }));
         navigate(`/blogs/me`);
         closeModal();
         setTitle("");
         setContent("");
+        setCategory("");
     }
 
     function closeModal() {
@@ -56,6 +58,13 @@ function UpdateBlogData({ blogId, blogData }) {
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                         />
+                        <input
+                            type="text" 
+                            placeholder="Enter new category"
+                            className="input input-bordered w-full p-3 border-gray-300 rouned-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                        />
                         <CKEditor 
                             editor={ClassicEditor} 
                             data = { content }
@@ -64,6 +73,7 @@ function UpdateBlogData({ blogId, blogData }) {
                                 setContent(data);
                             }}
                         />
+
                         <button className="btn btn-accent w-full p-3 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition duration-200" type="submit">
                             Update Changes
                         </button>

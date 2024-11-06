@@ -17,6 +17,7 @@ function CreateBlog() {
     const [blogData, setBlogData] = useState({
         title: "",
         content: "",
+        category : "",
         thumbnail: "",
     });
 
@@ -46,7 +47,7 @@ function CreateBlog() {
 
     async function handleFormSubmit(e) {
         e.preventDefault();
-        if (!blogData.title || !blogData.content || !blogData.thumbnail) {
+        if (!blogData.title || !blogData.content || !blogData.thumbnail || !blogData.category) {
             toast.error("All fields are mandatory");
             return;
         }
@@ -57,6 +58,7 @@ function CreateBlog() {
         formData.append("title", blogData.title);
         formData.append("content", sanitizedContent);
         formData.append("thumbnail", blogData.thumbnail);
+        formData.append("category", blogData.category);
 
         const res = await dispatch(createNewBlog(formData));
         if (res.meta.requestStatus === "fulfilled") {
@@ -112,6 +114,24 @@ function CreateBlog() {
                             value={blogData.title}
                             id="title"
                             name="title"
+                        />
+                    </div>
+
+                    <div className="mb-6">
+                        <label
+                            htmlFor="category"
+                            className="block text-gray-700 font-medium mb-2"
+                        >
+                            Category
+                        </label>
+                        <input 
+                            type="text"
+                            className="w-full px-3 py-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Enter blog category"
+                            onChange={handleUserInput}
+                            value={blogData.category}
+                            id="category"
+                            name="category"
                         />
                     </div>
 

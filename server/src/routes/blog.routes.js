@@ -8,7 +8,7 @@ import { upload } from "../middlewares/multer.middleware.js";
 const router = Router();
 
 router.route("/viewall").get(fetchAllBlogs);
-router.route("/view/:category").get(fetchBlogsByCategory);
+router.route("/view/category/:category").get(fetchBlogsByCategory);
 router.route("/view/:blogId").get(viewBlog);
 router.route("/my").get(verifyJWT, fetchMyBlogs);
 router.route("/create").post(verifyJWT, upload.single("thumbnail"), createBlog);

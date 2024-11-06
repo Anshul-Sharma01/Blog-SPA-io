@@ -52,8 +52,12 @@ function ViewBlog() {
                     {blogData?.title || ""}
                 </h1>
 
-                <div className="text-center text-gray-500 italic mb-4 md:mb-6 text-lg">
+                <div className="text-center text-gray-500 italic mb-2 md:mb-4 text-lg">
                     <p>By {blogData?.owner?.username || "Unknown"}</p>
+                </div>
+
+                <div className="inline-block bg-blue-500 text-white px-4 py-1 rounded-lg font-semibold shadow-md text-center mb-4">
+                    {blogData?.category || "Not added yet"}
                 </div>
 
                 <div className="prose w-full max-w-none text-lg leading-relaxed text-gray-700 bg-white p-6 rounded-lg shadow-md">
@@ -102,12 +106,15 @@ function ViewBlog() {
                     <FavCount blogId={blogId} />
                 </>
             )}
-            <button className='text-4xl fixed bottom-4 right-4 bg-blue-500 text-white p-3 rounded-full shadow-lg transition duration-300 ease-in-out hover:bg-blue-600 hover:scale-110' onClick={() => document.getElementById("comment_modal").showModal()}>
+            <button
+                className="text-4xl fixed bottom-4 right-4 bg-blue-500 text-white p-3 rounded-full shadow-lg transition duration-300 ease-in-out hover:bg-blue-600 hover:scale-110"
+                onClick={() => document.getElementById("comment_modal").showModal()}
+            >
                 <MdOutlineAddComment />
             </button>
 
-            <Comments blogId={blogID} />
-            <AddComment blogId={blogID} />
+            <Comments blogId={blogId} />
+            <AddComment blogId={blogId} />
         </HomeLayout>
     );
 }
