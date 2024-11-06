@@ -166,9 +166,34 @@ const getProfile = asyncHandler( async (req, res, next) => {
         const userId = req.user._id;
         const user = await User.findById(userId).select("-password -refreshToken");
 
-        res.status(200).json(new ApiResponse(200, user, "User fetched Successfully"));
+        return res.status(200).json(new ApiResponse(200, user, "User fetched Successfully"));
     }catch(err){
         throw new ApiError(400,err?.message || "Error occurred while fetching user profile");
+    }
+})
+
+const fetchAuthorProfile = asyncHandler(async (req, res, next) => {
+    try{
+        const { authorId } = req.params;
+        if(!isValidObjectId(authorId)){
+            throw new ApiError(400, "Invalid Author Id");
+        }
+
+        const authorProfile = await User.findById(authorId)
+        .select("-refreshToken -favourites -role");
+
+        return res.status(200)
+        .json(
+            new ApiResponse(
+                200,
+                {author : authorProfile},
+                "Successfully fetched author profile"
+            )
+        )
+
+    }catch(err){
+        console.error(`Error occurred while fetching author profile : ${err}`);
+        throw new ApiError(400, err?.message || "Error occurred while fetching author profile ");
     }
 })
 
@@ -417,6 +442,7 @@ export {
     login,
     logout,
     getProfile,
+    fetchAuthorProfile,
     forgotPassword,
     resetPassword,
     changePassword,
