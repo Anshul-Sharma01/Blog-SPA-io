@@ -48,9 +48,9 @@ function App() {
 
         <Route path='/denied' element={<PermissionDenied/>}></Route>
         <Route element={<RequireAuth allowedRoles={['USER','ADMIN']} />}>
-          <Route path='/dashboard' element={<AdminPage />} />
+          <Route path='/admin/dashboard' element={<AdminPage />} />
         </Route>
-
+G
         {/* NOT FOUND */}
 
         <Route path='*' element={<NotFound/>}></Route>

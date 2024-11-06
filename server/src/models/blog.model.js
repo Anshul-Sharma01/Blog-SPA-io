@@ -16,6 +16,11 @@ const blogSchema = new Schema({
         type : String,
         required : [true, "Content is required"]
     },
+    category : {
+        type : String,
+        required : [ true, "Category of the blog is required"],
+        trim : true,
+    },
     thumbnail : {
         public_id : {
             type : String,

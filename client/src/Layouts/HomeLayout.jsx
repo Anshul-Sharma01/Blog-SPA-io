@@ -12,6 +12,7 @@ function HomeLayout({ children }) {
 
     // Fetch state directly from Redux
     const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn);
+    const userRole = useSelector((state) => state?.auth?.userRole);
     const personalBlogsExists = useSelector((state) => state?.auth?.personalBlogsExists);
 
     // Drawer control functions
@@ -74,6 +75,13 @@ function HomeLayout({ children }) {
                                 </li>
                             </>
                         )}
+                        {
+                            userRole === "ADMIN" && (
+                                <li>
+                                    <Link to="/admin/dashboard">Admin Dashboard</Link>
+                                </li>
+                            )
+                        }
 
                         {isLoggedIn && (
                             <>

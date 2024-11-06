@@ -33,7 +33,7 @@ function Users() {
                     <img
                     src={user?.avatar?.secure_url || "https://via.placeholder.com/100"} 
                     alt={user.name}
-                    className="h-36 w-36 rounded-full mb-4"
+                    className="h-36 w-36 object-cover rounded-full mb-4"
                     />
                     <h2 className="text-lg font-semibold">{user.name}</h2>
                     <p>{user.email}</p>

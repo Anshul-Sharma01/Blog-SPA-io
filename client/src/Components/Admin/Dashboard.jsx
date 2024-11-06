@@ -9,7 +9,7 @@ import {
   Legend,
 } from "chart.js";
 
-// Register chart components
+
 ChartJS.register(ArcElement, Title, Tooltip, Legend);
 
 function Dashboard({ totalCountData }) {

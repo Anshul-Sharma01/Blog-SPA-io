@@ -8,7 +8,7 @@ import { isValidObjectId } from "mongoose";
 
 
 
-const viewAllBlogs = asyncHandler(async (req, res, next) => {
+const fetchAllBlogs = asyncHandler(async (req, res, next) => {
     try {
         let { page, limit } = req.query;
         page = parseInt(page) || 1; 
@@ -124,7 +124,7 @@ const viewBlog = asyncHandler( async (req, res, next) => {
     }
 })
 
-const viewMyBlogs = asyncHandler ( async( req, res, next) => {
+const fetchMyBlogs = asyncHandler ( async( req, res, next) => {
     try{
         let { page, limit } = req.query;
         const userId = req.user._id;
@@ -170,13 +170,62 @@ const viewMyBlogs = asyncHandler ( async( req, res, next) => {
     }
 })
 
+const fetchBlogsByCategory = asyncHandler(async(req, res, next ) => {
+    try{
+        let { page, limit } = req.query;
+        const { category } = req.params;
+        const userId = req.user?._id;
+        console.log("User-Id : ", userId);
+
+        page = parseInt(page) || 1;
+        limit = parseInt(limit) || 6;
+
+        const skip = ( page - 1 ) * limit;
+
+        const categoryBlogs = await Blog.find({ category })
+        .skip(skip)
+        .limit(limit);
+
+        if(categoryBlogs.length === 0){
+            return res.status(200).json(
+                new ApiResponse(
+                    200, 
+                    categoryBlogs,
+                    "No Blogs exists for specific category !!"
+                )
+            );
+        }
+
+        const totalBlogs = await Blog.countDocuments({ category });
+        return res.status(200).json(
+            new ApiResponse(
+                200,
+                {
+                    blogs : categoryBlogs,
+                    totalBlogs,
+                    totalPages : Math.ceil(totalBlogs / limit),
+                    currentPage : page
+                },
+                "Blogs for the specific category are fetched successfully"
+            )
+        )
+        
+    }catch(err){
+        console.error(`Error occurred while fetching blogs by category : ${err}`);
+        throw new ApiError(400, err?.message || "Failed to fetch blogs my category");
+    }
+})
+
 const createBlog = asyncHandler(async (req, res, next) => {
     try{
-        const { title, content } = req.body;
+        const { title, content, category } = req.body;
         const userId = req.user._id;
-        console.log("Title", title);
-        console.log(" and content : ", content);
-        if(!title || !content){
+
+        // console.log("Title", title);
+        // console.log(" and content : ", content);
+
+
+        if(!title || !content || !category){
             throw new ApiError(400, "All Fields are mandatory");
         }
 
@@ -192,6 +241,7 @@ const createBlog = asyncHandler(async (req, res, next) => {
                 owner : userId,
                 title,
                 content,
+                category,
                 thumbnail : {
                     public_id : thumbnail.public_id,
                     secure_url : thumbnail.secure_url
@@ -230,7 +280,7 @@ const createBlog = asyncHandler(async (req, res, next) => {
 
 const updateBlogDetails = asyncHandler(async (req, res, next) => {
     try {
-        const { title, content } = req.body;
+        const { title, content, category } = req.body;
         const { blogId } = req.params;
         const userID = req.user._id;
 
@@ -238,7 +288,7 @@ const updateBlogDetails = asyncHandler(async (req, res, next) => {
             throw new ApiError(400, "Invalid Blog Id");
         }
 
-        if (!title && !content) {
+        if (!title && !content && !category) {
             throw new ApiError(400, "At least update one field");
         }
 
@@ -258,6 +308,9 @@ const updateBlogDetails = asyncHandler(async (req, res, next) => {
         }
         if (content) {
             updatedFields.content = content;
+        }
+        if(category){
+            updatedFields.category = category;
         }
 
         const updatedBlog = await Blog.findByIdAndUpdate(
@@ -385,9 +438,10 @@ const deleteBlog = asyncHandler(async (req, res, next) => {
 
 
 export {
-    viewAllBlogs,
+    fetchAllBlogs,
+    fetchBlogsByCategory,
     viewBlog,
-    viewMyBlogs,
+    fetchMyBlogs,
     createBlog,
     updateBlogDetails,
     updateBlogThumbnail,

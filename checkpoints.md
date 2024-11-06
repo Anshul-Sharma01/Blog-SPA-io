@@ -1,2 +1,1 @@
 
--- If the user is not logged in then if the user tries to like or favourite or comment the blog then it should be rejected and redirected to login rahter than generating an error of Unauthorized request.

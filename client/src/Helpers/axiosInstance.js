@@ -1,7 +1,5 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import toast from "react-hot-toast";
-import { Navigate } from "react-router-dom";
 
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
@@ -12,29 +10,13 @@ const axiosInstance = axios.create({
 });
 
 let isRefreshing = false;
-let failedQueue = [];
-
-const processQueue = (error, token = null) => {
-    failedQueue.forEach(prom => {
-        if (error) {
-            prom.reject(error);
-        } else {
-            prom.resolve(token);
-        }
-    });
-
-    failedQueue = [];
-};
 
 axiosInstance.interceptors.request.use(
     async (config) => {
         const accessToken = Cookies.get('accessToken');
-        const refreshToken = Cookies.get('refreshToken');
-
         if (accessToken) {
-        config.headers.Authorization = `Bearer ${accessToken}`;
+            config.headers.Authorization = `Bearer ${accessToken}`;
         }
-
         return config;
     },
     (error) => {
@@ -51,14 +33,18 @@ axiosInstance.interceptors.response.use(
 
         if (error.response.status === 403 && !originalRequest._retry) {
             if (isRefreshing) {
-                return new Promise(function (resolve, reject) {
-                    failedQueue.push({ resolve, reject });
-                }).then(token => {
-                    originalRequest.headers['Authorization'] = 'Bearer ' + token;
-                    return axiosInstance(originalRequest);
-                }).catch(err => {
-                    return Promise.reject(err);
+                const retryRequest = new Promise((resolve) => {
+                    const interval = setInterval(() => {
+                        const accessToken = Cookies.get('accessToken');
+                        if (accessToken) {
+                            clearInterval(interval);
+                            originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
+                            resolve(axiosInstance(originalRequest));
+                        }
+                    }, 100); 
                 });
+
+                return retryRequest;
             }
 
             originalRequest._retry = true;
@@ -72,19 +58,19 @@ axiosInstance.interceptors.response.use(
                     const newAccessToken = response.data.accessToken;
                     const newRefreshToken = response.data.refreshToken;
 
+        
                     Cookies.set('accessToken', newAccessToken);
                     Cookies.set('refreshToken', newRefreshToken);
 
+            
                     axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
                     originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
 
-                    processQueue(null, newAccessToken);
-                    resolve(axiosInstance(originalRequest));
+                    resolve(axiosInstance(originalRequest)); 
                 } catch (err) {
-                    processQueue(err, null);
                     reject(err);
                 } finally {
-                    isRefreshing = false;
+                    isRefreshing = false; 
                 }
             });
         } else if (error.response.status === 401) {
@@ -99,6 +85,5 @@ axiosInstance.interceptors.response.use(
         return Promise.reject(error);
     }
 );
-
 
 export default axiosInstance;

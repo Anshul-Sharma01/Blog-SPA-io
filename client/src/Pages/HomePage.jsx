@@ -53,33 +53,33 @@ function HomePage() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
                     
                         <div className="group relative bg-white rounded-xl shadow-xl overflow-hidden transition-transform transform hover:scale-105">
-                            <img src="https://res.cloudinary.com/dqnzstk72/image/upload/v1726894472/xk7ydwsbkuvn7zjtk9xx.jpg" alt="Featured Blog 1" className="w-full h-64 object-cover" />
+                            <img src="https://res.cloudinary.com/dqnzstk72/image/upload/v1728840255/o1hukhkazt9x9v1lhbd4.jpg" alt="Featured Blog 1" className="w-full h-64 object-cover" />
                             <div className="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-50 transition duration-300"></div>
                             <div className="absolute bottom-0 left-0 p-4 text-white">
-                                <h3 className="text-2xl font-bold">The Day I Almost Conquered the Omnitrix</h3>
-                                <Link to="/blogs/view/66ee51864a4f8d8ded109864">
+                                <h3 className="text-2xl font-bold">Exploring the Wonders of the Great Barrier Reef</h3>
+                                <Link to="/blogs/view/670c023d07dfc9ff09d2262a">
                                     <button className="mt-4 bg-yellow-400 text-black px-6 py-2 rounded-md font-semibold hover:bg-yellow-500 transition duration-300">Read More</button>
                                 </Link>
                             </div>
                         </div>
 
                         <div className="group relative bg-white rounded-xl shadow-xl overflow-hidden transition-transform transform hover:scale-105">
-                            <img src="https://res.cloudinary.com/dqnzstk72/image/upload/v1726895104/xp0y7bvts0hib1gqc6qf.jpg" alt="Featured Blog 2" className="w-full h-64 object-cover" />
+                            <img src="https://res.cloudinary.com/dqnzstk72/image/upload/v1728840381/kfvlympxejkuqpwagvoy.jpg" alt="Featured Blog 2" className="w-full h-64 object-cover" />
                             <div className="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-50 transition duration-300"></div>
                             <div className="absolute bottom-0 left-0 p-4 text-white">
-                                <h3 className="text-2xl font-bold">The Power of the Ultimatrix: Why It's More Than Just a Watch</h3>
-                                <Link to="/blogs/view/66ee53fff82542978cb34e12">
+                                <h3 className="text-2xl font-bold">Top 10 Tips for Successful Remote Work</h3>
+                                <Link to="/blogs/view/670c02bb07dfc9ff09d22649">
                                     <button className="mt-4 bg-yellow-400 text-black px-6 py-2 rounded-md font-semibold hover:bg-yellow-500 transition duration-300">Read More</button>
                                 </Link>
                             </div>
                         </div>
 
                         <div className="group relative bg-white rounded-xl shadow-xl overflow-hidden transition-transform transform hover:scale-105">
-                            <img src="https://res.cloudinary.com/dqnzstk72/image/upload/v1726895466/uafosqxljmli1wwpthfp.jpg" alt="Featured Blog 3" className="w-full h-64 object-cover" />
+                            <img src="https://res.cloudinary.com/dqnzstk72/image/upload/v1728840502/njhhj7lpd1grvrmyq3zu.png" alt="Featured Blog 3" className="w-full h-64 object-cover" />
                             <div className="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-50 transition duration-300"></div>
                             <div className="absolute bottom-0 left-0 p-4 text-white">
-                                <h3 className="text-2xl font-bold">Embracing My Power: Why I’m More Than Just Magic</h3>
-                                <Link to="/blogs/view/66ee5568f82542978cb34e58">
+                                <h3 className="text-2xl font-bold">A Culinary Journey: The Best Street Foods Around the World</h3>
+                                <Link to="/blogs/view/670c033507dfc9ff09d22653">
                                     <button className="mt-4 bg-yellow-400 text-black px-6 py-2 rounded-md font-semibold hover:bg-yellow-500 transition duration-300">Read More</button>
                                 </Link>
                             </div>
