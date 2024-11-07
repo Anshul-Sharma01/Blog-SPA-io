@@ -85,7 +85,7 @@ const fetchAllBlogs = asyncHandler(async (req, res, next) => {
                 new ApiResponse(
                     200,
                     {
-                        allBlogs: [],
+                        blogs: [],
                         totalBlogs,
                         totalPages,
                         currentPage: page
@@ -100,7 +100,7 @@ const fetchAllBlogs = asyncHandler(async (req, res, next) => {
             new ApiResponse(
                 200,
                 {
-                    allBlogs, 
+                    blogs:allBlogs, 
                     totalBlogs,
                     totalPages,
                     currentPage: page
@@ -112,6 +112,102 @@ const fetchAllBlogs = asyncHandler(async (req, res, next) => {
         throw new ApiError(400, err?.message || "Error occurred while fetching blogs");
     }
 });
+
+const fetchBlogsByTitleOrCategory = asyncHandler(async(req, res, next) => {
+    try{
+        let { page, limit, query } = req.query;
+        // const { query } = req.body;
+
+        // console.log("Query : ", req.body);
+        console.log("Query : ", query);
+        if(!query){
+            throw new ApiError(400, "No query is provided for searching....");
+        }
+
+        page = parseInt(page) || 1;
+        limit = parseInt(limit) || 6;
+
+        const skip = (page - 1) * limit;
+
+        const searchCondition = {
+            $or : [
+                { title : { $regex : query, $options : "i" }},
+                { category : { $regex : query, $options : "i" } }
+            ]
+        };
+
+        const totalBlogs = await Blog.countDocuments(searchCondition);
+        if(totalBlogs === 0){
+            return res.status(200)
+            .json(
+                new ApiResponse(
+                    200,
+                    {
+                        blogs : [],
+                        totalBlogs,
+                        totalPages : 0,
+                        currentPage : page
+                    },
+                    "No Blogs found matching the query"
+                )
+            )
+        }
+
+        const totalPages = Math.ceil(totalBlogs / limit);
+
+        const blogs = await Blog.find(searchCondition)
+        .skip(skip)
+        .limit(limit)
+        .populate("owner", "username name");
+
+        return res.status(200)
+        .json(
+            new ApiResponse(
+                200,
+                {
+                    blogs, 
+                    totalBlogs,
+                    totalPages,
+                    currentPage : page
+                },
+                "Blogs matching query fetched successfully"
+            )
+        )
+
+
+    }catch(err){
+        console.log(`Error occurred while fetching blogs by title or category : ${err}`);
+        throw new ApiError(400, err?.message || "Error occurred while searching for blogs !!");
+    }
+})
+
+const fetchLatestBlogsOfAuthor = asyncHandler(async(req, res, next) => {
+    try{
+        const { authorId } = req.params;
+        if(!isValidObjectId(authorId)){
+            throw new ApiError(400, "Invalid Author Id");
+        }
+
+        const latestBlogs = await Blog.find({ owner : authorId })
+        .sort({ createdAt : -1 })
+        .limit(6)
+        .select("-content")
+        .populate("owner", "username name");
+
+        return res.status(200)
+        .json(
+            new ApiResponse(
+                200,
+                latestBlogs,
+                "Latest Blogs of the author fetched successfully"
+            )
+        );
+
+    }catch(err){
+        console.error(`Error occurred while fetching latest blogs of author : ${err}`);
+        throw new ApiError(400, err?.message || "Error occurred while fetching latest blogs of author !!");
+    }
+})
 
 const viewBlog = asyncHandler( async (req, res, next) => {
     try{
@@ -154,8 +250,10 @@ const fetchMyBlogs = asyncHandler ( async( req, res, next) => {
         const skip = ( page - 1 ) * limit;
 
         const myBlogs = await Blog.find({ owner : userId })
+        .populate("owner", "username name")
         .skip(skip)
         .limit(limit);
+        
 
         if(myBlogs.length === 0){
             return res.status(200).json(
@@ -455,7 +553,9 @@ const deleteBlog = asyncHandler(async (req, res, next) => {
 
 export {
     fetchAllBlogs,
+    fetchBlogsByTitleOrCategory,
     fetchBlogsByCategory,
+    fetchLatestBlogsOfAuthor,
     viewBlog,
     fetchMyBlogs,
     createBlog,
