@@ -57,25 +57,23 @@ function AllBlogs() {
 
             {isLoading ? (
                 <section className="flex justify-center items-center min-h-[60vh] gap-10 flex-wrap px-4">
-                    <BlogSkeleton />
-                    <BlogSkeleton />
-                    <BlogSkeleton />
-                    <BlogSkeleton />
-                    <BlogSkeleton />
-                    <BlogSkeleton />
+                    {[...Array(6)].map((_, i) => (
+                        <BlogSkeleton key={i} />
+                    ))}
                 </section>
             ) : (
-                <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 p-4 md:p-10 w-full max-w-7xl mx-auto">
+                <section className="m-4 p-10 flex justify-center items-center flex-wrap gap-10">
                     {allBlogsData.map((ele) => (
                         <BlogStructure
-                            blogId={ele._id}
                             key={ele._id}
+                            blogId={ele._id}
                             thumbnail={ele.thumbnail.secure_url}
                             title={ele.title}
                             category={ele.category}
                             numberOfLikes={ele.numberOfLikes}
-                            author={ele?.owner?.username || "account deleted"}
-                            authorId={ele?.owner?._id}
+                            author={ele.owner?.username || "account deleted"}
+                            authorId={ele.owner?._id}
+                            disableAuthorLink={!ele.owner} // Pass the condition for disabling the author link
                         />
                     ))}
                 </section>
@@ -83,14 +81,14 @@ function AllBlogs() {
 
             <div className="flex justify-center items-center py-10 gap-5">
                 <button
-                    className={`btn btn-outline ${page === 1 ? "btn-disabled" : ""} transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110`}
+                    className={`btn btn-outline ${page === 1 ? "btn-disabled opacity-50" : ""} transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110`}
                     onClick={handleBackwardPagination}
                     disabled={page === 1}
                 >
                     Previous
                 </button>
                 <button
-                    className={`btn btn-outline ${page >= totalPages ? "btn-disabled" : ""} transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110`}
+                    className={`btn btn-outline ${page >= totalPages ? "btn-disabled opacity-50" : ""} transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110`}
                     onClick={handleForwardPagination}
                     disabled={page >= totalPages}
                 >
