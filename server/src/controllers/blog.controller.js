@@ -187,7 +187,8 @@ const fetchLatestBlogsOfAuthor = asyncHandler(async(req, res, next) => {
         const latestBlogs = await Blog.find({ owner : authorId })
         .sort({ createdAt : -1 })
         .limit(6)
-        .select("-numberOfLikes -content");
+        .select("-numberOfLikes -content")
+        .populate("owner", "username name");
 
         return res.status(200)
         .json(

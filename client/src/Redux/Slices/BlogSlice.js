@@ -73,6 +73,21 @@ export const fetchBlogThunk = createAsyncThunk("/blog/view/:blogId", async(data)
     }
 })
 
+export const fetchLatestBlogs = createAsyncThunk("/view/author-profile/:authorId", async ({ authorId }) => {
+    try{
+        const res = axiosInstance.get(`blogs/view/author-blogs/${authorId}`);
+        toast.promise(res,{
+            loading : 'Working on author blogs....',
+            success : (data) => data?.data?.message,
+            error : "Failed to fetch author blogs at a moment..."
+        })
+
+        return (await res).data;
+    }catch(err){
+        console.log(`Error occurred in fetching latest blogs for a author : ${err}`);
+    }
+})
+
 
 export const updateBlogThunk = createAsyncThunk("/blogs/update/:blogId", async({ title, content, blogId, category }) => {
     try{

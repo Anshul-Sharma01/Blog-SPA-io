@@ -3,9 +3,12 @@ import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchAuthorProfile } from "../Redux/Slices/AuthSlice";
 import toast from "react-hot-toast";
+import { fetchLatestBlogs } from "../Redux/Slices/BlogSlice";
+import BlogStructure from "../Components/Blogs/BlogStructure";
 
 function AuthorProfile() {
     const [authorData, setAuthorData] = useState({});
+    const [authorBlogs, setAuthorBlogs] = useState([]);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { authorId } = useParams();
@@ -22,7 +25,18 @@ function AuthorProfile() {
                 return;
             }
         }
+
+        async function fetchLatestAuthorBlogs(){
+            const res = await dispatch(fetchLatestBlogs({ authorId }));
+            
+            if(res?.payload?.statusCode === 200){
+                setAuthorBlogs(res?.payload?.data);
+                console.log("author-blogs : ", res?.payload?.data);
+                console.log("Author Blogs : ", authorBlogs);
+            }
+        }
         fetchAuthorData();
+        fetchLatestAuthorBlogs();
     }, []);
 
     return (
@@ -57,8 +71,26 @@ function AuthorProfile() {
 
             <div className="mt-10">
                 <h3 className="text-2xl font-semibold text-gray-800 mb-4">Other Blogs by {authorData?.name}</h3>
-
-                <p className="text-gray-600">No blogs to display yet.</p>
+                {authorBlogs.length == 0 ? (
+                    <p className="text-gray-600">No blogs to display yet.</p>
+                ) : (
+                    <section className="m-4 p-10 flex justify-center items-center flex-wrap gap-10">
+                        {authorBlogs.map((ele) => (
+                            <BlogStructure
+                                key={ele._id}
+                                blogId={ele._id}
+                                thumbnail={ele.thumbnail?.secure_url}
+                                title={ele?.title}
+                                category={ele.category}
+                                numberOfLikes={ele.numberOfLikes}
+                                author={ele.owner?.username || "account deleted"}
+                                authorId={ele.owner?._id}
+                                disableAuthorLink={!ele.owner} 
+                            />
+                        ))}
+                    </section>
+                )}
+                
             </div>
         </div>
     );
