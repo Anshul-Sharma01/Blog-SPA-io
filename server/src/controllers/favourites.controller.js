@@ -12,7 +12,7 @@ import { Blog } from "../models/blog.model.js";
 const toggleFavourite = asyncHandler(async (req, res, next) => {
     try {
         const { blogId } = req.params;
-        const { authorId : blogUserId } = req.body;
+        const { blogUserId } = req.body;
         const userId = req.user._id;
         console.log(blogUserId);
         console.log(blogId);

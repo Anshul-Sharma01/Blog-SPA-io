@@ -250,8 +250,10 @@ const fetchMyBlogs = asyncHandler ( async( req, res, next) => {
         const skip = ( page - 1 ) * limit;
 
         const myBlogs = await Blog.find({ owner : userId })
+        .populate("owner", "username name")
         .skip(skip)
         .limit(limit);
+        
 
         if(myBlogs.length === 0){
             return res.status(200).json(

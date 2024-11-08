@@ -31,7 +31,8 @@ function AllBlogs() {
             }
             const blogData = res?.payload?.data;
             if (blogData?.totalBlogs === 0) {
-                navigate("/");
+                navigate("/blogs/all");
+                setFetchAll(true);
             } else if (blogData?.blogs) {
                 setAllBlogsData(blogData.blogs);
                 setTotalPages(blogData.totalPages);
