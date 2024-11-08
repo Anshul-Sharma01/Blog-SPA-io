@@ -25,7 +25,7 @@ function MyFavourites(){
             setFavBlogs(res?.payload?.data);
             setIsLoading(false);
             console.log(favblogs);
-            console.log("Favourites Response : ", res);
+            console.log("Favourites Response : ", res?.payload?.data);
         }catch(err){
             console.log("Error occurred at favourites : ", err);
         }
@@ -68,7 +68,7 @@ function MyFavourites(){
                                     title={ele?.blog?.title}
                                     numberOfLikes={ele?.blog?.numberOfLikes}
                                     author={ele?.blogOwner?.username}
-                                    blogUserId={ele?.blogOwner?._id}
+                                    authorId={ele?.blogOwner?._id}
                                 />
                             })
                         )
@@ -85,4 +85,3 @@ function MyFavourites(){
 }
 
 export default MyFavourites;
-
