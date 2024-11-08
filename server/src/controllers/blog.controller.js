@@ -85,7 +85,7 @@ const fetchAllBlogs = asyncHandler(async (req, res, next) => {
                 new ApiResponse(
                     200,
                     {
-                        allBlogs: [],
+                        blogs: [],
                         totalBlogs,
                         totalPages,
                         currentPage: page
@@ -100,7 +100,7 @@ const fetchAllBlogs = asyncHandler(async (req, res, next) => {
             new ApiResponse(
                 200,
                 {
-                    allBlogs, 
+                    blogs:allBlogs, 
                     totalBlogs,
                     totalPages,
                     currentPage: page
@@ -115,7 +115,11 @@ const fetchAllBlogs = asyncHandler(async (req, res, next) => {
 
 const fetchBlogsByTitleOrCategory = asyncHandler(async(req, res, next) => {
     try{
-        let { query, page, limit } = req.query;
+        let { page, limit, query } = req.query;
+        // const { query } = req.body;
+
+        // console.log("Query : ", req.body);
+        console.log("Query : ", query);
         if(!query){
             throw new ApiError(400, "No query is provided for searching....");
         }
@@ -127,8 +131,8 @@ const fetchBlogsByTitleOrCategory = asyncHandler(async(req, res, next) => {
 
         const searchCondition = {
             $or : [
-                { title : { $regex : query, options : "i" }},
-                { category : { $regex : query, options : "i" } }
+                { title : { $regex : query, $options : "i" }},
+                { category : { $regex : query, $options : "i" } }
             ]
         };
 
@@ -187,7 +191,7 @@ const fetchLatestBlogsOfAuthor = asyncHandler(async(req, res, next) => {
         const latestBlogs = await Blog.find({ owner : authorId })
         .sort({ createdAt : -1 })
         .limit(6)
-        .select("-numberOfLikes -content")
+        .select("-content")
         .populate("owner", "username name");
 
         return res.status(200)

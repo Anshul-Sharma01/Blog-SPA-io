@@ -18,6 +18,7 @@ import ViewBlog from './Pages/ViewBlog.jsx'
 import MyFavourites from './Pages/MyFavourites.jsx'
 import AdminPage from './Pages/AdminPage.jsx'
 import AuthorProfile from './Pages/AuthorProfile.jsx'
+import SearchBlogs from './Components/Blogs/SearchBlogs.jsx'
 
 
 function App() {
@@ -34,6 +35,8 @@ function App() {
         <Route path='/auth/reset' element={<ResetPassword/>}></Route>
         <Route path='/auth/reset/:resetToken' element={<ResetToken/>}></Route>
         <Route path='/auth/password/change' element={<ChangePassword/>}></Route>
+        <Route path='/component/check' element={<SearchBlogs/>}></Route>
+
 
         <Route path='/blogs/view/:blogId' element={<ViewBlog/>}></Route>
         <Route path='/view/author-profile/:authorId' element={<AuthorProfile/>}></Route>

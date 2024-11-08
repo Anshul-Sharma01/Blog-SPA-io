@@ -88,6 +88,19 @@ export const fetchLatestBlogs = createAsyncThunk("/view/author-profile/:authorId
     }
 })
 
+export const fetchSearchBlogs = createAsyncThunk("/blogs/all", async({ query, page, limit }) => {
+    try{
+        const res = axiosInstance.get(`blogs/view/search?page=${page}&limit=${limit}&query=${query}` );
+        toast.promise(res, {
+            loading : "Searching blogs...",
+            success : ( data ) => data?.data?.message,
+            error:"Failed to search blogs !!"
+        })
+        return (await res).data;
+    }catch(err){
+        console.error(`Error occurred while fetching searched blogs : ${err}`);
+    }
+})
 
 export const updateBlogThunk = createAsyncThunk("/blogs/update/:blogId", async({ title, content, blogId, category }) => {
     try{

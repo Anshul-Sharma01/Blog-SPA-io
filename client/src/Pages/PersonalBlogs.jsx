@@ -56,7 +56,7 @@ function PersonalBlogs() {
                             thumbnail={ele?.thumbnail?.secure_url}
                             title={ele.title}
                             numberOfLikes={ele.numberOfLikes}
-                            blogUserId={ele.owner}
+                            blogUserId={ele.owner._id}
                             category={ele.category}
                         />
                     ))}
