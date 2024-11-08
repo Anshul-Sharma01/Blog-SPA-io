@@ -13,11 +13,12 @@ function BlogStructure({ thumbnail, title, numberOfLikes, author, authorId, disa
     const navigate = useNavigate();
 
     const [toggleFavourite, setToggleFavourite] = useState(false);
+    const blogUserId = authorId;
 
     async function handletoggleFavourite(e) {
         e.preventDefault();
 
-        const res = await dispatch(toggleFavThunk({ blogId, authorId }));
+        const res = await dispatch(toggleFavThunk({ blogId, blogUserId }));
         navigate("/blogs/all");
 
         if (res?.payload?.success === true) {
