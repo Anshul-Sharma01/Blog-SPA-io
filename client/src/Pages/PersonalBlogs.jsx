@@ -55,9 +55,16 @@ function PersonalBlogs() {
                             blogId={ele._id}
                             thumbnail={ele.thumbnail.secure_url}
                             title={ele.title}
+<<<<<<< HEAD
                             numberOfLikes={ele.numberOfLikes}
                             blogUserId={ele.owner._id}
+=======
+>>>>>>> d3676850c3f647ba06ec9d8f7c4972b351ee8814
                             category={ele.category}
+                            numberOfLikes={ele.numberOfLikes}
+                            author={ele.owner?.username || "account deleted"}
+                            authorId={ele.owner?._id}
+                            disableAuthorLink={!ele.owner}
                         />
                     ))}
                 </section>
