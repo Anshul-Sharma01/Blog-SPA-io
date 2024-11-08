@@ -15,10 +15,12 @@
 - **Single Page Application (SPA)**: Seamless user experience with dynamic content loading and navigation using React.
 - **Responsive Design**: Optimized for all devices with a mobile-first approach.
 - **Profile Management**: Users can update their profile information, including avatars.
+- **Enhanced Search**: Added searching feature on the basis of title or category
 - **Comments & Likes**: Real-time interaction with the ability to like blogs and leave comments.
 - **Blog Editing & Creation**: Rich-text blog editor with image upload functionality.
 - **Custom Comment Section**: A custom-built comment section for engaging with blog content.
 - **DaisyUI & TailwindCSS**: Modern design with eye-catching elements using DaisyUI and TailwindCSS.
+- **Blog Analytics**: Added features to analyze blog performance, including views, likes, and comments for admin.
 
 ## Technologies Used
 
@@ -64,7 +66,4 @@
 └── 📄 README.md
 ```
 ## Future Work
-
-- **Enhanced Search**: Add more filters and search parameters.
-- **Notifications**: Implement a real-time notification system for likes, comments, and blog interactions.
-- **Blog Analytics**: Add features to analyze blog performance, including views, likes, and comments.
+-- I can finally say that I have completed my first MERN project

@@ -51,13 +51,15 @@ function PersonalBlogs() {
                 <section className="m-4 p-10 flex justify-center items-center flex-wrap gap-10">
                     {personalBlogsData.map((ele) => (
                         <BlogStructure
-                            blogId={ele._id}
                             key={ele._id}
-                            thumbnail={ele?.thumbnail?.secure_url}
+                            blogId={ele._id}
+                            thumbnail={ele.thumbnail.secure_url}
                             title={ele.title}
-                            numberOfLikes={ele.numberOfLikes}
-                            blogUserId={ele.owner._id}
                             category={ele.category}
+                            numberOfLikes={ele.numberOfLikes}
+                            author={ele.owner?.username || "account deleted"}
+                            authorId={ele.owner?._id}
+                            disableAuthorLink={!ele.owner}
                         />
                     ))}
                 </section>
